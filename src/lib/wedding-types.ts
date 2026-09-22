@@ -6,6 +6,25 @@ export type TimelineItem = {
   description?: string;
 };
 
+export type WeddingPlace = {
+  name: string;
+  address: string;
+};
+
+export type WeddingPhase = {
+  name: string;
+  when: string;
+  places: WeddingPlace[];
+};
+
+export type DetailCardIcon = "dresscode" | "bus" | "hotel";
+
+export type DetailCard = {
+  icon: DetailCardIcon;
+  title: string;
+  ctaLabel: string;
+};
+
 export type WeddingData = {
   partnerA: string;
   partnerB: string;
@@ -26,9 +45,15 @@ export type WeddingData = {
   rsvpNote: string;
   giftMessage: string;
   giftAccount: string;
+  giftHolderName: string;
   dressCode: string;
   organizerContact: string;
   palette: PaletteId;
+  // Fields used by the "Ribera" template's itinerary-by-phase layout.
+  estateName: string;
+  estateLocation: string;
+  phases: WeddingPhase[];
+  detailCards: DetailCard[];
 };
 
 export const emptyWeddingData: WeddingData = {
@@ -51,9 +76,14 @@ export const emptyWeddingData: WeddingData = {
   rsvpNote: "",
   giftMessage: "",
   giftAccount: "",
+  giftHolderName: "",
   dressCode: "",
   organizerContact: "",
   palette: "clay",
+  estateName: "",
+  estateLocation: "",
+  phases: [],
+  detailCards: [],
 };
 
 export const demoWeddingData: WeddingData = {
@@ -91,7 +121,65 @@ export const demoWeddingData: WeddingData = {
   giftMessage:
     "Vuestra presencia es el mejor regalo. Si aun así queréis tener un detalle con nosotros, nos hará ilusión que colaboréis con nuestra luna de miel.",
   giftAccount: "ES00 0000 0000 0000 0000 0000",
+  giftHolderName: "Laura García",
   dressCode: "Elegante de jardín. Evitad el blanco y los tacones muy finos, ¡se celebra sobre césped!",
   organizerContact: "Cualquier duda, escribidnos a laurayMarc@example.com",
   palette: "clay",
+  estateName: "",
+  estateLocation: "",
+  phases: [],
+  detailCards: [],
 };
+
+export const riberaDemoWeddingData: WeddingData = {
+  ...emptyWeddingData,
+  partnerA: "Elena",
+  partnerB: "Mateo",
+  date: "2027-09-11",
+  hashtag: "#ElenaYMateo2027",
+  welcomeMessage:
+    "Nos casamos y queremos celebrarlo con las personas que más queremos.",
+  storyTitle: "Nuestra historia",
+  story:
+    "Nos conocimos en un viaje a la costa, discutiendo sobre cuál era el mejor mirador. Años después seguimos discutiendo, pero ya sin dudas: queremos pasar la vida juntos.",
+  estateName: "finca del faro",
+  estateLocation: "Cadaqués, Girona",
+  phases: [
+    {
+      name: "La pre-boda",
+      when: "Viernes 10, 19:00",
+      places: [{ name: "Casa del Pescador", address: "Carrer Nou, 8, Cadaqués" }],
+    },
+    {
+      name: "La boda",
+      when: "Sábado 11, 18:00",
+      places: [
+        { name: "Ermita de Sant Baldiri", address: "Camí de l'Ermita, s/n, Cadaqués" },
+        { name: "Finca del Faro", address: "Carretera del Far, km 2, Cadaqués" },
+      ],
+    },
+    {
+      name: "La post-boda",
+      when: "Domingo 12, 13:00",
+      places: [{ name: "Restaurante Es Balandre", address: "Riba Nemesi Llorens, 2, Cadaqués" }],
+    },
+  ],
+  detailCards: [
+    { icon: "dresscode", title: "Dresscode", ctaLabel: "Inspiración" },
+    { icon: "bus", title: "Autobuses", ctaLabel: "Cómo llegar" },
+    { icon: "hotel", title: "Hoteles", ctaLabel: "Más información" },
+  ],
+  rsvpDeadline: "2027-07-15",
+  rsvpNote:
+    "Por favor, confirmad vuestra asistencia lo antes posible. Si venís en pareja o familia, con que lo rellene uno es suficiente.",
+  giftMessage:
+    "Tu presencia es nuestro mejor regalo, pero si quieres ayudarnos a crear nuestro nuevo hogar, puedes hacerlo por transferencia a",
+  giftAccount: "ES00 0000 0000 0000 0000 0000",
+  giftHolderName: "Elena Ruiz",
+  organizerContact: "Cualquier duda, escribidnos a elenaymateo@example.com",
+  palette: "clay",
+};
+
+export function getDemoWeddingData(slug: string): WeddingData {
+  return slug === "ribera" ? riberaDemoWeddingData : demoWeddingData;
+}

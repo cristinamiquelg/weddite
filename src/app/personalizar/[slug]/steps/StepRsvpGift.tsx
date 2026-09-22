@@ -42,6 +42,13 @@ export default function StepRsvpGift({
               placeholder="Vuestra presencia es el mejor regalo..."
             />
           </Field>
+          <Field label="Nombre del titular" hint="Opcional">
+            <TextInput
+              value={data.giftHolderName}
+              onChange={(e) => onChange({ giftHolderName: e.target.value })}
+              placeholder="Laura García"
+            />
+          </Field>
           <Field label="Número de cuenta / Bizum" hint="Opcional">
             <TextInput
               value={data.giftAccount}

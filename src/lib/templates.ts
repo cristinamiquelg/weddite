@@ -29,6 +29,24 @@ export const templates: Template[] = [
       "100% adaptada a móvil",
     ],
   },
+  {
+    id: "tpl-ribera",
+    slug: "ribera",
+    name: "Ribera",
+    tagline: "Elegante, náutica y con carácter",
+    description:
+      "Una plantilla con más personalidad: paleta navy, crema y coral, tipografía serif clásica y detalles ilustrados. Pensada para parejas que quieren una boda con varias fases (pre-boda, boda, post-boda) y un RSVP completo con acompañantes.",
+    price: 45,
+    tags: ["Elegante", "Con carácter", "Multi-evento"],
+    features: [
+      "Cuenta atrás en directo",
+      "Itinerario por fases (pre-boda, boda, post-boda) con varios lugares",
+      "Tarjetas de detalles (dresscode, autobuses, hoteles)",
+      "RSVP con acompañantes ilimitados",
+      "Sección de regalo con marco ilustrado",
+      "100% adaptada a móvil",
+    ],
+  },
 ];
 
 export function getTemplateBySlug(slug: string): Template | undefined {

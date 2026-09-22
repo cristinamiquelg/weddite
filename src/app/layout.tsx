@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Inter, Libre_Baskerville, Oswald } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -14,6 +14,20 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+// Used by the "Ribera" wedding template, independent of the app's own
+// Fraunces/Inter identity above.
+const libreBaskerville = Libre_Baskerville({
+  variable: "--font-libre-baskerville",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+});
+
+const oswald = Oswald({
+  variable: "--font-oswald",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Weddite — Webs de boda que enamoran",
   description:
@@ -24,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="es"
-      className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${inter.variable} ${libreBaskerville.variable} ${oswald.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>

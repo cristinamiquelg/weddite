@@ -14,7 +14,13 @@ function getRemaining(target: string) {
   };
 }
 
-export default function Countdown({ date }: { date: string }) {
+export default function Countdown({
+  date,
+  showSeconds = true,
+}: {
+  date: string;
+  showSeconds?: boolean;
+}) {
   const [remaining, setRemaining] = useState<ReturnType<typeof getRemaining> | null>(null);
 
   useEffect(() => {
@@ -38,7 +44,7 @@ export default function Countdown({ date }: { date: string }) {
     [remaining.days, "días"],
     [remaining.hours, "horas"],
     [remaining.minutes, "min"],
-    [remaining.seconds, "seg"],
+    ...(showSeconds ? ([[remaining.seconds, "seg"]] as [number, string][]) : []),
   ];
 
   return (

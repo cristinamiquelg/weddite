@@ -1,7 +1,8 @@
 import type { WeddingData } from "@/lib/wedding-types";
 import AuroraTemplate from "./AuroraTemplate";
+import RiberaTemplate from "./ribera/RiberaTemplate";
 
-const knownSlugs = ["aurora"] as const;
+const knownSlugs = ["aurora", "ribera"] as const;
 export type TemplateSlug = (typeof knownSlugs)[number];
 
 export function isKnownTemplateSlug(slug: string): slug is TemplateSlug {
@@ -15,5 +16,7 @@ export function renderTemplate(slug: TemplateSlug, data: WeddingData) {
   switch (slug) {
     case "aurora":
       return <AuroraTemplate data={data} />;
+    case "ribera":
+      return <RiberaTemplate data={data} />;
   }
 }

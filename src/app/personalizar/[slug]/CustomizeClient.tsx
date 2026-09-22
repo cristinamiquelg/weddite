@@ -11,6 +11,9 @@ import StepDay from "./steps/StepDay";
 import StepGallery from "./steps/StepGallery";
 import StepRsvpGift from "./steps/StepRsvpGift";
 import StepStyle from "./steps/StepStyle";
+import StepRiberaCouple from "./steps/StepRiberaCouple";
+import StepItinerary from "./steps/StepItinerary";
+import StepDetails from "./steps/StepDetails";
 
 type StepDef = {
   key: string;
@@ -21,7 +24,7 @@ type StepDef = {
   }) => React.ReactElement;
 };
 
-const steps: StepDef[] = [
+const auroraSteps: StepDef[] = [
   { key: "couple", label: "Pareja y fecha", Component: StepCouple },
   { key: "story", label: "Vuestra historia", Component: StepStory },
   { key: "day", label: "El gran día", Component: StepDay },
@@ -30,8 +33,21 @@ const steps: StepDef[] = [
   { key: "style", label: "Estilo", Component: StepStyle },
 ];
 
+const riberaSteps: StepDef[] = [
+  { key: "couple", label: "Pareja y fecha", Component: StepRiberaCouple },
+  { key: "story", label: "Vuestra historia", Component: StepStory },
+  { key: "itinerary", label: "Itinerario y lugares", Component: StepItinerary },
+  { key: "details", label: "Detalles", Component: StepDetails },
+  { key: "rsvp", label: "RSVP y regalo", Component: StepRsvpGift },
+];
+
+function stepsForTemplate(slug: string): StepDef[] {
+  return slug === "ribera" ? riberaSteps : auroraSteps;
+}
+
 export default function CustomizeClient({ template }: { template: Template }) {
   const { data, setData, loaded } = useWeddingDraft(template.slug);
+  const steps = stepsForTemplate(template.slug);
   const [stepIndex, setStepIndex] = useState(0);
   const [mobileTab, setMobileTab] = useState<"form" | "preview">("form");
   const iframeRef = useRef<HTMLIFrameElement>(null);

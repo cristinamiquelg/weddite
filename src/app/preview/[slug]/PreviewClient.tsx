@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import type { WeddingData } from "@/lib/wedding-types";
-import { demoWeddingData } from "@/lib/wedding-types";
+import { getDemoWeddingData } from "@/lib/wedding-types";
 import { draftStorageKey } from "@/lib/draft-storage";
 import { renderTemplate, type TemplateSlug } from "@/components/templates/registry";
 
 export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
-  const [data, setData] = useState<WeddingData>(demoWeddingData);
+  const [data, setData] = useState<WeddingData>(() => getDemoWeddingData(slug));
 
   useEffect(() => {
     try {

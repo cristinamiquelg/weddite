@@ -210,11 +210,16 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
               "Vuestra presencia es el mejor regalo. Si queréis tener un detalle con nosotros, aquí tenéis nuestros datos."}
           </p>
           {data.giftAccount ? (
-            <div className="mt-8 flex flex-col items-center gap-4">
+            <div className="mt-8 flex flex-col items-center gap-2">
+              {data.giftHolderName ? (
+                <p className="text-sm text-[var(--w-ink)]">{data.giftHolderName}</p>
+              ) : null}
               <p className="font-mono text-sm tracking-widest text-[var(--w-ink)]">
                 {data.giftAccount}
               </p>
-              <CopyButton value={data.giftAccount} />
+              <div className="mt-2">
+                <CopyButton value={data.giftAccount} />
+              </div>
             </div>
           ) : null}
         </div>
