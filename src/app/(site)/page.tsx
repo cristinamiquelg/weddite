@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { templates } from "@/lib/templates";
+import HeroGrid from "@/components/site/HeroGrid";
 
 const steps = [
   {
@@ -68,22 +69,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-6 pb-24">
-        <div className="overflow-hidden rounded-2xl border border-line bg-paper-raised shadow-[0_30px_80px_-40px_rgba(33,29,26,0.35)]">
-          <div className="flex items-center gap-1.5 border-b border-line bg-paper px-4 py-3">
-            <span className="h-2.5 w-2.5 rounded-full bg-line" />
-            <span className="h-2.5 w-2.5 rounded-full bg-line" />
-            <span className="h-2.5 w-2.5 rounded-full bg-line" />
-            <span className="ml-3 text-xs text-ink-soft">
-              weddite.com/preview/{featured.slug}
-            </span>
-          </div>
-          <iframe
-            src={`/preview/${featured.slug}`}
-            title="Preview en directo de una web de boda hecha con Weddite"
-            className="h-[520px] w-full"
-          />
-        </div>
+      <section className="pb-24">
+        <HeroGrid />
       </section>
 
       <section className="border-t border-line bg-paper-raised">

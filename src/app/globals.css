@@ -3,14 +3,14 @@
 :root {
   --color-ink: #211d1a;
   --color-ink-soft: #4a423c;
-  --color-paper: #faf6f1;
+  --color-paper: #fbfbfa;
   --color-paper-raised: #ffffff;
   --color-clay: #b5583a;
   --color-clay-dark: #93432a;
   --color-sage: #5f6b4f;
   --color-sage-light: #eef0e7;
   --color-gold: #a9824c;
-  --color-line: #e6ddd2;
+  --color-line: #e9e8e5;
 }
 
 @theme inline {
@@ -36,4 +36,25 @@ body {
 ::selection {
   background: var(--color-clay);
   color: var(--color-paper);
+}
+
+@keyframes marquee-up {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes marquee-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-col {
+    animation-play-state: paused !important;
+  }
 }

@@ -35,7 +35,7 @@ export default function CatalogPage() {
                   src={`/preview/${tpl.slug}`}
                   title={`Preview de la plantilla ${tpl.name}`}
                   tabIndex={-1}
-                  className="pointer-events-none h-[1100px] w-[1400px] origin-top-left scale-[0.35] sm:scale-[0.3]"
+                  className="pointer-events-none absolute left-1/2 top-0 h-[1100px] w-[1400px] origin-top -translate-x-1/2 scale-[0.35] sm:scale-[0.3]"
                 />
               </div>
             </Link>
