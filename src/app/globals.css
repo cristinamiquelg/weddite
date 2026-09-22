@@ -58,3 +58,19 @@ body {
     animation-play-state: paused !important;
   }
 }
+
+/* Scroll-reveal: gated behind html.reveal-ready (added by the ScrollReveal
+   client component once it's actually observing) so content never gets
+   stuck invisible if JS fails to load, and behind prefers-reduced-motion
+   so it's a no-op for anyone who'd rather not see the motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html.reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}

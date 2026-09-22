@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, Libre_Baskerville, Oswald } from "next/font/google";
 import "./globals.css";
+import ScrollReveal from "@/components/site/ScrollReveal";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -40,7 +41,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="es"
       className={`${fraunces.variable} ${inter.variable} ${libreBaskerville.variable} ${oswald.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        {children}
+        <ScrollReveal />
+      </body>
     </html>
   );
 }

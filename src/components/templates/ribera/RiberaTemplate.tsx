@@ -85,7 +85,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             "repeating-linear-gradient(90deg, rgba(14,20,83,0.3) 0 1px, transparent 1px 12px)",
         }}
       >
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-10 bg-[var(--r-cream)] px-6 py-16 text-center">
+        <div
+          data-reveal
+          className="mx-auto flex max-w-3xl flex-col items-center gap-10 bg-[var(--r-cream)] px-6 py-16 text-center"
+        >
           <div className="flex flex-col items-center gap-4">
             <p className="italic text-lg">Save the Date</p>
             <p className="text-xs uppercase tracking-[0.13em]" style={gothicStyle}>
@@ -115,6 +118,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
 
       <section id="cuando" className="bg-[var(--r-navy)] px-6 py-15 text-[var(--r-cream)]">
         <div
+          data-reveal
           className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-10 px-4 sm:px-24"
           style={{ "--w-ink": "var(--r-cream)", "--w-ink-soft": "rgba(239,236,227,0.85)" } as React.CSSProperties}
         >
@@ -124,7 +128,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
       </section>
 
       <section className="bg-[var(--r-navy)] p-6" id="itinerario">
-        <div className="mx-auto flex max-w-[1080px] flex-col items-center gap-13 bg-[var(--r-cream)] px-6 py-15 sm:px-15">
+        <div
+          data-reveal
+          className="mx-auto flex max-w-[1080px] flex-col items-center gap-13 bg-[var(--r-cream)] px-6 py-15 sm:px-15"
+        >
           <h2 className="text-center text-xl uppercase tracking-[0.04em]">Itinerario y lugares</h2>
 
           <div className="grid w-full gap-x-11 gap-y-15 sm:grid-cols-[minmax(150px,240px)_1fr_1fr]">
@@ -176,7 +183,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         }}
         id="detalles"
       >
-        <div className="mx-auto flex max-w-[1080px] flex-col items-center gap-13 bg-[var(--r-cream)] px-6 py-15 sm:px-15">
+        <div
+          data-reveal
+          className="mx-auto flex max-w-[1080px] flex-col items-center gap-13 bg-[var(--r-cream)] px-6 py-15 sm:px-15"
+        >
           <h2 className="text-center text-xl uppercase tracking-[0.04em]">Detalles</h2>
           <div className="grid w-full gap-10 sm:grid-cols-3">
             {(data.detailCards.length > 0
@@ -207,7 +217,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
       </section>
 
       <section id="regalos" className="flex justify-center bg-[var(--r-cream)] px-6 py-15">
-        <div className="w-full max-w-[700px] border border-[var(--r-coral)] bg-[var(--r-navy-2)] p-3">
+        <div
+          data-reveal
+          className="w-full max-w-[700px] border border-[var(--r-coral)] bg-[var(--r-navy-2)] p-3"
+        >
           <div className="border border-[var(--r-coral)] bg-[var(--r-cream-2)] p-2">
             <div
               className="flex flex-col items-center gap-8 border border-[var(--r-coral)] px-6 py-12 text-center text-[var(--r-cream)] sm:px-20"
@@ -246,7 +259,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             "repeating-linear-gradient(90deg, rgba(239,236,227,0.1) 0 1px, transparent 1px 12px)",
         }}
       >
-        <div className="mx-auto flex max-w-[600px] flex-col items-center gap-6 bg-[var(--r-cream)] px-5 py-14 sm:px-16">
+        <div
+          data-reveal
+          className="mx-auto flex max-w-[600px] flex-col items-center gap-6 bg-[var(--r-cream)] px-5 py-14 sm:px-16"
+        >
           <h2 className="text-center text-xl uppercase tracking-[0.04em]">Confirma tu asistencia</h2>
           <p className="max-w-[540px] text-center text-sm font-bold">
             {data.rsvpNote ||

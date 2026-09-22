@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function CatalogPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-16">
-      <div className="max-w-xl">
+      <div className="max-w-xl" data-reveal>
         <p className="text-xs uppercase tracking-[0.3em] text-clay">Catálogo</p>
         <h1 className="mt-4 font-display text-4xl sm:text-5xl">
           Elegid la que más se parezca a vosotros

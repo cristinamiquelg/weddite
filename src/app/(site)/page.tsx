@@ -40,7 +40,10 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="mx-auto max-w-5xl px-6 pb-20 pt-20 text-center sm:pt-28">
+      <section
+        data-reveal
+        className="mx-auto max-w-5xl px-6 pb-20 pt-20 text-center sm:pt-28"
+      >
         <p className="text-xs uppercase tracking-[0.3em] text-clay">
           Webs de boda, sin lo cutre
         </p>
@@ -70,13 +73,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="pb-24">
+      <section className="pb-24" data-reveal style={{ transitionDelay: "100ms" }}>
         <HeroGrid />
       </section>
 
       <section className="border-t border-line bg-paper-raised">
         <div className="mx-auto grid max-w-5xl gap-12 px-6 py-20 sm:grid-cols-2">
-          <div>
+          <div data-reveal>
             <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">
               El problema
             </p>
@@ -92,7 +95,7 @@ export default function HomePage() {
               ))}
             </ul>
           </div>
-          <div>
+          <div data-reveal style={{ transitionDelay: "120ms" }}>
             <p className="text-xs uppercase tracking-[0.3em] text-clay">
               Weddite
             </p>
@@ -112,15 +115,17 @@ export default function HomePage() {
       </section>
 
       <section id="como-funciona" className="mx-auto max-w-5xl px-6 py-24">
-        <p className="text-center text-xs uppercase tracking-[0.3em] text-clay">
-          Cómo funciona
-        </p>
-        <h2 className="mx-auto mt-4 max-w-md text-center font-display text-3xl sm:text-4xl">
-          De la idea a vuestra web publicada, en un ratito
-        </h2>
+        <div data-reveal>
+          <p className="text-center text-xs uppercase tracking-[0.3em] text-clay">
+            Cómo funciona
+          </p>
+          <h2 className="mx-auto mt-4 max-w-md text-center font-display text-3xl sm:text-4xl">
+            De la idea a vuestra web publicada, en un ratito
+          </h2>
+        </div>
         <div className="mt-16 grid gap-10 sm:grid-cols-3">
-          {steps.map((step) => (
-            <div key={step.n}>
+          {steps.map((step, i) => (
+            <div key={step.n} data-reveal style={{ transitionDelay: `${i * 120}ms` }}>
               <span className="font-display text-4xl text-clay">{step.n}</span>
               <h3 className="mt-4 font-display text-xl">{step.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft">
@@ -132,7 +137,7 @@ export default function HomePage() {
       </section>
 
       <section className="border-t border-line bg-paper-raised">
-        <div className="px-6 py-24">
+        <div className="px-6 py-24" data-reveal>
           <p className="text-center text-xs uppercase tracking-[0.3em] text-clay">
             Parejas reales
           </p>
@@ -146,7 +151,10 @@ export default function HomePage() {
       </section>
 
       <section className="border-t border-line bg-ink">
-        <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-20 text-center text-paper">
+        <div
+          data-reveal
+          className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-20 text-center text-paper"
+        >
           <h2 className="max-w-lg text-balance font-display text-3xl sm:text-4xl">
             Vuestra boda merece una web tan bonita como el día
           </h2>

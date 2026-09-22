@@ -41,7 +41,10 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
         </nav>
       </header>
 
-      <section className="mx-auto flex max-w-3xl flex-col items-center px-6 pb-20 pt-20 text-center sm:pt-28">
+      <section
+        data-reveal
+        className="mx-auto flex max-w-3xl flex-col items-center px-6 pb-20 pt-20 text-center sm:pt-28"
+      >
         <p className="text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]">
           Nos casamos
         </p>
@@ -69,7 +72,10 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
       </section>
 
       <section id="historia" className="border-t border-[var(--w-line)]">
-        <div className="mx-auto grid max-w-5xl gap-10 px-6 py-20 sm:grid-cols-2 sm:items-center">
+        <div
+          data-reveal
+          className="mx-auto grid max-w-5xl gap-10 px-6 py-20 sm:grid-cols-2 sm:items-center"
+        >
           <PhotoPlaceholder caption={data.galleryCaptions[0]} index={0} />
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]">
@@ -85,14 +91,16 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
 
       <section id="dia" className="border-t border-[var(--w-line)] bg-[var(--w-surface)]">
         <div className="mx-auto max-w-5xl px-6 py-20">
-          <p className="text-center text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]">
-            El gran día
-          </p>
-          <h2 className="mt-4 text-center font-display text-3xl sm:text-4xl">
-            {formatShortDate(data.date)}
-          </h2>
+          <div data-reveal>
+            <p className="text-center text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]">
+              El gran día
+            </p>
+            <h2 className="mt-4 text-center font-display text-3xl sm:text-4xl">
+              {formatShortDate(data.date)}
+            </h2>
+          </div>
 
-          <div className="mt-14 grid gap-8 sm:grid-cols-2">
+          <div data-reveal className="mt-14 grid gap-8 sm:grid-cols-2">
             <div className="rounded-2xl border border-[var(--w-line)] bg-[var(--w-bg)] p-8">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--w-accent)]">
                 Ceremonia · {data.ceremonyTime || "--:--"}
@@ -138,7 +146,10 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
           </div>
 
           {data.timeline.length > 0 ? (
-            <ol className="mx-auto mt-16 max-w-md space-y-6 border-l border-[var(--w-line)] pl-8">
+            <ol
+              data-reveal
+              className="mx-auto mt-16 max-w-md space-y-6 border-l border-[var(--w-line)] pl-8"
+            >
               {data.timeline.map((item, i) => (
                 <li key={i} className="relative">
                   <span className="absolute -left-[calc(2rem+5px)] top-1.5 h-2.5 w-2.5 rounded-full bg-[var(--w-accent)]" />
@@ -165,10 +176,13 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
 
       <section id="galeria" className="border-t border-[var(--w-line)]">
         <div className="mx-auto max-w-5xl px-6 py-20">
-          <p className="text-center text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]">
+          <p
+            data-reveal
+            className="text-center text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]"
+          >
             Galería
           </p>
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+          <div data-reveal className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
             {(data.galleryCaptions.length > 0
               ? data.galleryCaptions
               : ["", "", "", "", "", ""]
@@ -180,7 +194,7 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
       </section>
 
       <section id="rsvp" className="border-t border-[var(--w-line)] bg-[var(--w-surface)]">
-        <div className="mx-auto max-w-2xl px-6 py-20 text-center">
+        <div data-reveal className="mx-auto max-w-2xl px-6 py-20 text-center">
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]">
             Confirmación de asistencia
           </p>
@@ -201,7 +215,7 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
       </section>
 
       <section id="regalo" className="border-t border-[var(--w-line)]">
-        <div className="mx-auto max-w-2xl px-6 py-20 text-center">
+        <div data-reveal className="mx-auto max-w-2xl px-6 py-20 text-center">
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]">
             Mesa de regalos
           </p>

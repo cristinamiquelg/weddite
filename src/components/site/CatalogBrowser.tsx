@@ -116,6 +116,7 @@ export default function CatalogBrowser({ templates }: { templates: Template[] })
     <div>
       <div
         ref={barRef}
+        data-reveal
         className="flex flex-col gap-4 rounded-xl bg-[#f4ece0] px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
@@ -187,9 +188,11 @@ export default function CatalogBrowser({ templates }: { templates: Template[] })
         </p>
       ) : (
         <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((tpl) => (
+          {filtered.map((tpl, i) => (
             <article
               key={tpl.id}
+              data-reveal
+              style={{ transitionDelay: `${i * 100}ms` }}
               className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-paper-raised transition-shadow hover:shadow-[0_30px_60px_-35px_rgba(33,29,26,0.4)]"
             >
               <Link href={`/plantillas/${tpl.slug}`} className="block">

@@ -37,7 +37,10 @@ export default async function TemplateDetailPage({
       </Link>
 
       <div className="mt-6 grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="overflow-hidden rounded-2xl border border-line bg-paper-raised shadow-[0_30px_80px_-40px_rgba(33,29,26,0.35)]">
+        <div
+          data-reveal
+          className="overflow-hidden rounded-2xl border border-line bg-paper-raised shadow-[0_30px_80px_-40px_rgba(33,29,26,0.35)]"
+        >
           <div className="flex items-center gap-1.5 border-b border-line bg-paper px-4 py-3">
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
@@ -53,7 +56,7 @@ export default async function TemplateDetailPage({
           />
         </div>
 
-        <div>
+        <div data-reveal style={{ transitionDelay: "120ms" }}>
           <p className="text-xs uppercase tracking-[0.3em] text-clay">
             {tpl.tagline}
           </p>
