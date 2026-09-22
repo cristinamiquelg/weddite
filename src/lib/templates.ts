@@ -6,8 +6,13 @@ export type Template = {
   description: string;
   price: number;
   tags: string[];
+  colors: string[];
+  tools: string[];
   features: string[];
 };
+
+export const colorOptions = ["Terracota", "Verde salvia", "Azul medianoche", "Navy", "Coral"];
+export const toolOptions = ["RSVP", "Itinerario", "Galería", "Regalo"];
 
 export const templates: Template[] = [
   {
@@ -19,6 +24,8 @@ export const templates: Template[] = [
       "Una plantilla minimalista con aire editorial: tipografía serif elegante, mucho aire en blanco y detalles cálidos. Pensada para parejas que quieren algo bonito de verdad, no una web de boda genérica.",
     price: 39,
     tags: ["Minimalista", "Editorial", "Atemporal"],
+    colors: ["Terracota", "Verde salvia", "Azul medianoche"],
+    tools: ["RSVP", "Itinerario", "Galería", "Regalo"],
     features: [
       "Cuenta atrás en directo",
       "Itinerario del día con horarios",
@@ -38,6 +45,8 @@ export const templates: Template[] = [
       "Una plantilla con más personalidad: paleta navy, crema y coral, tipografía serif clásica y detalles ilustrados. Pensada para parejas que quieren una boda con varias fases (pre-boda, boda, post-boda) y un RSVP completo con acompañantes.",
     price: 45,
     tags: ["Elegante", "Con carácter", "Multi-evento"],
+    colors: ["Navy", "Coral"],
+    tools: ["RSVP", "Itinerario", "Regalo"],
     features: [
       "Cuenta atrás en directo",
       "Itinerario por fases (pre-boda, boda, post-boda) con varios lugares",

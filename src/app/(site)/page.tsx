@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { templates } from "@/lib/templates";
 import HeroGrid from "@/components/site/HeroGrid";
+import TestimonialsCarousel from "@/components/site/TestimonialsCarousel";
 
 const steps = [
   {
@@ -127,6 +128,20 @@ export default function HomePage() {
               </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="border-t border-line bg-paper-raised">
+        <div className="px-6 py-24">
+          <p className="text-center text-xs uppercase tracking-[0.3em] text-clay">
+            Parejas reales
+          </p>
+          <h2 className="mx-auto mt-4 max-w-md text-center font-display text-3xl sm:text-4xl">
+            Lo que dicen las parejas que ya se casaron
+          </h2>
+          <div className="mt-16">
+            <TestimonialsCarousel />
+          </div>
         </div>
       </section>
 
