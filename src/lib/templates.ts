@@ -1,0 +1,36 @@
+export type Template = {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string;
+  description: string;
+  price: number;
+  tags: string[];
+  features: string[];
+};
+
+export const templates: Template[] = [
+  {
+    id: "tpl-aurora",
+    slug: "aurora",
+    name: "Aurora",
+    tagline: "Editorial, cálida y atemporal",
+    description:
+      "Una plantilla minimalista con aire editorial: tipografía serif elegante, mucho aire en blanco y detalles cálidos. Pensada para parejas que quieren algo bonito de verdad, no una web de boda genérica.",
+    price: 39,
+    tags: ["Minimalista", "Editorial", "Atemporal"],
+    features: [
+      "Cuenta atrás en directo",
+      "Itinerario del día con horarios",
+      "Galería de fotos personalizable",
+      "Confirmación de asistencia (RSVP) integrada",
+      "Sección de lista de regalos / bizum",
+      "3 paletas de color a elegir",
+      "100% adaptada a móvil",
+    ],
+  },
+];
+
+export function getTemplateBySlug(slug: string): Template | undefined {
+  return templates.find((t) => t.slug === slug);
+}
