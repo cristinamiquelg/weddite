@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import Link from "next/link";
+import SparkleIcon from "@/components/site/SparkleIcon";
 import type { WeddingData } from "@/lib/wedding-types";
 import { formatLongDate, mapsUrl } from "@/lib/format";
 import Countdown from "../Countdown";
@@ -85,10 +86,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             "repeating-linear-gradient(90deg, rgba(14,20,83,0.3) 0 1px, transparent 1px 12px)",
         }}
       >
-        <div
-          data-reveal
-          className="mx-auto flex max-w-3xl flex-col items-center gap-10 bg-[var(--r-cream)] px-6 py-16 text-center"
-        >
+        <div className="fade-in-load mx-auto flex max-w-3xl flex-col items-center gap-10 bg-[var(--r-cream)] px-6 py-16 text-center">
           <div className="flex flex-col items-center gap-4">
             <p className="italic text-lg">Save the Date</p>
             <p className="text-xs uppercase tracking-[0.13em]" style={gothicStyle}>
@@ -283,8 +281,9 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         {data.organizerContact ? <p className="text-sm">{data.organizerContact}</p> : null}
         <p className="text-sm">
           Hecho con{" "}
-          <Link href="/" className="text-[var(--r-coral)]">
+          <Link href="/" className="group inline-flex items-center gap-1 text-[var(--r-coral)]">
             Weddite
+            <SparkleIcon className="h-3 w-3 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125" />
           </Link>
         </p>
       </footer>

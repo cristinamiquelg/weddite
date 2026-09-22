@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SparkleIcon from "@/components/site/SparkleIcon";
 import type { WeddingData } from "@/lib/wedding-types";
 import { formatLongDate, formatShortDate, mapsUrl } from "@/lib/format";
 import { paletteCssVars } from "./palette";
@@ -41,10 +42,7 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
         </nav>
       </header>
 
-      <section
-        data-reveal
-        className="mx-auto flex max-w-3xl flex-col items-center px-6 pb-20 pt-20 text-center sm:pt-28"
-      >
+      <section className="fade-in-load mx-auto flex max-w-3xl flex-col items-center px-6 pb-20 pt-20 text-center sm:pt-28">
         <p className="text-xs uppercase tracking-[0.3em] text-[var(--w-accent)]">
           Nos casamos
         </p>
@@ -247,8 +245,12 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
           <p className="mt-4 font-display italic text-lg">{names}</p>
           <p className="mt-6 text-xs uppercase tracking-[0.2em] text-[var(--w-ink-soft)]">
             Hecho con{" "}
-            <Link href="/" className="font-medium text-[var(--w-accent)]">
+            <Link
+              href="/"
+              className="group inline-flex items-center gap-1 font-medium text-[var(--w-accent)]"
+            >
               Weddite
+              <SparkleIcon className="h-3 w-3 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125" />
             </Link>
           </p>
         </div>

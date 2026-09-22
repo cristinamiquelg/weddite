@@ -2,6 +2,7 @@ import Link from "next/link";
 import { templates } from "@/lib/templates";
 import HeroGrid from "@/components/site/HeroGrid";
 import TestimonialsCarousel from "@/components/site/TestimonialsCarousel";
+import SparkleIcon from "@/components/site/SparkleIcon";
 
 const steps = [
   {
@@ -41,15 +42,15 @@ export default function HomePage() {
   return (
     <>
       <section
-        data-reveal
-        className="mx-auto max-w-5xl px-6 pb-20 pt-20 text-center sm:pt-28"
+        className="fade-in-load mx-auto max-w-5xl px-6 pb-20 pt-20 text-center sm:pt-28"
+        style={{ animationDelay: "80ms" }}
       >
         <p className="text-xs uppercase tracking-[0.3em] text-clay">
           Webs de boda, sin lo cutre
         </p>
         <h1 className="mx-auto mt-6 max-w-3xl text-balance font-display text-4xl leading-tight sm:text-6xl">
           La web de vuestra boda, bonita de verdad
-          <span className="italic text-clay">.</span>
+          <SparkleIcon className="ml-2 inline-block h-[0.6em] w-[0.6em] -translate-y-1 text-clay" />
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-balance text-lg text-ink-soft">
           Elegid una plantilla moderna, personalizadla con vuestra historia y

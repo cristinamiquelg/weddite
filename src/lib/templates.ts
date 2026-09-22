@@ -11,8 +11,6 @@ export type Template = {
   features: string[];
 };
 
-export const colorOptions = ["Terracota", "Verde salvia", "Azul medianoche", "Navy", "Coral"];
-export const toolOptions = ["RSVP", "Itinerario", "Galería", "Regalo"];
 
 export const templates: Template[] = [
   {
