@@ -3,6 +3,9 @@ export type Template = {
   slug: string;
   name: string;
   tagline: string;
+  /** One short line for catalog cards — sells the feeling, not the feature list. */
+  summary: string;
+  /** Longer, feeling-first copy for the template's own detail page. */
   description: string;
   price: number;
   tags: string[];
@@ -18,8 +21,9 @@ export const templates: Template[] = [
     slug: "aurora",
     name: "Aurora",
     tagline: "Editorial, cálida y atemporal",
+    summary: "Diseño editorial, cálido y sin adornos de más: bonito hoy y dentro de diez años.",
     description:
-      "Una plantilla minimalista con aire editorial: tipografía serif elegante, mucho aire en blanco y detalles cálidos. Pensada para parejas que quieren algo bonito de verdad, no una web de boda genérica.",
+      "Para una boda que no necesita adornos para tener personalidad: tipografía elegante, mucho aire y una estética que seguirá gustándoos cuando hayan pasado las fotos de la boda.",
     price: 39,
     tags: ["Minimalista", "Editorial", "Atemporal"],
     colors: ["Terracota", "Verde salvia", "Azul medianoche"],
@@ -39,8 +43,9 @@ export const templates: Template[] = [
     slug: "ribera",
     name: "Ribera",
     tagline: "Elegante, náutica y con carácter",
+    summary: "Elegante, náutica y con carácter, para bodas que no empiezan el día de la boda.",
     description:
-      "Una plantilla con más personalidad: paleta navy, crema y coral, tipografía serif clásica y detalles ilustrados. Pensada para parejas que quieren una boda con varias fases (pre-boda, boda, post-boda) y un RSVP completo con acompañantes.",
+      "Para bodas con varias fases: preboda, ceremonia, celebración y postboda, todo en una misma web, con paleta navy y coral y detalles ilustrados que le dan carácter.",
     price: 45,
     tags: ["Elegante", "Con carácter", "Multi-evento"],
     colors: ["Navy", "Coral"],

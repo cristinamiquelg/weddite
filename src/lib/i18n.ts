@@ -94,7 +94,7 @@ const es: Dict = {
       bus: { title: "Autobuses", cta: "Cómo llegar" },
       hotel: { title: "Hoteles", cta: "Más información" },
     },
-    rsvp: { title: "Confirma tu asistencia", deadlinePrefix: "Antes del" },
+    rsvp: { title: "¿Nos acompañáis?", deadlinePrefix: "Antes del" },
     footer: { madeWith: "Hecho con" },
     form: {
       legend: "Tu información",
@@ -163,7 +163,7 @@ const en: Dict = {
       bus: { title: "Shuttle buses", cta: "Get directions" },
       hotel: { title: "Hotels", cta: "More info" },
     },
-    rsvp: { title: "Confirm your attendance", deadlinePrefix: "Before" },
+    rsvp: { title: "Will you join us?", deadlinePrefix: "Before" },
     footer: { madeWith: "Made with" },
     form: {
       legend: "Your information",

@@ -8,33 +8,33 @@ import SparkleIcon from "@/components/site/SparkleIcon";
 const steps = [
   {
     n: "01",
-    title: "Elegís vuestra plantilla",
-    body: "Navegad el catálogo, mirad la preview en directo tal cual la verán vuestros invitados y quedaos con la que más os enamore.",
+    title: "Elegid vuestro diseño",
+    body: "Mirad las plantillas, abrid la preview y elegid vuestra favorita. Sin registros, llamadas ni compromiso.",
   },
   {
     n: "02",
-    title: "La personalizáis al momento",
-    body: "Nombres, fecha, ubicación, vuestra historia, itinerario, fotos, RSVP y regalo. Vais viendo los cambios en vivo mientras escribís.",
+    title: "Hacedla vuestra",
+    body: "Añadid vuestros nombres, historia, fotos, horarios, ubicaciones, RSVP y todo lo que necesitan vuestros invitados.",
   },
   {
     n: "03",
-    title: "La contratáis con un clic",
-    body: "Sin llamadas, sin presupuestos por correo, sin esperas. Confirmáis y vuestra web queda lista para compartir con quien queráis.",
+    title: "Publicadla",
+    body: "Cuando esté lista, la compráis y podéis compartirla con vuestros invitados. Así de fácil.",
   },
 ];
 
 const painPoints = [
-  "Plantillas con typefaces de los 2000 y gifs de corazones",
-  "Formularios interminables por email para pedir un simple cambio",
-  "Presupuestos a medida que tardan días en llegar",
-  "Webs que se rompen en el móvil, donde las va a ver todo el mundo",
+  "Diseños que parecen sacados de otra década.",
+  "Cambios que requieren tres emails y una llamada.",
+  "Presupuestos que llegan cuando ya te has olvidado de ellos.",
+  "Webs pensadas para ordenador cuando tus invitados están en WhatsApp.",
 ];
 
 const promises = [
-  "Diseño editorial, cuidado hasta el último detalle",
-  "Preview en directo antes de pagar un euro",
-  "Todo el proceso en minutos, sin intermediarios",
-  "100% responsive, pensada para leerse desde el grupo de WhatsApp",
+  { title: "Diseño cuidado", body: "Diseños editoriales, sin clichés de boda." },
+  { title: "La veis antes de comprarla", body: "Probad la web en directo antes de pagar." },
+  { title: "La tenéis en minutos", body: "Sin llamadas, presupuestos ni intermediarios." },
+  { title: "Pensada para móvil", body: "Porque vuestros invitados probablemente la abrirán desde WhatsApp." },
 ];
 
 export default function HomePage() {
@@ -50,28 +50,34 @@ export default function HomePage() {
           Webs de boda, sin lo cutre
         </p>
         <h1 className="mx-auto mt-6 max-w-3xl text-balance font-display text-4xl leading-tight sm:text-6xl">
-          La web de vuestra boda, bonita de verdad
+          Una web tan bonita como vuestra boda
           <SparkleIcon className="ml-2 inline-block h-[0.6em] w-[0.6em] -translate-y-1 text-clay" />
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-balance text-lg text-ink-soft">
-          Elegid una plantilla moderna, personalizadla con vuestra historia y
-          contratadla en minutos. Todo a golpe de clic: sin llamadas, sin
-          correos interminables.
+          Elegid vuestro diseño, personalizadlo con vuestra historia y
+          compartidlo con vuestros invitados. Sin llamadas, sin presupuestos
+          y sin esperas.
         </p>
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Link
-            href="/plantillas"
-            className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
-          >
-            Explorar plantillas
-          </Link>
-          <Link
-            href={`/preview/${featured.slug}`}
-            target="_blank"
-            className="rounded-full border border-line px-7 py-3.5 text-sm font-medium text-ink transition-colors hover:border-ink"
-          >
-            Ver un ejemplo en directo
-          </Link>
+        <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-4">
+          <div className="flex flex-col items-center gap-2">
+            <Link
+              href="/plantillas"
+              className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+            >
+              Explorar plantillas
+            </Link>
+            <span className="text-xs text-ink-soft">Ver diseños y precios</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <Link
+              href={`/preview/${featured.slug}`}
+              target="_blank"
+              className="rounded-full border border-line px-7 py-3.5 text-sm font-medium text-ink transition-colors hover:border-ink"
+            >
+              Ver un ejemplo en directo
+            </Link>
+            <span className="text-xs text-ink-soft">Así la verán vuestros invitados</span>
+          </div>
         </div>
       </section>
 
@@ -86,7 +92,8 @@ export default function HomePage() {
               El problema
             </p>
             <h2 className="mt-4 font-display text-3xl">
-              Las webs de boda suelen ser cutres
+              Una boda puede estar cuidada hasta el último detalle. Su web
+              también debería.
             </h2>
             <ul className="mt-6 space-y-4">
               {painPoints.map((p) => (
@@ -102,13 +109,16 @@ export default function HomePage() {
               Weddite
             </p>
             <h2 className="mt-4 font-display text-3xl">
-              Nosotros lo hacemos de otra forma
+              Así debería ser una web de boda
             </h2>
-            <ul className="mt-6 space-y-4">
+            <ul className="mt-6 space-y-5">
               {promises.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-ink">
+                <li key={p.title} className="flex items-start gap-3 text-ink">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" />
-                  {p}
+                  <span>
+                    <span className="font-medium text-ink">{p.title}</span>
+                    <span className="block text-sm text-ink-soft">{p.body}</span>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -122,7 +132,7 @@ export default function HomePage() {
             Cómo funciona
           </p>
           <h2 className="mx-auto mt-4 max-w-md text-center font-display text-3xl sm:text-4xl">
-            De la idea a vuestra web publicada, en un ratito
+            De cero a web de boda en tres pasos
           </h2>
         </div>
         <div className="mt-16 grid gap-10 sm:grid-cols-3">
@@ -158,7 +168,7 @@ export default function HomePage() {
           className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-20 text-center text-paper"
         >
           <h2 className="max-w-lg text-balance font-display text-3xl sm:text-4xl">
-            Vuestra boda merece una web tan bonita como el día
+            Vuestra boda merece algo mejor que una plantilla genérica
           </h2>
           <Link
             href="/plantillas"

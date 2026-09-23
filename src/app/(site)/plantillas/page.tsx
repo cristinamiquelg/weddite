@@ -14,12 +14,12 @@ export default function CatalogPage() {
       <div className="max-w-xl" data-reveal>
         <p className="text-xs uppercase tracking-[0.3em] text-clay">Catálogo</p>
         <h1 className="mt-4 font-display text-4xl sm:text-5xl">
-          Elegid la que más se parezca a vosotros
+          Elegid vuestro estilo
         </h1>
         <p className="mt-4 text-ink-soft">
           Cada plantilla se puede probar en directo antes de decidir nada.
-          Cuando la tengáis clara, la personalizáis y la contratáis sin salir
-          del navegador.
+          Cuando la tengáis clara, la personalizáis y la hacéis vuestra sin
+          salir del navegador.
         </p>
       </div>
 
@@ -50,7 +50,7 @@ export default function CatalogPage() {
               </div>
               <p className="mt-1 text-sm text-clay">{tpl.tagline}</p>
               <p className="mt-4 flex-1 text-sm text-ink-soft">
-                {tpl.description}
+                {tpl.summary}
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {tpl.tags.map((tag) => (

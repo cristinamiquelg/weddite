@@ -82,7 +82,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
             target="_blank"
             className="mt-6 inline-block text-sm font-medium text-clay underline underline-offset-4"
           >
-            Revisar la vista previa antes de contratar
+            Revisar la vista previa antes de comprar
           </Link>
         </div>
 
@@ -157,7 +157,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
               >
                 {submitting
                   ? "Confirmando..."
-                  : `Confirmar contratación · ${template.price} €`}
+                  : `Confirmar compra · ${template.price} €`}
               </button>
               <p className="text-center text-xs text-ink-soft">
                 Al confirmar aceptáis los términos del servicio. Sin llamadas,

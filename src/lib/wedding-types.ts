@@ -122,7 +122,8 @@ export const demoWeddingData: WeddingData = {
     "Riendo, como siempre",
   ],
   rsvpDeadline: "2027-04-15",
-  rsvpNote: "Confirmad antes del 15 de abril indicando alergias o restricciones alimentarias.",
+  rsvpNote:
+    "Esperamos veros el 12 de junio. Confirmad antes del 15 de abril e indicadnos si tenéis alguna alergia.",
   giftMessage:
     "Vuestra presencia es el mejor regalo. Si aun así queréis tener un detalle con nosotros, nos hará ilusión que colaboréis con nuestra luna de miel.",
   giftAccount: "ES00 0000 0000 0000 0000 0000",
@@ -176,7 +177,7 @@ export const riberaDemoWeddingData: WeddingData = {
   ],
   rsvpDeadline: "2027-07-15",
   rsvpNote:
-    "Por favor, confirmad vuestra asistencia lo antes posible. Si venís en pareja o familia, con que lo rellene uno es suficiente.",
+    "Esperamos veros el gran día. Confirmad vuestra asistencia lo antes posible; si venís en pareja o familia, con que lo rellene uno es suficiente.",
   giftMessage:
     "Tu presencia es nuestro mejor regalo, pero si quieres ayudarnos a crear nuestro nuevo hogar, puedes hacerlo por transferencia a",
   giftAccount: "ES00 0000 0000 0000 0000 0000",

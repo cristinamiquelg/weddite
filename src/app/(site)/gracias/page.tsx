@@ -30,7 +30,7 @@ export default async function ThanksPage({
         />
       </span>
       <p className="mt-6 text-xs uppercase tracking-[0.3em] text-clay">
-        Contratación confirmada
+        Compra confirmada
       </p>
       <h1 className="mt-4 font-display text-4xl sm:text-5xl">
         ¡Enhorabuena! Vuestra web ya está lista

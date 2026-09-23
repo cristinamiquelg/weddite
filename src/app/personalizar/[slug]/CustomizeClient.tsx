@@ -151,7 +151,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
                 href={`/personalizar/${template.slug}/confirmar`}
                 className="rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-90"
               >
-                Revisar y contratar
+                Revisar y comprar
               </Link>
             ) : (
               <button

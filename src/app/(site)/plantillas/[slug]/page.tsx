@@ -71,7 +71,7 @@ export default async function TemplateDetailPage({
               href={`/personalizar/${tpl.slug}`}
               className="flex-1 rounded-full bg-ink px-6 py-3.5 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90"
             >
-              Personalizar y contratar
+              Hacerla vuestra
             </Link>
             <Link
               href={`/preview/${tpl.slug}`}
@@ -84,7 +84,7 @@ export default async function TemplateDetailPage({
 
           <div className="mt-10 border-t border-line pt-8">
             <p className="text-xs uppercase tracking-[0.2em] text-ink-soft">
-              Qué incluye
+              Todo lo que necesitáis
             </p>
             <ul className="mt-4 space-y-3">
               {tpl.features.map((f) => (

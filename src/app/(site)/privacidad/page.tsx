@@ -34,7 +34,7 @@ const sections: { heading: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    heading: "La contratación",
+    heading: "La compra",
     body: (
       <p>
         Weddite es todavía un prototipo: el proceso de pago que veis en el

@@ -55,7 +55,7 @@ export default function Footer() {
           <div className="max-w-sm">
             <Logo className="text-3xl text-paper sm:text-4xl" />
             <p className="mt-5 text-sm leading-relaxed text-paper/70">
-              Webs de boda modernas, contratadas en minutos. Sin llamadas, sin
+              Webs de boda modernas, listas en minutos. Sin llamadas, sin
               presupuestos por correo: todo a golpe de clic.
             </p>
           </div>
