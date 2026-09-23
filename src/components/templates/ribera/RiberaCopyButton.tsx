@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 
-export default function RiberaCopyButton({ value }: { value: string }) {
+export default function RiberaCopyButton({
+  value,
+  className = "border border-[var(--r-coral)] px-5 py-2.5 text-sm text-[var(--r-cream)] transition-colors hover:bg-[var(--r-coral)]",
+}: {
+  value: string;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   return (
@@ -17,7 +23,7 @@ export default function RiberaCopyButton({ value }: { value: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1800);
       }}
-      className="border border-[var(--r-coral)] px-5 py-2.5 text-sm text-[var(--r-cream)] transition-colors hover:bg-[var(--r-coral)]"
+      className={className}
     >
       {copied ? "¡Copiado!" : "Copiar número de cuenta"}
     </button>
