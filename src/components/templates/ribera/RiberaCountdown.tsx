@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getDict, type Locale } from "@/lib/i18n";
 import styles from "./ribera.module.css";
 
 function getRemaining(target: string) {
@@ -17,8 +18,9 @@ function getRemaining(target: string) {
 // Ribera-specific countdown: same ticking logic as the shared Countdown
 // component, but with the exact big-serif-number look of the L&J
 // invitation (days/hours/minutes only, no seconds).
-export default function RiberaCountdown({ date }: { date: string }) {
+export default function RiberaCountdown({ date, locale }: { date: string; locale?: Locale }) {
   const [remaining, setRemaining] = useState<ReturnType<typeof getRemaining> | null>(null);
+  const dict = getDict(locale);
 
   useEffect(() => {
     if (!date) return;
@@ -31,15 +33,15 @@ export default function RiberaCountdown({ date }: { date: string }) {
   if (!date || !remaining) return null;
 
   if (remaining.isPast) {
-    return <p className={styles.eyebrow}>¡Ya lo celebramos!</p>;
+    return <p className={styles.eyebrow}>{dict.countdown.alreadyCelebrated}</p>;
   }
 
   // Days is the headline number, left unpadded (e.g. "524", not "0524");
   // hours/minutes pad to 2 digits, matching the original invitation.
   const units: [string, string][] = [
-    [String(remaining.days), "días"],
-    [String(remaining.hours).padStart(2, "0"), "horas"],
-    [String(remaining.minutes).padStart(2, "0"), "minutos"],
+    [String(remaining.days), dict.countdown.days],
+    [String(remaining.hours).padStart(2, "0"), dict.countdown.hours],
+    [String(remaining.minutes).padStart(2, "0"), dict.countdown.minutes],
   ];
 
   return (

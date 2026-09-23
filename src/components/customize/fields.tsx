@@ -1,15 +1,26 @@
 export function Field({
   label,
   hint,
+  required = false,
   children,
 }: {
   label: string;
   hint?: string;
+  required?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-ink">{label}</span>
+      <span className="flex items-center gap-2 text-sm font-medium text-ink">
+        {label}
+        <span
+          className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+            required ? "bg-clay/10 text-clay" : "bg-line text-ink-soft"
+          }`}
+        >
+          {required ? "Obligatorio" : "Opcional"}
+        </span>
+      </span>
       {children}
       {hint ? <span className="text-xs text-ink-soft">{hint}</span> : null}
     </label>

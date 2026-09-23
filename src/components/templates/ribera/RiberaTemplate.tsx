@@ -1,19 +1,13 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
-import type { WeddingData } from "@/lib/wedding-types";
+import type { WeddingData, WeddingPlace } from "@/lib/wedding-types";
 import { formatLongDate, mapsUrl } from "@/lib/format";
+import { getDict } from "@/lib/i18n";
 import RiberaCountdown from "./RiberaCountdown";
 import RiberaRsvpForm from "./RiberaRsvpForm";
 import RiberaCopyButton from "./RiberaCopyButton";
 import styles from "./ribera.module.css";
-
-const NAV_LINKS = [
-  { href: "#cuando", label: "Cuándo" },
-  { href: "#itinerario", label: "Itinerario y lugares" },
-  { href: "#detalles", label: "Detalles" },
-  { href: "#regalos", label: "Regalos" },
-];
 
 // Real line-art illustrations from the L&J invitation this template is
 // modeled on. Detail cards map 1:1 to their icon; itinerary places don't
@@ -25,11 +19,6 @@ const DETAIL_ILLUSTRATIONS = {
   bus: "/ribera/autobuses.svg",
   hotel: "/ribera/hoteles.svg",
 };
-const DETAIL_DEFAULTS = {
-  dresscode: { title: "Dresscode", ctaLabel: "Inspiración" },
-  bus: { title: "Autobuses", ctaLabel: "Cómo llegar" },
-  hotel: { title: "Hoteles", ctaLabel: "Más información" },
-};
 const PLACE_ILLUSTRATIONS = [
   "/ribera/casa-monico.svg",
   "/ribera/catedral.svg",
@@ -40,6 +29,27 @@ const PLACE_ILLUSTRATIONS = [
 const gothicStyle: React.CSSProperties = {
   fontFamily: "var(--font-science-gothic), Oswald, \"Arial Narrow\", sans-serif",
 };
+
+type VisiblePlace = WeddingPlace & { illus: string };
+type VisiblePhase = { name: string; when: string; places: VisiblePlace[]; placeholderCount: number };
+
+// Assigns each visible place a venue illustration by its position across
+// the whole itinerary (not reset per phase), matching the variety of the
+// four distinct places in the original design. Computed once, outside any
+// JSX-embedded callback, so no mutable counter is captured by render.
+function buildVisiblePhases(phases: WeddingData["phases"]): VisiblePhase[] {
+  let cursor = 0;
+  return phases.map((phase) => {
+    const places = phase.places
+      .filter((place) => place.name || place.address)
+      .map((place) => {
+        const illus = PLACE_ILLUSTRATIONS[cursor % PLACE_ILLUSTRATIONS.length];
+        cursor += 1;
+        return { ...place, illus };
+      });
+    return { name: phase.name, when: phase.when, places, placeholderCount: phase.places.length };
+  });
+}
 
 function heroDateParts(iso: string) {
   if (!iso) return { day: "—", month: "—", year: "----" };
@@ -53,11 +63,31 @@ function heroDateParts(iso: string) {
 }
 
 export default function RiberaTemplate({ data }: { data: WeddingData }) {
+  const locale = data.locale;
+  const dict = getDict(locale);
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
   const initials = `${(data.partnerA || "L")[0]}&${(data.partnerB || "J")[0]}`;
   const { day, month, year } = heroDateParts(data.date);
 
-  let placeIndex = 0;
+  const hasEstate = Boolean(data.estateName || data.estateLocation);
+  const hasItinerary = data.phases.length > 0;
+  const hasDetails = data.detailCards.length > 0;
+  const hasGift = Boolean(data.giftMessage || data.giftAccount);
+
+  const NAV_LINKS = [
+    { href: "#cuando", label: dict.ribera.nav.cuando },
+    hasItinerary ? { href: "#itinerario", label: dict.ribera.nav.itinerario } : null,
+    hasDetails ? { href: "#detalles", label: dict.ribera.nav.detalles } : null,
+    hasGift ? { href: "#regalos", label: dict.ribera.nav.regalos } : null,
+  ].filter((l): l is { href: string; label: string } => l !== null);
+
+  const DETAIL_DEFAULTS = {
+    dresscode: dict.ribera.details.dresscode,
+    bus: dict.ribera.details.bus,
+    hotel: dict.ribera.details.hotel,
+  };
+
+  const visiblePhases = hasItinerary ? buildVisiblePhases(data.phases) : [];
 
   return (
     <div className={styles.root}>
@@ -73,7 +103,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
           {initials}
         </a>
         <Link href="#rsvp" className={`${styles.btnSolid} ${styles.navCta}`}>
-          Confirma asistencia
+          {dict.ribera.nav.confirm}
         </Link>
       </header>
 
@@ -97,142 +127,141 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             </span>
           </div>
 
-          <div className={styles.heroGroup}>
-            <p className={styles.heroNames}>{data.estateName || "Lugar de la celebración"}</p>
-            <p className={styles.scriptText}>{data.estateLocation || "Ubicación por confirmar"}</p>
-          </div>
+          {hasEstate ? (
+            <div className={styles.heroGroup}>
+              {data.estateName ? <p className={styles.heroNames}>{data.estateName}</p> : null}
+              {data.estateLocation ? (
+                <p className={styles.scriptText}>{data.estateLocation}</p>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </section>
 
       <section id="cuando" className={styles.countdown}>
         <div data-reveal className={styles.countdownInner}>
-          <p className={styles.countdownTitle}>¡Se acerca el gran día!</p>
-          <RiberaCountdown date={data.date} />
+          <p className={styles.countdownTitle}>{dict.ribera.countdownTitle}</p>
+          <RiberaCountdown date={data.date} locale={locale} />
         </div>
       </section>
 
-      <section className={styles.bandSolid} id="itinerario">
-        <div data-reveal className={styles.card}>
-          <h2 className={styles.sectionTitle}>Itinerario y lugares</h2>
+      {hasItinerary ? (
+        <section className={styles.bandSolid} id="itinerario">
+          <div data-reveal className={styles.card}>
+            <h2 className={styles.sectionTitle}>{dict.ribera.itinerary.title}</h2>
 
-          <div className={styles.itinerary}>
-            {data.phases.length > 0 ? (
-              data.phases.map((phase, pi) => (
+            <div className={styles.itinerary}>
+              {visiblePhases.map((phase, pi) => (
                 <Fragment key={`phase-${pi}`}>
-                  <div className={styles.phase}>
-                    <p className={styles.phaseName}>{phase.name || "Momento"}</p>
-                    <p className={styles.phaseWhen} style={gothicStyle}>
-                      {phase.when || "Fecha y hora"}
-                    </p>
-                  </div>
-                  {phase.places.map((place, li) => {
-                    const illus = PLACE_ILLUSTRATIONS[placeIndex % PLACE_ILLUSTRATIONS.length];
-                    placeIndex += 1;
-                    return (
-                      <article key={`place-${pi}-${li}`} className={styles.place}>
-                        <img
-                          src={illus}
-                          alt={place.name ? `Ilustración de ${place.name}` : ""}
-                          className={styles.placeImg}
-                        />
-                        <h3 className={styles.placeName}>{place.name || "Lugar por confirmar"}</h3>
-                        <p className={styles.placeAddr}>{place.address || "Dirección por confirmar"}</p>
+                  {phase.name || phase.when ? (
+                    <div className={styles.phase}>
+                      {phase.name ? <p className={styles.phaseName}>{phase.name}</p> : null}
+                      {phase.when ? (
+                        <p className={styles.phaseWhen} style={gothicStyle}>
+                          {phase.when}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+                  {phase.places.map((place, li) => (
+                    <article key={`place-${pi}-${li}`} className={styles.place}>
+                      <img
+                        src={place.illus}
+                        alt={place.name ? `Ilustración de ${place.name}` : ""}
+                        className={styles.placeImg}
+                      />
+                      {place.name ? <h3 className={styles.placeName}>{place.name}</h3> : null}
+                      {place.address ? (
+                        <p className={styles.placeAddr}>{place.address}</p>
+                      ) : null}
+                      {place.address ? (
                         <a
-                          href={place.address ? mapsUrl(place.address) : "#"}
+                          href={mapsUrl(place.address)}
                           target="_blank"
                           rel="noreferrer"
                           className={styles.btnOutline}
                         >
-                          Cómo llegar
+                          {dict.ribera.itinerary.comoLlegar}
                         </a>
-                      </article>
-                    );
-                  })}
-                  {phase.places.length < 2 ? (
+                      ) : null}
+                    </article>
+                  ))}
+                  {phase.placeholderCount < 2 ? (
                     <div className={styles.placeEmpty} aria-hidden="true" />
                   ) : null}
                 </Fragment>
-              ))
-            ) : (
-              <p style={{ gridColumn: "1 / -1", textAlign: "center", opacity: 0.7 }}>
-                Añadid las fases de vuestro gran día: pre-boda, boda y post-boda.
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.bandStriped} id="detalles">
-        <div data-reveal className={styles.card}>
-          <h2 className={styles.sectionTitle}>Detalles</h2>
-          <div className={styles.details}>
-            {(data.detailCards.length > 0
-              ? data.detailCards
-              : [
-                  { icon: "dresscode" as const, title: "", ctaLabel: "" },
-                  { icon: "bus" as const, title: "", ctaLabel: "" },
-                  { icon: "hotel" as const, title: "", ctaLabel: "" },
-                ]
-            ).map((card, i) => {
-              const fallback = DETAIL_DEFAULTS[card.icon];
-              return (
-                <article key={i} className={styles.detail}>
-                  <img
-                    src={DETAIL_ILLUSTRATIONS[card.icon]}
-                    alt={`Ilustración de ${card.title || fallback.title}`}
-                    className={styles.detailImg}
-                  />
-                  <h3 className={styles.detailName}>{card.title || fallback.title}</h3>
-                  <a href="#" className={`${styles.btnOutline} ${styles.detailBtn}`}>
-                    {card.ctaLabel || fallback.ctaLabel}
-                  </a>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="regalos" className={styles.giftSection}>
-        <div data-reveal className={styles.gift}>
-          <div className={styles.giftMat}>
-            <div className={styles.giftPanel}>
-              <p className={styles.leadText}>
-                {data.giftMessage ||
-                  "Vuestra presencia es nuestro mejor regalo, pero si queréis ayudarnos a crear nuestro nuevo hogar, podéis hacerlo por transferencia a"}
-              </p>
-              {data.giftAccount ? (
-                <div className={styles.giftAccount}>
-                  {data.giftHolderName ? <p className={styles.leadText}>{data.giftHolderName}</p> : null}
-                  <p className={styles.giftIban} style={gothicStyle}>
-                    {data.giftAccount}
-                  </p>
-                  <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} />
-                </div>
-              ) : null}
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
+
+      {hasDetails ? (
+        <section className={styles.bandStriped} id="detalles">
+          <div data-reveal className={styles.card}>
+            <h2 className={styles.sectionTitle}>{dict.ribera.details.title}</h2>
+            <div className={styles.details}>
+              {data.detailCards.map((card, i) => {
+                const fallback = DETAIL_DEFAULTS[card.icon];
+                return (
+                  <article key={i} className={styles.detail}>
+                    <img
+                      src={DETAIL_ILLUSTRATIONS[card.icon]}
+                      alt={`Ilustración de ${card.title || fallback.title}`}
+                      className={styles.detailImg}
+                    />
+                    <h3 className={styles.detailName}>{card.title || fallback.title}</h3>
+                    <a href="#" className={`${styles.btnOutline} ${styles.detailBtn}`}>
+                      {card.ctaLabel || fallback.cta}
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {hasGift ? (
+        <section id="regalos" className={styles.giftSection}>
+          <div data-reveal className={styles.gift}>
+            <div className={styles.giftMat}>
+              <div className={styles.giftPanel}>
+                {data.giftMessage ? (
+                  <p className={styles.leadText}>{data.giftMessage}</p>
+                ) : null}
+                {data.giftAccount ? (
+                  <div className={styles.giftAccount}>
+                    {data.giftHolderName ? <p className={styles.leadText}>{data.giftHolderName}</p> : null}
+                    <p className={styles.giftIban} style={gothicStyle}>
+                      {data.giftAccount}
+                    </p>
+                    <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} locale={locale} />
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section id="rsvp" className={styles.bandStriped}>
         <div data-reveal className={styles.rsvpCard}>
-          <h2 className={styles.sectionTitle}>Confirma tu asistencia</h2>
-          <p className={styles.rsvpIntro}>
-            {data.rsvpNote ||
-              "Por favor, confirma tu asistencia lo antes posible. Si venís en pareja o familia, es suficiente con que lo rellenéis uno de vosotros."}
-          </p>
+          <h2 className={styles.sectionTitle}>{dict.ribera.rsvp.title}</h2>
+          {data.rsvpNote ? <p className={styles.rsvpIntro}>{data.rsvpNote}</p> : null}
           {data.rsvpDeadline ? (
-            <p className={styles.rsvpDeadline}>Antes del {formatLongDate(data.rsvpDeadline)}</p>
+            <p className={styles.rsvpDeadline}>
+              {dict.ribera.rsvp.deadlinePrefix} {formatLongDate(data.rsvpDeadline, locale)}
+            </p>
           ) : null}
-          <RiberaRsvpForm />
+          <RiberaRsvpForm locale={locale} />
         </div>
       </section>
 
       <footer className={styles.footer}>
         {data.organizerContact ? <p>{data.organizerContact}</p> : null}
         <p>
-          Hecho con{" "}
+          {dict.ribera.footer.madeWith}{" "}
           <Link href="/" className="group inline-flex items-center gap-1" style={{ color: "var(--r-coral)" }}>
             Weddite
             <SparkleIcon className="h-3 w-3 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125" />

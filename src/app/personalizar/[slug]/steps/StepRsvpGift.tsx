@@ -42,14 +42,14 @@ export default function StepRsvpGift({
               placeholder="Vuestra presencia es el mejor regalo..."
             />
           </Field>
-          <Field label="Nombre del titular" hint="Opcional">
+          <Field label="Nombre del titular">
             <TextInput
               value={data.giftHolderName}
               onChange={(e) => onChange({ giftHolderName: e.target.value })}
               placeholder="Laura García"
             />
           </Field>
-          <Field label="Número de cuenta / Bizum" hint="Opcional">
+          <Field label="Número de cuenta / Bizum">
             <TextInput
               value={data.giftAccount}
               onChange={(e) => onChange({ giftAccount: e.target.value })}
@@ -59,7 +59,7 @@ export default function StepRsvpGift({
         </div>
       </div>
 
-      <Field label="Contacto de los organizadores" hint="Opcional">
+      <Field label="Contacto de los organizadores">
         <TextInput
           value={data.organizerContact}
           onChange={(e) => onChange({ organizerContact: e.target.value })}

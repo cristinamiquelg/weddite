@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getDict, type Locale } from "@/lib/i18n";
 
 function getRemaining(target: string) {
   const diff = new Date(target).getTime() - Date.now();
@@ -17,11 +18,14 @@ function getRemaining(target: string) {
 export default function Countdown({
   date,
   showSeconds = true,
+  locale,
 }: {
   date: string;
   showSeconds?: boolean;
+  locale?: Locale;
 }) {
   const [remaining, setRemaining] = useState<ReturnType<typeof getRemaining> | null>(null);
+  const dict = getDict(locale);
 
   useEffect(() => {
     if (!date) return;
@@ -35,16 +39,16 @@ export default function Countdown({
   if (remaining.isPast) {
     return (
       <p className="text-sm tracking-[0.2em] uppercase text-[var(--w-ink-soft)]">
-        ¡Ya lo celebramos!
+        {dict.countdown.alreadyCelebrated}
       </p>
     );
   }
 
   const units: [number, string][] = [
-    [remaining.days, "días"],
-    [remaining.hours, "horas"],
-    [remaining.minutes, "min"],
-    ...(showSeconds ? ([[remaining.seconds, "seg"]] as [number, string][]) : []),
+    [remaining.days, dict.countdown.days],
+    [remaining.hours, dict.countdown.hours],
+    [remaining.minutes, dict.countdown.minutes],
+    ...(showSeconds ? ([[remaining.seconds, dict.countdown.seconds]] as [number, string][]) : []),
   ];
 
   return (

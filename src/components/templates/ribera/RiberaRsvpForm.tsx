@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { getDict, type Locale } from "@/lib/i18n";
 import styles from "./ribera.module.css";
 
 function CheckIcon() {
@@ -74,7 +75,8 @@ function StackField({ label }: { label: string }) {
 
 type Companion = { id: number; bus: "si" | "no" | null };
 
-export default function RiberaRsvpForm() {
+export default function RiberaRsvpForm({ locale }: { locale?: Locale }) {
+  const dict = getDict(locale).ribera.form;
   const [asiste, setAsiste] = useState<"si" | "no" | null>(null);
   const [bus, setBus] = useState<"si" | "no" | null>(null);
   const [acompanante, setAcompanante] = useState<"si" | "no" | null>(null);
@@ -119,7 +121,7 @@ export default function RiberaRsvpForm() {
   if (submitted) {
     return (
       <div className={styles.formThanks}>
-        <p className={styles.formThanksText}>¡Gracias! Hemos recibido tu confirmación. 🤍</p>
+        <p className={styles.formThanksText}>{dict.thanks}</p>
       </div>
     );
   }
@@ -132,33 +134,33 @@ export default function RiberaRsvpForm() {
         setSubmitted(true);
       }}
     >
-      <p className={styles.formLegend}>Tu información</p>
+      <p className={styles.formLegend}>{dict.legend}</p>
 
       <div className={styles.formRow}>
-        <TextField label="Nombre" />
-        <TextField label="Apellidos" />
+        <TextField label={dict.firstName} />
+        <TextField label={dict.lastName} />
       </div>
       <div className={styles.formRow}>
-        <TextField label="Teléfono" type="tel" />
-        <TextField label="E-mail" type="email" />
+        <TextField label={dict.phone} type="tel" />
+        <TextField label={dict.email} type="email" />
       </div>
 
-      <Seg value={asiste} onChange={setAsiste} yesLabel="Voy a la boda" noLabel="No voy a la boda" />
-      <Seg value={bus} onChange={setBus} yesLabel="Iré en el bus" noLabel="No necesitaré" />
+      <Seg value={asiste} onChange={setAsiste} yesLabel={dict.attendingYes} noLabel={dict.attendingNo} />
+      <Seg value={bus} onChange={setBus} yesLabel={dict.busYes} noLabel={dict.busNo} />
 
-      <StackField label="¿Tienes alguna intolerancia alimenticia o dieta?" />
+      <StackField label={dict.dietary} />
 
       <Seg
         value={acompanante}
         onChange={setBringsCompanions}
-        yesLabel="Llevo acompañante"
-        noLabel="Voy solo/a"
+        yesLabel={dict.companionYes}
+        noLabel={dict.companionNo}
       />
 
       {acompanante === "si" ? (
         <div className={styles.companionsControl}>
           <label className={styles.companionsControlQ} htmlFor="ribera-companions-count">
-            ¿Cuántos acompañantes llevas?
+            {dict.howManyCompanions}
           </label>
           <select
             id="ribera-companions-count"
@@ -179,38 +181,40 @@ export default function RiberaRsvpForm() {
         <div key={c.id} className={styles.companion}>
           <hr className={styles.divider} />
           <div className={styles.companionHead}>
-            <p className={styles.formLegend}>Información de acompañante {i + 1}</p>
+            <p className={styles.formLegend}>
+              {dict.companionInfo} {i + 1}
+            </p>
             <button
               type="button"
               onClick={() => removeCompanion(c.id)}
-              aria-label="Quitar acompañante"
+              aria-label={dict.removeCompanion}
               className={styles.companionRemove}
             >
               <CrossIcon />
             </button>
           </div>
           <div className={styles.formRow}>
-            <TextField label="Nombre" />
-            <TextField label="Apellidos" />
+            <TextField label={dict.firstName} />
+            <TextField label={dict.lastName} />
           </div>
           <div className={styles.formRow}>
-            <TextField label="Teléfono" type="tel" />
-            <TextField label="E-mail" type="email" />
+            <TextField label={dict.phone} type="tel" />
+            <TextField label={dict.email} type="email" />
           </div>
           <Seg
             value={c.bus}
             onChange={(v) =>
               setCompanions((prev) => prev.map((p) => (p.id === c.id ? { ...p, bus: v } : p)))
             }
-            yesLabel="Irá en el bus"
-            noLabel="No necesitará"
+            yesLabel={dict.busYes}
+            noLabel={dict.busNo}
           />
-          <StackField label="¿Tiene alguna intolerancia alimenticia o dieta?" />
+          <StackField label={dict.dietary} />
         </div>
       ))}
 
       <button type="submit" className={styles.formSubmit}>
-        Enviar confirmación
+        {dict.submit}
       </button>
     </form>
   );

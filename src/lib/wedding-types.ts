@@ -1,3 +1,5 @@
+import type { Locale } from "./i18n";
+
 export type PaletteId = "clay" | "sage" | "midnight";
 
 export type TimelineItem = {
@@ -26,6 +28,7 @@ export type DetailCard = {
 };
 
 export type WeddingData = {
+  locale: Locale;
   partnerA: string;
   partnerB: string;
   date: string; // ISO date, e.g. "2027-06-12"
@@ -57,6 +60,7 @@ export type WeddingData = {
 };
 
 export const emptyWeddingData: WeddingData = {
+  locale: "es",
   partnerA: "",
   partnerB: "",
   date: "",
@@ -87,6 +91,7 @@ export const emptyWeddingData: WeddingData = {
 };
 
 export const demoWeddingData: WeddingData = {
+  locale: "es",
   partnerA: "Laura",
   partnerB: "Marc",
   date: "2027-06-12",

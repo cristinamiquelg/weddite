@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 
 type Shot = {
   src: string;
@@ -26,34 +25,31 @@ const shots: Shot[] = [
 // Each column gets its own order (so neighbouring columns never show the
 // same shot at the same height) and its own parallax speed + direction —
 // that's what makes the columns visibly drift apart as you scroll instead
-// of moving in lockstep.
+// of moving in lockstep. Five cards per column (not four) so there's
+// enough buffer height for the bigger travel distance below.
 const columns: { order: number[]; speed: number }[] = [
-  { order: [0, 3, 1, 4], speed: 0.55 },
-  { order: [4, 1, 5, 2], speed: -0.75 },
-  { order: [2, 5, 0, 3], speed: 0.9 },
-  { order: [5, 2, 4, 1], speed: -0.5 },
-  { order: [1, 4, 3, 0], speed: 0.7 },
+  { order: [0, 3, 1, 4, 2], speed: 0.55 },
+  { order: [4, 1, 5, 2, 0], speed: -0.75 },
+  { order: [2, 5, 0, 3, 1], speed: 0.9 },
+  { order: [5, 2, 4, 1, 3], speed: -0.5 },
+  { order: [1, 4, 3, 0, 5], speed: 0.7 },
 ];
 
 function Card({ shot }: { shot: Shot }) {
   return (
-    <Link
-      href={`/preview/${shot.slug}`}
-      target="_blank"
-      className="group/card relative block h-40 w-full shrink-0 overflow-hidden rounded-xl border border-black/5 shadow-[0_16px_30px_-20px_rgba(33,29,26,0.4)] sm:h-52"
-    >
+    <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-xl border border-black/5 shadow-[0_16px_30px_-20px_rgba(33,29,26,0.4)] sm:h-52">
       <Image
         src={shot.src}
         alt={`Plantilla ${shot.template} — ${shot.label}`}
         fill
         sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 45vw"
-        className="object-cover object-top transition-transform duration-500 ease-out group-hover/card:scale-105"
+        className="object-cover object-top"
       />
       <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/55 to-transparent px-3 pb-2 pt-6 text-[10px] uppercase tracking-[0.18em] text-white/90">
         {shot.template}
         <span className="opacity-70">{shot.label}</span>
       </span>
-    </Link>
+    </div>
   );
 }
 
@@ -80,7 +76,7 @@ export default function HeroGrid() {
         1,
         Math.max(0, (viewportH - rect.top) / (viewportH + rect.height)),
       );
-      const shift = (progress - 0.5) * 110; // px of total travel per column at speed 1
+      const shift = (progress - 0.5) * 380; // px of total travel per column at speed 1
 
       columnRefs.current.forEach((col, i) => {
         if (!col) return;
@@ -124,7 +120,7 @@ export default function HeroGrid() {
               ref={(el) => {
                 columnRefs.current[ci] = el;
               }}
-              className={`${visibility} -mt-10 flex-col gap-4 will-change-transform sm:gap-5`}
+              className={`${visibility} -mt-24 flex-col gap-4 will-change-transform sm:gap-5`}
             >
               {col.order.map((shotIndex, i) => (
                 <Card key={i} shot={shots[shotIndex]} />

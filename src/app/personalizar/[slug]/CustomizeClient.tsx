@@ -14,6 +14,7 @@ import StepStyle from "./steps/StepStyle";
 import StepRiberaCouple from "./steps/StepRiberaCouple";
 import StepItinerary from "./steps/StepItinerary";
 import StepDetails from "./steps/StepDetails";
+import StepLanguage from "./steps/StepLanguage";
 
 type StepDef = {
   key: string;
@@ -31,6 +32,7 @@ const auroraSteps: StepDef[] = [
   { key: "gallery", label: "Galería", Component: StepGallery },
   { key: "rsvp", label: "RSVP y regalo", Component: StepRsvpGift },
   { key: "style", label: "Estilo", Component: StepStyle },
+  { key: "language", label: "Idioma", Component: StepLanguage },
 ];
 
 const riberaSteps: StepDef[] = [
@@ -39,6 +41,7 @@ const riberaSteps: StepDef[] = [
   { key: "itinerary", label: "Itinerario y lugares", Component: StepItinerary },
   { key: "details", label: "Detalles", Component: StepDetails },
   { key: "rsvp", label: "RSVP y regalo", Component: StepRsvpGift },
+  { key: "language", label: "Idioma", Component: StepLanguage },
 ];
 
 function stepsForTemplate(slug: string): StepDef[] {
