@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
 
@@ -18,12 +19,27 @@ const promise = [
 export default function QuienesSomosPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
-      <div data-reveal>
-        <p className="text-xs uppercase tracking-[0.3em] text-clay">Quiénes somos</p>
-        <h1 className="mt-4 font-display text-4xl sm:text-5xl">
-          Nos casamos. Buscamos una web bonita. No la encontramos.
-          <SparkleIcon className="ml-2 inline-block h-[0.6em] w-[0.6em] -translate-y-1 text-clay" />
-        </h1>
+      <div
+        data-reveal
+        className="flex flex-col-reverse items-center gap-10 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] text-clay">Quiénes somos</p>
+          <h1 className="mt-4 font-display text-4xl sm:text-5xl">
+            Nos casamos. Buscamos una web bonita. No la encontramos.
+            <SparkleIcon className="ml-2 inline-block h-[0.6em] w-[0.6em] -translate-y-1 text-clay" />
+          </h1>
+        </div>
+        <div className="shrink-0 overflow-hidden rounded-2xl border border-line bg-paper-raised shadow-[0_20px_50px_-30px_rgba(33,29,26,0.4)]">
+          <Image
+            src="/quienes-somos/retrato.webp"
+            alt="Cristina, fundadora de Weddite"
+            width={220}
+            height={220}
+            className="h-[180px] w-[180px] object-cover sm:h-[220px] sm:w-[220px]"
+            priority
+          />
+        </div>
       </div>
 
       <div className="mt-10 space-y-6 text-lg leading-relaxed text-ink-soft" data-reveal style={{ transitionDelay: "80ms" }}>

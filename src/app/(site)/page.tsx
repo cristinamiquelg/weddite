@@ -37,6 +37,15 @@ const promises = [
   { title: "Pensada para móvil", body: "Porque vuestros invitados probablemente la abrirán desde WhatsApp." },
 ];
 
+const ctaScatter: { top: string; left: string; size: string; opacity: number; rotate: string }[] = [
+  { top: "12%", left: "8%", size: "2rem", opacity: 0.45, rotate: "-10deg" },
+  { top: "72%", left: "12%", size: "1.3rem", opacity: 0.3, rotate: "18deg" },
+  { top: "20%", left: "90%", size: "1.6rem", opacity: 0.35, rotate: "6deg" },
+  { top: "78%", left: "88%", size: "2.6rem", opacity: 0.4, rotate: "-8deg" },
+  { top: "50%", left: "4%", size: "1.1rem", opacity: 0.25, rotate: "12deg" },
+  { top: "45%", left: "95%", size: "1.4rem", opacity: 0.3, rotate: "-15deg" },
+];
+
 export default function HomePage() {
   const featured = templates[0];
 
@@ -49,7 +58,7 @@ export default function HomePage() {
         <p className="text-xs uppercase tracking-[0.3em] text-clay">
           Webs para historias que merecen ser contadas
         </p>
-        <h1 className="mx-auto mt-6 max-w-3xl text-balance font-display text-4xl leading-tight sm:text-6xl">
+        <h1 className="mx-auto mt-6 max-w-3xl text-balance font-display text-4xl leading-none sm:text-6xl">
           Una web tan bonita como vuestra boda
           <SparkleIcon className="ml-2 inline-block h-[0.6em] w-[0.6em] -translate-y-1 text-clay" />
         </h1>
@@ -59,15 +68,12 @@ export default function HomePage() {
           y sin esperas.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-4">
-          <div className="flex flex-col items-center gap-2">
-            <Link
-              href="/plantillas"
-              className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
-            >
-              Explorar diseños
-            </Link>
-            <span className="text-xs text-ink-soft">Ver diseños y precios</span>
-          </div>
+          <Link
+            href="/plantillas"
+            className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+          >
+            Explorar diseños
+          </Link>
           <Link
             href={`/preview/${featured.slug}`}
             target="_blank"
@@ -89,8 +95,8 @@ export default function HomePage() {
               El problema
             </p>
             <h2 className="mt-4 font-display text-3xl">
-              Una boda puede estar cuidada hasta el último detalle. Su web
-              también debería.
+              Una boda se cuida hasta el último detalle. Su web también
+              debería.
             </h2>
             <ul className="mt-6 space-y-4">
               {painPoints.map((p) => (
@@ -106,7 +112,7 @@ export default function HomePage() {
               Weddite
             </p>
             <h2 className="mt-4 font-display text-3xl">
-              Weddite crea las webs que <em className="italic">deberían de ser</em>
+              Weddite crea las webs que <em className="italic">deberían de ser</em>.
             </h2>
             <ul className="mt-6 space-y-5">
               {promises.map((p) => (
@@ -159,17 +165,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-t border-line bg-ink">
+      <section className="relative overflow-hidden border-t border-line bg-ink">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          {ctaScatter.map((s, i) => (
+            <SparkleIcon
+              key={i}
+              className="absolute text-clay"
+              style={{
+                top: s.top,
+                left: s.left,
+                width: s.size,
+                height: s.size,
+                opacity: s.opacity,
+                transform: `rotate(${s.rotate})`,
+                animationDelay: `${i * 0.35}s`,
+              }}
+            />
+          ))}
+        </div>
         <div
           data-reveal
-          className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-20 text-center text-paper"
+          className="relative mx-auto flex max-w-3xl flex-col items-center gap-8 px-6 py-28 text-center text-paper sm:py-32"
         >
-          <h2 className="max-w-2xl text-balance font-display text-3xl sm:text-4xl">
-            Vuestra boda merece algo mejor que un diseño genérico
+          <h2 className="text-balance font-display text-4xl leading-[1.1] sm:text-6xl">
+            Vuestra boda merece <em className="italic text-clay">algo mejor</em> que un
+            diseño genérico
           </h2>
           <Link
             href="/plantillas"
-            className="rounded-full bg-paper px-7 py-3.5 text-sm font-medium text-ink transition-opacity hover:opacity-90"
+            className="rounded-full bg-paper px-9 py-4 text-base font-medium text-ink transition-opacity hover:opacity-90"
           >
             Explorar diseños
           </Link>

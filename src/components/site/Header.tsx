@@ -8,12 +8,18 @@ export default function Header() {
         <Link href="/">
           <Logo className="text-xl" />
         </Link>
-        <nav className="hidden items-center gap-8 text-sm text-ink-soft sm:flex">
+        <nav className="hidden items-center gap-6 text-sm text-ink-soft md:flex">
           <Link href="/plantillas" className="transition-colors hover:text-ink">
             Diseños
           </Link>
           <Link href="/#como-funciona" className="transition-colors hover:text-ink">
             Cómo funciona
+          </Link>
+          <Link href="/quienes-somos" className="transition-colors hover:text-ink">
+            Quiénes somos
+          </Link>
+          <Link href="/#contacto" className="transition-colors hover:text-ink">
+            Contacto
           </Link>
         </nav>
         <Link
