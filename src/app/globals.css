@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #211d1a;
+  --color-ink-soft: #4a423c;
+  --color-paper: #fbfbfa;
+  --color-paper-raised: #ffffff;
+  --color-clay: #b5583a;
+  --color-clay-dark: #93432a;
+  --color-sage: #5f6b4f;
+  --color-sage-light: #eef0e7;
+  --color-gold: #a9824c;
+  --color-line: #e9e8e5;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-paper: var(--color-paper);
+  --color-paper-raised: var(--color-paper-raised);
+  --color-clay: var(--color-clay);
+  --color-clay-dark: var(--color-clay-dark);
+  --color-sage: var(--color-sage);
+  --color-sage-light: var(--color-sage-light);
+  --color-gold: var(--color-gold);
+  --color-line: var(--color-line);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+::selection {
+  background: var(--color-clay);
+  color: var(--color-paper);
+}
+
+@keyframes marquee-up {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes marquee-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-col {
+    animation-play-state: paused !important;
+  }
+}
+
+/* Scroll-reveal: gated behind html.reveal-ready (added by the ScrollReveal
+   client component once it's actually observing) so content never gets
+   stuck invisible if JS fails to load, and behind prefers-reduced-motion
+   so it's a no-op for anyone who'd rather not see the motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html.reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Load-in fade for above-the-fold content (header, hero): a plain CSS
+   animation with fill-mode "both" applies its 0%-keyframe as soon as
+   styles are computed, before first paint — so unlike the JS-gated
+   [data-reveal] mechanism above, there's no flash of fully-visible content
+   snapping to hidden once JS attaches. Use this for anything visible
+   without scrolling; use [data-reveal] for anything below the fold. */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in-load {
+    animation: fade-in-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+/* Sparkle mark: a gentle idle twinkle, paused on hover so the group-hover
+   burst transition (set via Tailwind utilities where it's used) can take
+   over cleanly instead of fighting the keyframe. */
+@keyframes sparkle-twinkle {
+  0%,
+  100% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.15) rotate(10deg);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sparkle-twinkle {
+    transform-origin: center;
+    animation: sparkle-twinkle 2.4s ease-in-out infinite;
+  }
+  .group:hover .sparkle-twinkle,
+  .sparkle-twinkle:hover {
+    animation-play-state: paused;
+  }
+}
