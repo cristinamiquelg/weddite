@@ -76,21 +76,23 @@ export default function StepItinerary({
 
           <div className="flex flex-col gap-3 pl-4">
             {phase.places.map((place, li) => (
-              <div key={li} className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+              <div key={li} className="flex flex-wrap gap-3">
                 <TextInput
                   value={place.name}
                   onChange={(e) => updatePlace(pi, li, { name: e.target.value })}
                   placeholder="Ermita de Sant Baldiri"
+                  className="min-w-[140px] flex-1"
                 />
                 <TextInput
                   value={place.address}
                   onChange={(e) => updatePlace(pi, li, { address: e.target.value })}
                   placeholder="Dirección"
+                  className="min-w-[140px] flex-1"
                 />
                 <button
                   type="button"
                   onClick={() => removePlace(pi, li)}
-                  className="rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
+                  className="shrink-0 rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
                 >
                   Quitar
                 </button>

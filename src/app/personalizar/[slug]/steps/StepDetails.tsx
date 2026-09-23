@@ -37,11 +37,11 @@ export default function StepDetails({
         autobuses, hoteles recomendados...
       </p>
       {data.detailCards.map((card, i) => (
-        <div key={i} className="grid gap-3 rounded-lg border border-line p-4 sm:grid-cols-[140px_1fr_1fr_auto]">
+        <div key={i} className="flex flex-wrap gap-3 rounded-lg border border-line p-4">
           <select
             value={card.icon}
             onChange={(e) => updateCard(i, { icon: e.target.value as DetailCardIcon })}
-            className="rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-sm text-ink outline-none focus:border-clay"
+            className="min-w-[120px] rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-sm text-ink outline-none focus:border-clay"
           >
             {(Object.keys(ICON_LABELS) as DetailCardIcon[]).map((icon) => (
               <option key={icon} value={icon}>
@@ -53,16 +53,18 @@ export default function StepDetails({
             value={card.title}
             onChange={(e) => updateCard(i, { title: e.target.value })}
             placeholder="Dresscode"
+            className="min-w-[140px] flex-1"
           />
           <TextInput
             value={card.ctaLabel}
             onChange={(e) => updateCard(i, { ctaLabel: e.target.value })}
             placeholder="Inspiración"
+            className="min-w-[140px] flex-1"
           />
           <button
             type="button"
             onClick={() => removeCard(i)}
-            className="rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
+            className="shrink-0 rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
           >
             Quitar
           </button>

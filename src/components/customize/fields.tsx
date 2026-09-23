@@ -13,13 +13,11 @@ export function Field({
     <label className="flex flex-col gap-1.5">
       <span className="flex items-center gap-2 text-sm font-medium text-ink">
         {label}
-        <span
-          className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-            required ? "bg-clay/10 text-clay" : "bg-line text-ink-soft"
-          }`}
-        >
-          {required ? "Obligatorio" : "Opcional"}
-        </span>
+        {required ? (
+          <span className="rounded-full bg-clay/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-clay">
+            Obligatorio
+          </span>
+        ) : null}
       </span>
       {children}
       {hint ? <span className="text-xs text-ink-soft">{hint}</span> : null}

@@ -30,16 +30,14 @@ export default function QuienesSomosPage() {
             <SparkleIcon className="ml-2 inline-block h-[0.6em] w-[0.6em] -translate-y-1 text-clay" />
           </h1>
         </div>
-        <div className="shrink-0 overflow-hidden rounded-2xl border border-line bg-paper-raised shadow-[0_20px_50px_-30px_rgba(33,29,26,0.4)]">
-          <Image
-            src="/quienes-somos/retrato.webp"
-            alt="Cristina, fundadora de Weddite"
-            width={220}
-            height={220}
-            className="h-[180px] w-[180px] object-cover sm:h-[220px] sm:w-[220px]"
-            priority
-          />
-        </div>
+        <Image
+          src="/quienes-somos/retrato.webp"
+          alt="Cristina, fundadora de Weddite"
+          width={220}
+          height={220}
+          className="h-[180px] w-[180px] shrink-0 object-contain sm:h-[220px] sm:w-[220px]"
+          priority
+        />
       </div>
 
       <div className="mt-10 space-y-6 text-lg leading-relaxed text-ink-soft" data-reveal style={{ transitionDelay: "80ms" }}>

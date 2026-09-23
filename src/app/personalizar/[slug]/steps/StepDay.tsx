@@ -96,17 +96,19 @@ export default function StepDay({
           {data.timeline.map((item, i) => (
             <div
               key={i}
-              className="grid gap-3 rounded-lg border border-line p-4 sm:grid-cols-[100px_1fr_1fr_auto]"
+              className="flex flex-wrap gap-3 rounded-lg border border-line p-4"
             >
               <TextInput
                 type="time"
                 value={item.time}
                 onChange={(e) => updateTimeline(i, { time: e.target.value })}
+                className="w-[110px] shrink-0"
               />
               <TextInput
                 value={item.title}
                 onChange={(e) => updateTimeline(i, { title: e.target.value })}
                 placeholder="Cóctel de bienvenida"
+                className="min-w-[140px] flex-1"
               />
               <TextInput
                 value={item.description ?? ""}
@@ -114,11 +116,12 @@ export default function StepDay({
                   updateTimeline(i, { description: e.target.value })
                 }
                 placeholder="Detalle (opcional)"
+                className="min-w-[140px] flex-1"
               />
               <button
                 type="button"
                 onClick={() => removeTimelineItem(i)}
-                className="rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
+                className="shrink-0 rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
               >
                 Quitar
               </button>
