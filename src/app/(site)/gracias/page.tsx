@@ -36,7 +36,7 @@ export default async function ThanksPage({
         ¡Enhorabuena! Vuestra web ya está lista
       </h1>
       <p className="mt-5 max-w-md text-ink-soft">
-        Hemos generado vuestra web de boda con la plantilla{" "}
+        Hemos generado vuestra web de boda con el diseño{" "}
         {template ? <strong className="text-ink">{template.name}</strong> : "elegida"}.
         Podéis seguir editándola cuando queráis y compartirla con vuestros
         invitados.

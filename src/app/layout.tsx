@@ -40,7 +40,7 @@ const scienceGothic = Science_Gothic({
 export const metadata: Metadata = {
   title: "Weddite — Webs de boda que enamoran",
   description:
-    "Elige una plantilla de web de boda moderna, personalízala con vuestra historia y contrátala en minutos. Sin llamadas, sin correos, todo a golpe de clic.",
+    "Elige un diseño de web de boda moderno, personalízalo con vuestra historia y hazlo vuestro en minutos. Sin llamadas, sin correos, todo a golpe de clic.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -9,7 +9,7 @@ const steps = [
   {
     n: "01",
     title: "Elegid vuestro diseño",
-    body: "Mirad las plantillas, abrid la preview y elegid vuestra favorita. Sin registros, llamadas ni compromiso.",
+    body: "Mirad los diseños, abrid la preview y elegid vuestro favorito. Sin registros, llamadas ni compromiso.",
   },
   {
     n: "02",
@@ -47,7 +47,7 @@ export default function HomePage() {
         style={{ animationDelay: "80ms" }}
       >
         <p className="text-xs uppercase tracking-[0.3em] text-clay">
-          Webs de boda, sin lo cutre
+          Webs para historias que merecen ser contadas
         </p>
         <h1 className="mx-auto mt-6 max-w-3xl text-balance font-display text-4xl leading-tight sm:text-6xl">
           Una web tan bonita como vuestra boda
@@ -64,20 +64,17 @@ export default function HomePage() {
               href="/plantillas"
               className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
             >
-              Explorar plantillas
+              Explorar diseños
             </Link>
             <span className="text-xs text-ink-soft">Ver diseños y precios</span>
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <Link
-              href={`/preview/${featured.slug}`}
-              target="_blank"
-              className="rounded-full border border-line px-7 py-3.5 text-sm font-medium text-ink transition-colors hover:border-ink"
-            >
-              Ver un ejemplo en directo
-            </Link>
-            <span className="text-xs text-ink-soft">Así la verán vuestros invitados</span>
-          </div>
+          <Link
+            href={`/preview/${featured.slug}`}
+            target="_blank"
+            className="rounded-full border border-line px-7 py-3.5 text-sm font-medium text-ink transition-colors hover:border-ink"
+          >
+            Ver un ejemplo en directo
+          </Link>
         </div>
       </section>
 
@@ -109,7 +106,7 @@ export default function HomePage() {
               Weddite
             </p>
             <h2 className="mt-4 font-display text-3xl">
-              Así debería ser una web de boda
+              Weddite crea las webs que <em className="italic">deberían de ser</em>
             </h2>
             <ul className="mt-6 space-y-5">
               {promises.map((p) => (
@@ -167,14 +164,14 @@ export default function HomePage() {
           data-reveal
           className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-20 text-center text-paper"
         >
-          <h2 className="max-w-lg text-balance font-display text-3xl sm:text-4xl">
-            Vuestra boda merece algo mejor que una plantilla genérica
+          <h2 className="max-w-2xl text-balance font-display text-3xl sm:text-4xl">
+            Vuestra boda merece algo mejor que un diseño genérico
           </h2>
           <Link
             href="/plantillas"
             className="rounded-full bg-paper px-7 py-3.5 text-sm font-medium text-ink transition-opacity hover:opacity-90"
           >
-            Explorar plantillas
+            Explorar diseños
           </Link>
         </div>
       </section>

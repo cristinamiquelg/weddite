@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { templates } from "@/lib/templates";
 
 export const metadata: Metadata = {
-  title: "Plantillas de webs de boda — Weddite",
+  title: "Diseños de webs de boda — Weddite",
   description:
-    "Explora el catálogo de plantillas de webs de boda de Weddite, con preview en directo y personalización al instante.",
+    "Explora el catálogo de diseños de webs de boda de Weddite, con preview en directo y personalización al instante.",
 };
 
 export default function CatalogPage() {
@@ -17,8 +17,8 @@ export default function CatalogPage() {
           Elegid vuestro estilo
         </h1>
         <p className="mt-4 text-ink-soft">
-          Cada plantilla se puede probar en directo antes de decidir nada.
-          Cuando la tengáis clara, la personalizáis y la hacéis vuestra sin
+          Cada diseño se puede probar en directo antes de decidir nada.
+          Cuando lo tengáis claro, lo personalizáis y lo hacéis vuestro sin
           salir del navegador.
         </p>
       </div>
@@ -35,7 +35,7 @@ export default function CatalogPage() {
               <div className="relative h-64 overflow-hidden border-b border-line bg-paper">
                 <iframe
                   src={`/preview/${tpl.slug}`}
-                  title={`Preview de la plantilla ${tpl.name}`}
+                  title={`Preview del diseño ${tpl.name}`}
                   tabIndex={-1}
                   className="pointer-events-none absolute left-1/2 top-0 h-[1100px] w-[1400px] origin-top -translate-x-1/2 scale-[0.35] sm:scale-[0.3]"
                 />

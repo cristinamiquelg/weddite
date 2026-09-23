@@ -24,7 +24,7 @@ const sections: { heading: string; body: React.ReactNode }[] = [
     heading: "La personalización de vuestra web de boda",
     body: (
       <p>
-        Cuando personalizáis una plantilla (nombres, fecha, itinerario,
+        Cuando personalizáis un diseño (nombres, fecha, itinerario,
         textos, etc.), esos datos se guardan únicamente en el navegador de
         vuestro dispositivo (localStorage), para que podáis retomar el
         proceso donde lo dejasteis. No se envían a ningún servidor ni base

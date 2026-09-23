@@ -16,7 +16,7 @@ export async function generateMetadata({
   const tpl = getTemplateBySlug(slug);
   if (!tpl) return {};
   return {
-    title: `${tpl.name} — Plantilla de web de boda — Weddite`,
+    title: `${tpl.name} — Diseño de web de boda — Weddite`,
     description: tpl.description,
   };
 }
@@ -51,7 +51,7 @@ export default async function TemplateDetailPage({
           </div>
           <iframe
             src={`/preview/${tpl.slug}`}
-            title={`Preview de la plantilla ${tpl.name}`}
+            title={`Preview del diseño ${tpl.name}`}
             className="h-[720px] w-full"
           />
         </div>

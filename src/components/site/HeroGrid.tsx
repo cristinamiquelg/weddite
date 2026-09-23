@@ -40,7 +40,7 @@ function Card({ shot }: { shot: Shot }) {
     <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-xl border border-black/5 shadow-[0_16px_30px_-20px_rgba(33,29,26,0.4)] sm:h-52">
       <Image
         src={shot.src}
-        alt={`Plantilla ${shot.template} — ${shot.label}`}
+        alt={`Diseño ${shot.template} — ${shot.label}`}
         fill
         sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 45vw"
         className="object-cover object-top"

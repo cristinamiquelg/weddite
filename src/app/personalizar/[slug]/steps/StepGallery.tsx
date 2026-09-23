@@ -28,7 +28,7 @@ export default function StepGallery({
       <p className="text-sm text-ink-soft">
         En esta primera versión las fotos se muestran como marcadores de
         posición: añadid un pie de foto para cada una. La subida de imágenes
-        reales llegará cuando compréis la plantilla.
+        reales llegará cuando compréis el diseño.
       </p>
       <div className="flex flex-col gap-3">
         {data.galleryCaptions.map((caption, i) => (

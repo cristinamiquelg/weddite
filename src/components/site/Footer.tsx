@@ -15,7 +15,7 @@ const columns: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: "Producto",
     links: [
-      { label: "Plantillas", href: "/plantillas" },
+      { label: "Diseños", href: "/plantillas" },
       { label: "Cómo funciona", href: "/#como-funciona" },
       { label: "Contacto", href: "/#contacto" },
     ],

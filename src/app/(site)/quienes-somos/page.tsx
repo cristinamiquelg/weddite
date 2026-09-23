@@ -50,8 +50,8 @@ export default function QuienesSomosPage() {
         data-reveal
         style={{ transitionDelay: "200ms" }}
       >
-        Hoy Weddite es un proyecto pequeño, hecho a mano, con dos plantillas
-        propias —Aurora y Ribera— y la idea de seguir añadiendo más. Si
+        Hoy Weddite es un proyecto pequeño, hecho a mano, con dos diseños
+        propios —Aurora y Ribera— y la idea de seguir añadiendo más. Si
         tenéis feedback, ideas o simplemente queréis contarnos cómo va la
         boda, nos encanta escuchar: podéis escribirnos desde el{" "}
         <Link

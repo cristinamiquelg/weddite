@@ -14,37 +14,37 @@ const testimonials: Testimonial[] = [
     quote:
       "Montamos la web en una tarde, literalmente entre risas. Nuestros invitados no paraban de preguntarnos qué agencia nos la había hecho.",
     names: "Marta & Iker",
-    detail: "Se casaron en Sitges, plantilla Aurora",
+    detail: "Se casaron en Sitges, diseño Aurora",
   },
   {
     quote:
-      "Veníamos de mirar plantillas horribles durante semanas. En cuanto vimos la preview en directo de Ribera supimos que era la nuestra.",
+      "Veníamos de mirar diseños horribles durante semanas. En cuanto vimos la preview en directo de Ribera supimos que era la nuestra.",
     names: "Alicia & Pau",
-    detail: "Se casaron en Cadaqués, plantilla Ribera",
+    detail: "Se casaron en Cadaqués, diseño Ribera",
   },
   {
     quote:
       "Lo mejor fue no depender de nadie: cambiábamos el itinerario a las 11 de la noche y lo veíamos actualizado al momento.",
     names: "Nora & Bruno",
-    detail: "Se casaron en Ronda, plantilla Aurora",
+    detail: "Se casaron en Ronda, diseño Aurora",
   },
   {
     quote:
       "El RSVP con acompañantes nos ahorró un Excel entero. Se lo hemos recomendado a mi hermana para su boda del año que viene.",
     names: "Julia & Adrián",
-    detail: "Se casaron en Comillas, plantilla Ribera",
+    detail: "Se casaron en Comillas, diseño Ribera",
   },
   {
     quote:
       "Pagamos, personalizamos y publicamos en menos de una hora. Ni una llamada, ni un PDF de presupuesto.",
     names: "Carla & Dani",
-    detail: "Se casaron en Olite, plantilla Aurora",
+    detail: "Se casaron en Olite, diseño Aurora",
   },
   {
     quote:
       "Buscábamos algo que no pareciera sacado de un cumpleaños de los 2000. Por fin una web de boda con buen gusto de verdad.",
     names: "Irene & Pol",
-    detail: "Se casaron en Peñíscola, plantilla Ribera",
+    detail: "Se casaron en Peñíscola, diseño Ribera",
   },
 ];
 

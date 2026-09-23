@@ -55,7 +55,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
           <h1 className="mt-3 font-display text-4xl">{names}</h1>
           <dl className="mt-8 space-y-4 text-sm">
             <div className="flex justify-between border-b border-line pb-3">
-              <dt className="text-ink-soft">Plantilla</dt>
+              <dt className="text-ink-soft">Diseño</dt>
               <dd className="font-medium">{template.name}</dd>
             </div>
             <div className="flex justify-between border-b border-line pb-3">
