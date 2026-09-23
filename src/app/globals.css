@@ -75,6 +75,15 @@ body {
   }
 }
 
+/* Printing (or exporting to PDF) never scrolls, so an element the
+   IntersectionObserver hasn't reached yet would otherwise print blank. */
+@media print {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* Load-in fade for above-the-fold content (header, hero): a plain CSS
    animation with fill-mode "both" applies its 0%-keyframe as soon as
    styles are computed, before first paint — so unlike the JS-gated
