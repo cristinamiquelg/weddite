@@ -2,6 +2,7 @@ import Link from "next/link";
 import { templates } from "@/lib/templates";
 import HeroGrid from "@/components/site/HeroGrid";
 import TestimonialsCarousel from "@/components/site/TestimonialsCarousel";
+import ContactForm from "@/components/site/ContactForm";
 import SparkleIcon from "@/components/site/SparkleIcon";
 
 const steps = [
@@ -165,6 +166,23 @@ export default function HomePage() {
           >
             Explorar plantillas
           </Link>
+        </div>
+      </section>
+
+      <section id="contacto" className="border-t border-line">
+        <div className="mx-auto max-w-2xl px-6 py-24">
+          <div data-reveal>
+            <p className="text-xs uppercase tracking-[0.3em] text-clay">Contacto</p>
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl">
+              ¿Tenéis alguna pregunta?
+            </h2>
+            <p className="mt-4 text-ink-soft">
+              Escribidnos y os respondemos en cuanto podamos.
+            </p>
+          </div>
+          <div data-reveal style={{ transitionDelay: "100ms" }}>
+            <ContactForm />
+          </div>
         </div>
       </section>
     </>

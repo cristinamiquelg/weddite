@@ -1,55 +1,112 @@
-type Persona = {
-  names: string;
-  place: string;
-  bg: string;
-  ink: string;
-  accent: string;
+"use client";
+
+import { useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+type Shot = {
+  src: string;
+  template: string;
+  slug: string;
+  label: string;
 };
 
-// Invented "sites" that stand in for a full catalog wall while Weddite only
-// ships two real templates — pure decoration, not linked to any real page.
-const personas: Persona[] = [
-  { names: "Marta & Iker", place: "Sitges, Barcelona", bg: "#f1e0d6", ink: "#241f1a", accent: "#b5583a" },
-  { names: "Alicia & Pau", place: "Cadaqués, Girona", bg: "#0e1453", ink: "#efece3", accent: "#dd3e3e" },
-  { names: "Nora & Bruno", place: "Ronda, Málaga", bg: "#eef0e7", ink: "#20261c", accent: "#5f6b4f" },
-  { names: "Elena & Hugo", place: "Formentera", bg: "#f7e7e6", ink: "#3a2020", accent: "#c17a7a" },
-  { names: "Sofía & Marc", place: "Vic, Barcelona", bg: "#11151f", ink: "#f3f1ea", accent: "#c9a86a" },
-  { names: "Carla & Dani", place: "Olite, Navarra", bg: "#efe7d8", ink: "#2b2a20", accent: "#7a7a4a" },
-  { names: "Julia & Adrián", place: "Comillas, Cantabria", bg: "#e3ebf0", ink: "#1c2b33", accent: "#4a7a95" },
-  { names: "Irene & Pol", place: "Peñíscola, Castellón", bg: "#f4ece1", ink: "#3a1620", accent: "#7a2436" },
-  { names: "Vera & Nico", place: "Almagro, Ciudad Real", bg: "#22201f", ink: "#f2e9df", accent: "#e0a87a" },
-  { names: "Clara & Martí", place: "Begur, Girona", bg: "#efe9f5", ink: "#2c2333", accent: "#7a5fa0" },
+// Real screenshots of the templates Weddite actually ships today (Aurora,
+// Ribera) — no invented sites. As the catalog grows, add more shots here
+// and they'll flow into the columns automatically.
+const shots: Shot[] = [
+  { src: "/hero/aurora-hero.jpg", template: "Aurora", slug: "aurora", label: "Portada" },
+  { src: "/hero/aurora-historia.jpg", template: "Aurora", slug: "aurora", label: "Historia" },
+  { src: "/hero/aurora-dia.jpg", template: "Aurora", slug: "aurora", label: "El día" },
+  { src: "/hero/ribera-hero.jpg", template: "Ribera", slug: "ribera", label: "Portada" },
+  { src: "/hero/ribera-itinerario.jpg", template: "Ribera", slug: "ribera", label: "Itinerario" },
+  { src: "/hero/ribera-detalles.jpg", template: "Ribera", slug: "ribera", label: "Detalles" },
 ];
 
-const columns: { order: number[]; duration: string; direction: "up" | "down" }[] = [
-  { order: [0, 1, 2, 3, 4, 5], duration: "46s", direction: "up" },
-  { order: [6, 7, 8, 9, 0, 1], duration: "58s", direction: "down" },
-  { order: [3, 4, 5, 6, 7, 8], duration: "40s", direction: "up" },
-  { order: [9, 0, 2, 4, 6, 8], duration: "52s", direction: "down" },
-  { order: [1, 3, 5, 7, 9, 0], duration: "44s", direction: "up" },
+// Each column gets its own order (so neighbouring columns never show the
+// same shot at the same height) and its own parallax speed + direction —
+// that's what makes the columns visibly drift apart as you scroll instead
+// of moving in lockstep.
+const columns: { order: number[]; speed: number }[] = [
+  { order: [0, 3, 1, 4], speed: 0.55 },
+  { order: [4, 1, 5, 2], speed: -0.75 },
+  { order: [2, 5, 0, 3], speed: 0.9 },
+  { order: [5, 2, 4, 1], speed: -0.5 },
+  { order: [1, 4, 3, 0], speed: 0.7 },
 ];
 
-function Card({ persona }: { persona: Persona }) {
+function Card({ shot }: { shot: Shot }) {
   return (
-    <div
-      className="flex h-40 w-full flex-col justify-center gap-2 rounded-xl border border-black/5 px-6 py-5 shadow-[0_16px_30px_-20px_rgba(33,29,26,0.4)]"
-      style={{ background: persona.bg, color: persona.ink }}
+    <Link
+      href={`/preview/${shot.slug}`}
+      target="_blank"
+      className="group/card relative block h-40 w-full shrink-0 overflow-hidden rounded-xl border border-black/5 shadow-[0_16px_30px_-20px_rgba(33,29,26,0.4)] sm:h-52"
     >
-      <p
-        className="text-[10px] uppercase tracking-[0.25em] opacity-80"
-        style={{ color: persona.accent }}
-      >
-        Nos casamos
-      </p>
-      <p className="font-display text-xl italic leading-tight">{persona.names}</p>
-      <p className="text-xs opacity-70">{persona.place}</p>
-    </div>
+      <Image
+        src={shot.src}
+        alt={`Plantilla ${shot.template} — ${shot.label}`}
+        fill
+        sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 45vw"
+        className="object-cover object-top transition-transform duration-500 ease-out group-hover/card:scale-105"
+      />
+      <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/55 to-transparent px-3 pb-2 pt-6 text-[10px] uppercase tracking-[0.18em] text-white/90">
+        {shot.template}
+        <span className="opacity-70">{shot.label}</span>
+      </span>
+    </Link>
   );
 }
 
 export default function HeroGrid() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
+
+    let raf = 0;
+
+    function update() {
+      raf = 0;
+      const container = containerRef.current;
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const viewportH = window.innerHeight || 1;
+      // 0 when the section's top is at the viewport's bottom edge,
+      // 1 when its bottom has reached the viewport's top edge — i.e. real
+      // scroll progress of this section through the viewport, not a timer.
+      const progress = Math.min(
+        1,
+        Math.max(0, (viewportH - rect.top) / (viewportH + rect.height)),
+      );
+      const shift = (progress - 0.5) * 110; // px of total travel per column at speed 1
+
+      columnRefs.current.forEach((col, i) => {
+        if (!col) return;
+        const speed = columns[i]?.speed ?? 1;
+        col.style.transform = `translate3d(0, ${shift * speed}px, 0)`;
+      });
+    }
+
+    function onScroll() {
+      if (raf) return;
+      raf = requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       className="relative h-[420px] overflow-hidden sm:h-[520px]"
       style={{
         maskImage: "linear-gradient(to bottom, transparent, black 12%, black 88%, transparent)",
@@ -59,19 +116,18 @@ export default function HeroGrid() {
     >
       <div className="grid h-full grid-flow-col auto-cols-fr gap-4 px-4 sm:gap-5 sm:px-0">
         {columns.map((col, ci) => {
-          const cards = [...col.order, ...col.order];
           const visibility =
             ci === 2 ? "hidden sm:flex" : ci >= 3 ? "hidden lg:flex" : "flex";
           return (
             <div
               key={ci}
-              className={`marquee-col ${visibility} flex-col gap-4 sm:gap-5`}
-              style={{
-                animation: `${col.direction === "up" ? "marquee-up" : "marquee-down"} ${col.duration} linear infinite`,
+              ref={(el) => {
+                columnRefs.current[ci] = el;
               }}
+              className={`${visibility} -mt-10 flex-col gap-4 will-change-transform sm:gap-5`}
             >
-              {cards.map((personaIndex, i) => (
-                <Card key={i} persona={personas[personaIndex]} />
+              {col.order.map((shotIndex, i) => (
+                <Card key={i} shot={shots[shotIndex]} />
               ))}
             </div>
           );

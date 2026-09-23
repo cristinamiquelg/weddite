@@ -38,27 +38,6 @@ body {
   color: var(--color-paper);
 }
 
-@keyframes marquee-up {
-  to {
-    transform: translateY(-50%);
-  }
-}
-
-@keyframes marquee-down {
-  from {
-    transform: translateY(-50%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-col {
-    animation-play-state: paused !important;
-  }
-}
-
 /* Scroll-reveal: gated behind html.reveal-ready (added by the ScrollReveal
    client component once it's actually observing) so content never gets
    stuck invisible if JS fails to load, and behind prefers-reduced-motion
