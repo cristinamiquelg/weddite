@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, Libre_Baskerville, Oswald } from "next/font/google";
+import { Fraunces, Inter, Libre_Baskerville, Oswald, Science_Gothic } from "next/font/google";
 import "./globals.css";
 import ScrollReveal from "@/components/site/ScrollReveal";
 
@@ -29,6 +29,14 @@ const oswald = Oswald({
   subsets: ["latin"],
 });
 
+// The "Ribera" template's real typeface for uppercase/eyebrow text and the
+// countdown labels (Oswald above is its fallback while this loads).
+const scienceGothic = Science_Gothic({
+  variable: "--font-science-gothic",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
 export const metadata: Metadata = {
   title: "Weddite — Webs de boda que enamoran",
   description:
@@ -39,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="es"
-      className={`${fraunces.variable} ${inter.variable} ${libreBaskerville.variable} ${oswald.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${inter.variable} ${libreBaskerville.variable} ${oswald.variable} ${scienceGothic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         {children}
