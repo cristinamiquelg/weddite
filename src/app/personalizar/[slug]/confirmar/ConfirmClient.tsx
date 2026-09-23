@@ -7,9 +7,17 @@ import type { Template } from "@/lib/templates";
 import { useWeddingDraft } from "@/lib/use-wedding-draft";
 import { formatLongDate } from "@/lib/format";
 
+const TEST_CARD = {
+  name: "Laura García",
+  number: "4242 4242 4242 4242",
+  expiry: "12/29",
+  cvc: "123",
+};
+
 export default function ConfirmClient({ template }: { template: Template }) {
   const { data, loaded } = useWeddingDraft(template.slug);
   const [submitting, setSubmitting] = useState(false);
+  const [card, setCard] = useState({ name: "", number: "", expiry: "", cvc: "" });
   const router = useRouter();
 
   const names =
@@ -80,12 +88,19 @@ export default function ConfirmClient({ template }: { template: Template }) {
 
         <div>
           <div className="rounded-2xl border border-line bg-paper-raised p-8">
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-4 flex items-center justify-between">
               <p className="text-sm font-semibold text-ink">Datos de pago</p>
               <span className="rounded-full bg-sage-light px-3 py-1 text-xs font-medium text-ink-soft">
                 Modo demo · sin cobro real
               </span>
             </div>
+            <button
+              type="button"
+              onClick={() => setCard(TEST_CARD)}
+              className="mb-6 self-start text-sm font-medium text-clay underline underline-offset-4"
+            >
+              Rellenar con tarjeta de prueba
+            </button>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label className="flex flex-col gap-1.5 text-sm">
                 <span className="font-medium text-ink">Nombre en la tarjeta</span>
@@ -93,6 +108,8 @@ export default function ConfirmClient({ template }: { template: Template }) {
                   required
                   type="text"
                   placeholder="Laura García"
+                  value={card.name}
+                  onChange={(e) => setCard((c) => ({ ...c, name: e.target.value }))}
                   className="rounded-lg border border-line bg-paper px-3.5 py-2.5 text-sm outline-none focus:border-clay"
                 />
               </label>
@@ -103,6 +120,8 @@ export default function ConfirmClient({ template }: { template: Template }) {
                   inputMode="numeric"
                   type="text"
                   placeholder="4242 4242 4242 4242"
+                  value={card.number}
+                  onChange={(e) => setCard((c) => ({ ...c, number: e.target.value }))}
                   className="rounded-lg border border-line bg-paper px-3.5 py-2.5 text-sm outline-none focus:border-clay"
                 />
               </label>
@@ -113,6 +132,8 @@ export default function ConfirmClient({ template }: { template: Template }) {
                     required
                     type="text"
                     placeholder="MM/AA"
+                    value={card.expiry}
+                    onChange={(e) => setCard((c) => ({ ...c, expiry: e.target.value }))}
                     className="rounded-lg border border-line bg-paper px-3.5 py-2.5 text-sm outline-none focus:border-clay"
                   />
                 </label>
@@ -123,6 +144,8 @@ export default function ConfirmClient({ template }: { template: Template }) {
                     inputMode="numeric"
                     type="text"
                     placeholder="123"
+                    value={card.cvc}
+                    onChange={(e) => setCard((c) => ({ ...c, cvc: e.target.value }))}
                     className="rounded-lg border border-line bg-paper px-3.5 py-2.5 text-sm outline-none focus:border-clay"
                   />
                 </label>
