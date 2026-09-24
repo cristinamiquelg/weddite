@@ -1,5 +1,5 @@
 import type { DetailCard, DetailCardIcon, WeddingData } from "@/lib/wedding-types";
-import { TextInput } from "@/components/customize/fields";
+import { TextArea, TextInput } from "@/components/customize/fields";
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
 
@@ -22,7 +22,7 @@ export default function StepDetails({
 
   function addCard() {
     onChange({
-      detailCards: [...data.detailCards, { icon: "dresscode", title: "", ctaLabel: "" }],
+      detailCards: [...data.detailCards, { icon: "dresscode", title: "", description: "", ctaLabel: "", url: "" }],
     });
   }
 
@@ -50,12 +50,32 @@ export default function StepDetails({
             value={card.title}
             onChange={(e) => updateCard(i, { title: e.target.value })}
             placeholder={dict.stepDetails.titlePlaceholder}
+            aria-label={dict.stepDetails.titleAriaLabel}
             className="min-w-[140px] flex-1"
+          />
+          <TextArea
+            value={card.description ?? ""}
+            onChange={(e) => updateCard(i, { description: e.target.value })}
+            placeholder={dict.stepDetails.descriptionPlaceholder}
+            aria-label={dict.stepDetails.descriptionAriaLabel}
+            rows={2}
+            maxLength={160}
+            className="w-full"
+          />
+          <TextInput
+            value={card.url ?? ""}
+            onChange={(e) => updateCard(i, { url: e.target.value })}
+            placeholder={dict.stepDetails.urlPlaceholder}
+            aria-label={dict.stepDetails.urlAriaLabel}
+            type="url"
+            inputMode="url"
+            className="min-w-[220px] flex-[2]"
           />
           <TextInput
             value={card.ctaLabel}
             onChange={(e) => updateCard(i, { ctaLabel: e.target.value })}
             placeholder={dict.stepDetails.ctaPlaceholder}
+            aria-label={dict.stepDetails.ctaAriaLabel}
             className="min-w-[140px] flex-1"
           />
           <button

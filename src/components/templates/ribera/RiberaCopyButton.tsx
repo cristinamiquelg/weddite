@@ -16,6 +16,7 @@ export default function RiberaCopyButton({
   const dict = getDict(locale);
 
   return (
+    <>
     <button
       type="button"
       onClick={async () => {
@@ -31,5 +32,9 @@ export default function RiberaCopyButton({
     >
       {copied ? dict.copyButton.copied : dict.copyButton.copy}
     </button>
+    <span role="status" className="sr-only">
+      {copied ? dict.copyButton.copied : ""}
+    </span>
+    </>
   );
 }

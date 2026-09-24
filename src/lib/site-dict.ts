@@ -197,7 +197,13 @@ type SiteDict = {
       intro: string;
       iconLabels: { dresscode: string; bus: string; hotel: string };
       titlePlaceholder: string;
+      titleAriaLabel: string;
+      descriptionPlaceholder: string;
+      descriptionAriaLabel: string;
+      urlPlaceholder: string;
+      urlAriaLabel: string;
       ctaPlaceholder: string;
+      ctaAriaLabel: string;
       addCard: string;
     };
   };
@@ -457,9 +463,16 @@ const es: SiteDict = {
     },
     stepDetails: {
       intro: "Añadid tarjetas informativas para vuestros invitados: dresscode, autobuses, hoteles recomendados...",
-      iconLabels: { dresscode: "Dresscode", bus: "Autobuses", hotel: "Hoteles" },
-      titlePlaceholder: "Dresscode",
-      ctaPlaceholder: "Inspiración",
+      iconLabels: { dresscode: "Dress code", bus: "Autobuses", hotel: "Hoteles" },
+      titlePlaceholder: "Título (p. ej. Dress code)",
+      titleAriaLabel: "Título de la tarjeta",
+      descriptionPlaceholder:
+        "Lo esencial en 1–2 frases (p. ej. Formal de verano, evitad tacón fino: la ermita tiene suelo de piedra)",
+      descriptionAriaLabel: "Texto de la tarjeta",
+      urlPlaceholder: "Enlace (https://…) — si lo dejáis vacío no se muestra botón",
+      urlAriaLabel: "Enlace del botón",
+      ctaPlaceholder: "Texto del botón (p. ej. Ver inspiración)",
+      ctaAriaLabel: "Texto del botón",
       addCard: "+ Añadir tarjeta",
     },
   },
@@ -720,8 +733,15 @@ const en: SiteDict = {
     stepDetails: {
       intro: "Add info cards for your guests: dress code, buses, recommended hotels...",
       iconLabels: { dresscode: "Dress code", bus: "Buses", hotel: "Hotels" },
-      titlePlaceholder: "Dress code",
-      ctaPlaceholder: "Inspiration",
+      titlePlaceholder: "Title (e.g. Dress code)",
+      titleAriaLabel: "Card title",
+      descriptionPlaceholder:
+        "The essentials in 1–2 sentences (e.g. Summer formal, skip stiletto heels: the chapel has a stone floor)",
+      descriptionAriaLabel: "Card text",
+      urlPlaceholder: "Link (https://…) — leave empty to hide the button",
+      urlAriaLabel: "Button link",
+      ctaPlaceholder: "Button text (e.g. See inspiration)",
+      ctaAriaLabel: "Button text",
       addCard: "+ Add card",
     },
   },

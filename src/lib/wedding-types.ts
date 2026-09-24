@@ -24,7 +24,11 @@ export type DetailCardIcon = "dresscode" | "bus" | "hotel";
 export type DetailCard = {
   icon: DetailCardIcon;
   title: string;
+  /** Short practical text shown on the card itself (1–3 lines). */
+  description?: string;
   ctaLabel: string;
+  /** Destination for the CTA. The button is hidden when empty. */
+  url?: string;
 };
 
 export type WeddingData = {
@@ -152,7 +156,7 @@ export const riberaDemoWeddingData: WeddingData = {
   storyTitle: "Nuestra historia",
   story:
     "Nos conocimos en un viaje a la costa, discutiendo sobre cuál era el mejor mirador. Años después seguimos discutiendo, pero ya sin dudas: queremos pasar la vida juntos.",
-  estateName: "finca del faro",
+  estateName: "Finca del Faro",
   estateLocation: "Cadaqués, Girona",
   phases: [
     {
@@ -175,9 +179,27 @@ export const riberaDemoWeddingData: WeddingData = {
     },
   ],
   detailCards: [
-    { icon: "dresscode", title: "Dresscode", ctaLabel: "Inspiración" },
-    { icon: "bus", title: "Autobuses", ctaLabel: "Cómo llegar" },
-    { icon: "hotel", title: "Hoteles", ctaLabel: "Más información" },
+    {
+      icon: "dresscode",
+      title: "Dress code",
+      description: "Formal de verano. La ermita tiene suelo de piedra: mejor tacón ancho.",
+      ctaLabel: "Ver inspiración",
+      url: "https://www.pinterest.es/search/pins/?q=boda%20verano%20formal",
+    },
+    {
+      icon: "bus",
+      title: "Autobuses",
+      description: "Salida a las 17:15 desde la plaza de Cadaqués. Vuelta a partir de la 01:00.",
+      ctaLabel: "Ver punto de salida",
+      url: "https://www.google.com/maps/search/?api=1&query=Pla%C3%A7a%20Frederic%20Rahola%2C%20Cadaqu%C3%A9s",
+    },
+    {
+      icon: "hotel",
+      title: "Hoteles",
+      description: "Tenemos precio especial en dos hoteles del pueblo hasta el 1 de julio.",
+      ctaLabel: "Ver hoteles",
+      url: "https://www.google.com/maps/search/?api=1&query=hoteles%20Cadaqu%C3%A9s",
+    },
   ],
   rsvpDeadline: "2027-07-15",
   rsvpNote:

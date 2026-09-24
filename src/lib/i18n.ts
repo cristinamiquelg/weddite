@@ -17,7 +17,9 @@ type Dict = {
   };
   ribera: {
     nav: { cuando: string; itinerario: string; detalles: string; regalos: string; confirm: string };
+    hero: { saveTheDate: string; forTheWeddingOf: string };
     countdownTitle: string;
+    giftTitle: string;
     itinerary: { title: string; comoLlegar: string };
     details: {
       title: string;
@@ -45,6 +47,19 @@ type Dict = {
       removeCompanion: string;
       submit: string;
       thanks: string;
+      optional: string;
+      attendingQ: string;
+      busQ: string;
+      companionQ: string;
+      kidsMenu: string;
+      contactHint: string;
+      errRequired: string;
+      errContact: string;
+      errEmail: string;
+      errSummary: string;
+      edit: string;
+      summaryAttending: string;
+      summaryNotAttending: string;
     };
   };
   countdown: { days: string; hours: string; minutes: string; seconds: string; alreadyCelebrated: string };
@@ -85,12 +100,14 @@ const es: Dict = {
     footer: { madeWith: "Hecho con" },
   },
   ribera: {
-    nav: { cuando: "Cuándo", itinerario: "Itinerario y lugares", detalles: "Detalles", regalos: "Regalos", confirm: "Confirma asistencia" },
+    nav: { cuando: "Cuándo", itinerario: "Itinerario", detalles: "Detalles", regalos: "Regalos", confirm: "Confirmar" },
+    hero: { saveTheDate: "Save the Date", forTheWeddingOf: "la boda de" },
     countdownTitle: "¡Se acerca el gran día!",
+    giftTitle: "Regalos",
     itinerary: { title: "Itinerario y lugares", comoLlegar: "Cómo llegar" },
     details: {
       title: "Detalles",
-      dresscode: { title: "Dresscode", cta: "Inspiración" },
+      dresscode: { title: "Dress code", cta: "Inspiración" },
       bus: { title: "Autobuses", cta: "Cómo llegar" },
       hotel: { title: "Hoteles", cta: "Más información" },
     },
@@ -102,18 +119,31 @@ const es: Dict = {
       lastName: "Apellidos",
       phone: "Teléfono",
       email: "E-mail",
-      attendingYes: "Voy a la boda",
-      attendingNo: "No voy a la boda",
-      busYes: "Iré en el bus",
-      busNo: "No necesitaré",
+      attendingYes: "Sí, allí estaré",
+      attendingNo: "No podré ir",
+      busYes: "Sí, iré en bus",
+      busNo: "No lo necesito",
       dietary: "¿Tienes alguna intolerancia alimenticia o dieta?",
-      companionYes: "Llevo acompañante",
-      companionNo: "Voy solo/a",
-      howManyCompanions: "¿Cuántos acompañantes llevas?",
-      companionInfo: "Información de acompañante",
+      companionYes: "Sí",
+      companionNo: "No, voy solo/a",
+      howManyCompanions: "¿Cuántas personas vienen contigo?",
+      companionInfo: "Acompañante",
       removeCompanion: "Quitar acompañante",
       submit: "Enviar confirmación",
       thanks: "¡Gracias! Hemos recibido tu confirmación. 🤍",
+      optional: "opcional",
+      attendingQ: "¿Vienes a la boda?",
+      busQ: "¿Necesitas autobús?",
+      companionQ: "¿Vienes con alguien? (pareja, hijos…)",
+      kidsMenu: "Es menor y necesita menú infantil",
+      contactHint: "Déjanos al menos un teléfono o un e-mail por si hay cambios.",
+      errRequired: "Este campo es obligatorio.",
+      errContact: "Indica un teléfono o un e-mail.",
+      errEmail: "Revisa el e-mail: parece incompleto.",
+      errSummary: "Falta algún dato. Revisa los campos marcados.",
+      edit: "Modificar mi respuesta",
+      summaryAttending: "Confirmado: {n} persona(s).",
+      summaryNotAttending: "Sentimos que no puedas venir. Gracias por avisar.",
     },
   },
   countdown: { days: "días", hours: "horas", minutes: "min", seconds: "seg", alreadyCelebrated: "¡Ya lo celebramos!" },
@@ -154,8 +184,10 @@ const en: Dict = {
     footer: { madeWith: "Made with" },
   },
   ribera: {
-    nav: { cuando: "When", itinerario: "Itinerary & venues", detalles: "Details", regalos: "Gifts", confirm: "RSVP now" },
+    nav: { cuando: "When", itinerario: "Itinerary", detalles: "Details", regalos: "Gifts", confirm: "RSVP" },
+    hero: { saveTheDate: "Save the Date", forTheWeddingOf: "for the wedding of" },
     countdownTitle: "The big day is getting close!",
+    giftTitle: "Gifts",
     itinerary: { title: "Itinerary & venues", comoLlegar: "Get directions" },
     details: {
       title: "Details",
@@ -171,18 +203,31 @@ const en: Dict = {
       lastName: "Last name",
       phone: "Phone",
       email: "E-mail",
-      attendingYes: "I'll be at the wedding",
-      attendingNo: "I can't make it",
-      busYes: "I'll take the bus",
-      busNo: "I won't need it",
+      attendingYes: "Yes, I'll be there",
+      attendingNo: "Sorry, I can't",
+      busYes: "Yes, I'll take the bus",
+      busNo: "I don't need it",
       dietary: "Any food intolerance or diet we should know about?",
-      companionYes: "I'm bringing a plus-one",
-      companionNo: "I'm coming alone",
-      howManyCompanions: "How many guests are you bringing?",
-      companionInfo: "Guest info",
+      companionYes: "Yes",
+      companionNo: "No, just me",
+      howManyCompanions: "How many people are coming with you?",
+      companionInfo: "Guest",
       removeCompanion: "Remove guest",
       submit: "Send RSVP",
       thanks: "Thank you! We've received your RSVP. 🤍",
+      optional: "optional",
+      attendingQ: "Are you coming to the wedding?",
+      busQ: "Do you need the shuttle bus?",
+      companionQ: "Is anyone coming with you? (partner, kids…)",
+      kidsMenu: "Child — needs a kids' menu",
+      contactHint: "Leave at least a phone or an e-mail in case plans change.",
+      errRequired: "This field is required.",
+      errContact: "Please add a phone or an e-mail.",
+      errEmail: "Check the e-mail — it looks incomplete.",
+      errSummary: "Something's missing. Please check the highlighted fields.",
+      edit: "Change my answer",
+      summaryAttending: "Confirmed: {n} guest(s).",
+      summaryNotAttending: "Sorry you can't make it. Thanks for letting us know.",
     },
   },
   countdown: { days: "days", hours: "hours", minutes: "min", seconds: "sec", alreadyCelebrated: "We already celebrated!" },

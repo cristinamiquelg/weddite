@@ -28,9 +28,9 @@ const PLACE_ILLUSTRATIONS = [
   "/ribera/restaurante.svg",
 ];
 
-const gothicStyle: React.CSSProperties = {
-  fontFamily: "var(--font-science-gothic), Oswald, \"Arial Narrow\", sans-serif",
-};
+// Font families now resolve through the CSS tokens in ribera.module.css
+// (--r-serif / --r-gothic point at the next/font variables), so no inline
+// font styles are needed here.
 
 type VisiblePlace = WeddingPlace & { illus: string };
 type VisiblePhase = { name: string; when: string; places: VisiblePlace[]; placeholderCount: number };
@@ -76,6 +76,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
   const hasItinerary = data.phases.length > 0;
   const hasDetails = data.detailCards.length > 0;
   const hasGift = Boolean(data.giftMessage || data.giftAccount);
+  const hasBus = data.detailCards.some((c) => c.icon === "bus");
 
   const NAV_LINKS = [
     { href: "#cuando", label: dict.ribera.nav.cuando },
@@ -95,7 +96,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
   return (
     <div className={styles.root}>
       <header className={styles.header}>
-        <nav className={styles.nav}>
+        <nav className={styles.nav} aria-label={locale === "en" ? "Sections" : "Secciones"}>
           {NAV_LINKS.map((link) => (
             <a key={link.href} href={link.href}>
               {link.label}
@@ -116,48 +117,72 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             </span>
           ) : null}
         </nav>
-        <a href="#top" className={styles.logo}>
+        <a href="#top" className={styles.logo} aria-label={names}>
           {initials}
         </a>
-        <Link href="#rsvp" className={`${styles.btnSolid} ${styles.navCta}`}>
+        <a href="#rsvp" className={`${styles.btnSolid} ${styles.navCta}`}>
           {dict.ribera.nav.confirm}
-        </Link>
+        </a>
       </header>
 
       <section id="top" className={`${styles.hero} fade-in-load`}>
         <div className={styles.heroPanel}>
           <div className={styles.heroGroup}>
-            <p className={styles.scriptText}>Save the Date</p>
-            <p className={styles.eyebrow} style={gothicStyle}>
-              for the wedding of
-            </p>
+            <p className={styles.scriptText}>{dict.ribera.hero.saveTheDate}</p>
+            <p className={styles.eyebrow}>{dict.ribera.hero.forTheWeddingOf}</p>
             <h1 className={styles.heroNames}>{names}</h1>
           </div>
 
-          <div className={styles.heroDate}>
-            <span className={styles.eyebrow} style={gothicStyle}>
+          <p className={styles.heroDate}>
+            <span className="sr-only">{formatLongDate(data.date, locale)}</span>
+            <span className={styles.heroDatePart} aria-hidden="true">
               {day} {month}
             </span>
-            <img src="/ribera/hero-bouquet.svg" alt="" className={styles.heroBouquet} />
-            <span className={styles.eyebrow} style={gothicStyle}>
+            <img
+              src="/ribera/hero-bouquet.svg"
+              alt=""
+              width={84}
+              height={84}
+              fetchPriority="high"
+              className={styles.heroBouquet}
+            />
+            <span className={styles.heroDatePart} aria-hidden="true">
               {year}
             </span>
-          </div>
+          </p>
 
           {hasEstate ? (
             <div className={styles.heroGroup}>
-              {data.estateName ? <p className={styles.heroNames}>{data.estateName}</p> : null}
+              {data.estateName ? <p className={styles.heroPlace}>{data.estateName}</p> : null}
               {data.estateLocation ? (
                 <p className={styles.scriptText}>{data.estateLocation}</p>
               ) : null}
             </div>
           ) : null}
+          <a href="#rsvp" className={`${styles.btnSolid} ${styles.heroCta}`}>
+            {dict.rsvpForm.submit}
+            {data.rsvpDeadline ? (
+              <span className={styles.heroCtaSub}>
+                {dict.ribera.rsvp.deadlinePrefix.toLowerCase()} {formatLongDate(data.rsvpDeadline, locale)}
+              </span>
+            ) : null}
+          </a>
         </div>
       </section>
 
-      <section id="cuando" className={styles.countdown}>
+      <section id="cuando" className={styles.countdown} aria-labelledby="ribera-cuando-title">
         <div data-reveal className={styles.countdownInner}>
-          <p className={styles.countdownTitle}>{dict.ribera.countdownTitle}</p>
+          <div>
+            <h2 id="ribera-cuando-title" className={styles.countdownTitle}>
+              {dict.ribera.countdownTitle}
+            </h2>
+            {data.date ? (
+              <p className={styles.countdownDate}>
+                {formatLongDate(data.date, locale)}
+                {data.estateLocation ? ` · ${data.estateLocation}` : ""}
+              </p>
+            ) : null}
+          </div>
           <RiberaCountdown date={data.date} locale={locale} />
         </div>
       </section>
@@ -174,7 +199,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                     <div className={styles.phase}>
                       {phase.name ? <p className={styles.phaseName}>{phase.name}</p> : null}
                       {phase.when ? (
-                        <p className={styles.phaseWhen} style={gothicStyle}>
+                        <p className={styles.phaseWhen}>
                           {phase.when}
                         </p>
                       ) : null}
@@ -184,7 +209,11 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                     <article key={`place-${pi}-${li}`} className={styles.place}>
                       <img
                         src={place.illus}
-                        alt={place.name ? `Ilustración de ${place.name}` : ""}
+                        alt=""
+                        width={190}
+                        height={190}
+                        loading="lazy"
+                        decoding="async"
                         className={styles.placeImg}
                       />
                       {place.name ? <h3 className={styles.placeName}>{place.name}</h3> : null}
@@ -199,6 +228,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                           className={styles.btnOutline}
                         >
                           {dict.ribera.itinerary.comoLlegar}
+                          {place.name ? <span className="sr-only"> — {place.name}</span> : null}
                         </a>
                       ) : null}
                     </article>
@@ -224,13 +254,26 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                   <article key={i} className={styles.detail}>
                     <img
                       src={DETAIL_ILLUSTRATIONS[card.icon]}
-                      alt={`Ilustración de ${card.title || fallback.title}`}
+                      alt=""
+                      width={150}
+                      height={150}
+                      loading="lazy"
+                      decoding="async"
                       className={styles.detailImg}
                     />
                     <h3 className={styles.detailName}>{card.title || fallback.title}</h3>
-                    <a href="#" className={`${styles.btnOutline} ${styles.detailBtn}`}>
-                      {card.ctaLabel || fallback.cta}
-                    </a>
+                    {card.description ? <p className={styles.detailText}>{card.description}</p> : null}
+                    {card.url ? (
+                      <a
+                        href={card.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`${styles.btnOutline} ${styles.detailBtn}`}
+                      >
+                        {card.ctaLabel || fallback.cta}
+                        <span className="sr-only"> — {card.title || fallback.title}</span>
+                      </a>
+                    ) : null}
                   </article>
                 );
               })}
@@ -240,7 +283,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
       ) : null}
 
       {hasGift ? (
-        <section id="regalos" className={styles.giftSection}>
+        <section id="regalos" className={styles.giftSection} aria-labelledby="ribera-gift-title">
+          <h2 id="ribera-gift-title" className="sr-only">
+            {dict.ribera.giftTitle}
+          </h2>
           <div data-reveal className={styles.gift}>
             <div className={styles.giftMat}>
               <div className={styles.giftPanel}>
@@ -250,7 +296,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                 {data.giftAccount ? (
                   <div className={styles.giftAccount}>
                     {data.giftHolderName ? <p className={styles.leadText}>{data.giftHolderName}</p> : null}
-                    <p className={styles.giftIban} style={gothicStyle}>
+                    <p className={styles.giftIban}>
                       {data.giftAccount}
                     </p>
                     <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} locale={locale} />
@@ -271,7 +317,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
               {dict.ribera.rsvp.deadlinePrefix} {formatLongDate(data.rsvpDeadline, locale)}
             </p>
           ) : null}
-          <RiberaRsvpForm locale={locale} />
+          <RiberaRsvpForm locale={locale} showBus={hasBus} />
         </div>
       </section>
 
@@ -279,7 +325,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         {data.organizerContact ? <p>{data.organizerContact}</p> : null}
         <p>
           {dict.ribera.footer.madeWith}{" "}
-          <Link href="/" className="group inline-flex items-center gap-1" style={{ color: "var(--r-coral)" }}>
+          <Link href="/" className="group inline-flex items-center gap-1" style={{ color: "var(--r-coral-text)" }}>
             Weddite
             <SparkleIcon className="h-3 w-3 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125" />
           </Link>

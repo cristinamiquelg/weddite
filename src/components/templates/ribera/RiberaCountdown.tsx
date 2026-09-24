@@ -5,7 +5,10 @@ import { getDict, type Locale } from "@/lib/i18n";
 import styles from "./ribera.module.css";
 
 function getRemaining(target: string) {
-  const diff = new Date(target).getTime() - Date.now();
+  // "2027-09-11" alone is parsed as UTC midnight; anchor it to local time
+  // so the countdown matches the guest's calendar day.
+  const at = /^\d{4}-\d{2}-\d{2}$/.test(target) ? `${target}T00:00:00` : target;
+  const diff = new Date(at).getTime() - Date.now();
   const clamped = Math.max(diff, 0);
   return {
     days: Math.floor(clamped / (1000 * 60 * 60 * 24)),
@@ -26,7 +29,9 @@ export default function RiberaCountdown({ date, locale }: { date: string; locale
     if (!date) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- first tick must run immediately, not a second after mount
     setRemaining(getRemaining(date));
-    const id = setInterval(() => setRemaining(getRemaining(date)), 1000);
+    // Only minutes are shown, so ticking every 15s is plenty and saves
+    // re-renders (and battery) on low-end phones.
+    const id = setInterval(() => setRemaining(getRemaining(date)), 15000);
     return () => clearInterval(id);
   }, [date]);
 
@@ -45,7 +50,7 @@ export default function RiberaCountdown({ date, locale }: { date: string; locale
   ];
 
   return (
-    <div className={styles.countdownUnits}>
+    <div className={styles.countdownUnits} role="timer" aria-live="off">
       {units.map(([value, label]) => (
         <div key={label} className={styles.unit}>
           <span className={styles.unitNum}>{value}</span>
