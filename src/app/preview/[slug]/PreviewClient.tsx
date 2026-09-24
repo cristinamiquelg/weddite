@@ -12,8 +12,11 @@ export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(draftStorageKey(slug));
+      // Merge onto the template's own defaults, not just the raw parsed
+      // draft: an older draft saved before a field existed (e.g. `locales`)
+      // would otherwise leave that field `undefined` and crash the template.
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from localStorage after mount
-      if (raw) setData(JSON.parse(raw));
+      if (raw) setData({ ...getDemoWeddingData(slug), ...JSON.parse(raw) });
     } catch {
       // ignore malformed/unavailable storage
     }
