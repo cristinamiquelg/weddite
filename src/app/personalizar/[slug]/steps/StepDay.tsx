@@ -1,5 +1,7 @@
 import type { TimelineItem, WeddingData } from "@/lib/wedding-types";
 import { Field, TextInput } from "@/components/customize/fields";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 export default function StepDay({
   data,
@@ -8,6 +10,9 @@ export default function StepDay({
   data: WeddingData;
   onChange: (patch: Partial<WeddingData>) => void;
 }) {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).wizard;
+
   function updateTimeline(index: number, patch: Partial<TimelineItem>) {
     const next = data.timeline.map((item, i) =>
       i === index ? { ...item, ...patch } : item,
@@ -28,23 +33,23 @@ export default function StepDay({
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <p className="text-sm font-semibold text-ink">Ceremonia</p>
+        <p className="text-sm font-semibold text-ink">{dict.stepDay.ceremony}</p>
         <div className="mt-3 grid gap-5 sm:grid-cols-2">
-          <Field label="Lugar">
+          <Field label={dict.stepDay.venue}>
             <TextInput
               value={data.ceremonyVenue}
               onChange={(e) => onChange({ ceremonyVenue: e.target.value })}
               placeholder="Ermita de Sant Miquel"
             />
           </Field>
-          <Field label="Hora">
+          <Field label={dict.stepDay.time}>
             <TextInput
               type="time"
               value={data.ceremonyTime}
               onChange={(e) => onChange({ ceremonyTime: e.target.value })}
             />
           </Field>
-          <Field label="Dirección" hint="Se usará para el enlace al mapa">
+          <Field label={dict.stepDay.address} hint={dict.stepDay.addressHint}>
             <TextInput
               value={data.ceremonyAddress}
               onChange={(e) => onChange({ ceremonyAddress: e.target.value })}
@@ -55,23 +60,23 @@ export default function StepDay({
       </div>
 
       <div>
-        <p className="text-sm font-semibold text-ink">Celebración</p>
+        <p className="text-sm font-semibold text-ink">{dict.stepDay.celebration}</p>
         <div className="mt-3 grid gap-5 sm:grid-cols-2">
-          <Field label="Lugar">
+          <Field label={dict.stepDay.venue}>
             <TextInput
               value={data.celebrationVenue}
               onChange={(e) => onChange({ celebrationVenue: e.target.value })}
               placeholder="Masía Can Bassa"
             />
           </Field>
-          <Field label="Hora">
+          <Field label={dict.stepDay.time}>
             <TextInput
               type="time"
               value={data.celebrationTime}
               onChange={(e) => onChange({ celebrationTime: e.target.value })}
             />
           </Field>
-          <Field label="Dirección">
+          <Field label={dict.stepDay.address}>
             <TextInput
               value={data.celebrationAddress}
               onChange={(e) => onChange({ celebrationAddress: e.target.value })}
@@ -83,13 +88,13 @@ export default function StepDay({
 
       <div>
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-ink">Itinerario del día</p>
+          <p className="text-sm font-semibold text-ink">{dict.stepDay.dayItinerary}</p>
           <button
             type="button"
             onClick={addTimelineItem}
             className="text-sm font-medium text-clay hover:underline"
           >
-            + Añadir momento
+            {dict.stepDay.addMoment}
           </button>
         </div>
         <div className="mt-3 flex flex-col gap-4">
@@ -107,7 +112,7 @@ export default function StepDay({
               <TextInput
                 value={item.title}
                 onChange={(e) => updateTimeline(i, { title: e.target.value })}
-                placeholder="Cóctel de bienvenida"
+                placeholder={dict.stepDay.momentTitlePlaceholder}
                 className="min-w-[140px] flex-1"
               />
               <TextInput
@@ -115,7 +120,7 @@ export default function StepDay({
                 onChange={(e) =>
                   updateTimeline(i, { description: e.target.value })
                 }
-                placeholder="Detalle (opcional)"
+                placeholder={dict.stepDay.detailPlaceholder}
                 className="min-w-[140px] flex-1"
               />
               <button
@@ -123,24 +128,21 @@ export default function StepDay({
                 onClick={() => removeTimelineItem(i)}
                 className="shrink-0 rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
               >
-                Quitar
+                {dict.remove}
               </button>
             </div>
           ))}
           {data.timeline.length === 0 ? (
-            <p className="text-sm text-ink-soft">
-              Añadid los momentos clave del día: ceremonia, cóctel, banquete,
-              fiesta...
-            </p>
+            <p className="text-sm text-ink-soft">{dict.stepDay.emptyTimeline}</p>
           ) : null}
         </div>
       </div>
 
-      <Field label="Código de vestimenta" hint="Opcional">
+      <Field label={dict.stepDay.dressCode} hint={dict.stepDay.dressCodeHint}>
         <TextInput
           value={data.dressCode}
           onChange={(e) => onChange({ dressCode: e.target.value })}
-          placeholder="Elegante de jardín, evitad el blanco"
+          placeholder={dict.stepDay.dressCodePlaceholder}
         />
       </Field>
     </div>

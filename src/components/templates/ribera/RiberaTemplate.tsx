@@ -1,9 +1,11 @@
-import { Fragment } from "react";
+"use client";
+
+import { Fragment, useState } from "react";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
 import type { WeddingData, WeddingPlace } from "@/lib/wedding-types";
 import { formatLongDate, mapsUrl } from "@/lib/format";
-import { getDict } from "@/lib/i18n";
+import { getDict, locales as localeOptions } from "@/lib/i18n";
 import RiberaCountdown from "./RiberaCountdown";
 import RiberaRsvpForm from "./RiberaRsvpForm";
 import RiberaCopyButton from "./RiberaCopyButton";
@@ -63,8 +65,9 @@ function heroDateParts(iso: string) {
 }
 
 export default function RiberaTemplate({ data }: { data: WeddingData }) {
-  const locale = data.locale;
+  const [locale, setLocale] = useState(data.locales[0] ?? "es");
   const dict = getDict(locale);
+  const showLocaleSwitcher = data.locales.length > 1;
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
   const initials = `${(data.partnerA || "L")[0]}&${(data.partnerB || "J")[0]}`;
   const { day, month, year } = heroDateParts(data.date);
@@ -98,6 +101,20 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
               {link.label}
             </a>
           ))}
+          {showLocaleSwitcher ? (
+            <span className={styles.localeSwitch}>
+              {data.locales.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setLocale(id)}
+                  className={`${styles.localeBtn} ${locale === id ? styles.localeBtnActive : ""}`}
+                >
+                  {localeOptions.find((l) => l.id === id)?.id ?? id}
+                </button>
+              ))}
+            </span>
+          ) : null}
         </nav>
         <a href="#top" className={styles.logo}>
           {initials}

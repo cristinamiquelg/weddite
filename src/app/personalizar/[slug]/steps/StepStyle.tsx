@@ -1,5 +1,7 @@
 import type { PaletteId, WeddingData } from "@/lib/wedding-types";
 import { palettes } from "@/components/templates/palette";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 const paletteIds = Object.keys(palettes) as PaletteId[];
 
@@ -10,11 +12,13 @@ export default function StepStyle({
   data: WeddingData;
   onChange: (patch: Partial<WeddingData>) => void;
 }) {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).wizard;
+  const paletteLabels: Record<PaletteId, string> = dict.paletteLabels;
+
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-ink-soft">
-        Elegid la paleta de color que mejor pegue con vuestra boda.
-      </p>
+      <p className="text-sm text-ink-soft">{dict.stepStyle.intro}</p>
       <div className="grid gap-4 sm:grid-cols-3">
         {paletteIds.map((id) => {
           const p = palettes[id];
@@ -42,7 +46,7 @@ export default function StepStyle({
                   style={{ background: p.ink }}
                 />
               </div>
-              <span className="text-sm font-medium text-ink">{p.label}</span>
+              <span className="text-sm font-medium text-ink">{paletteLabels[id]}</span>
             </button>
           );
         })}

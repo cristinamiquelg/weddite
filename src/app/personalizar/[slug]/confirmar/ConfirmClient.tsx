@@ -6,6 +6,8 @@ import { useState } from "react";
 import type { Template } from "@/lib/templates";
 import { useWeddingDraft } from "@/lib/use-wedding-draft";
 import { formatLongDate } from "@/lib/format";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 const TEST_CARD = {
   name: "Laura García",
@@ -19,11 +21,13 @@ export default function ConfirmClient({ template }: { template: Template }) {
   const [submitting, setSubmitting] = useState(false);
   const [card, setCard] = useState({ name: "", number: "", expiry: "", cvc: "" });
   const router = useRouter();
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).checkout;
 
   const names =
     data.partnerA || data.partnerB
       ? `${data.partnerA || "..."} & ${data.partnerB || "..."}`
-      : "Vuestra boda";
+      : dict.yourWeddingFallback;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -44,36 +48,36 @@ export default function ConfirmClient({ template }: { template: Template }) {
         href={`/personalizar/${template.slug}`}
         className="text-sm text-ink-soft hover:text-ink"
       >
-        ← Seguir editando
+        {dict.backEdit}
       </Link>
 
       <div className="mt-6 grid gap-12 lg:grid-cols-[1fr_1.1fr]">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-clay">
-            Resumen
+            {dict.summary}
           </p>
           <h1 className="mt-3 font-display text-4xl">{names}</h1>
           <dl className="mt-8 space-y-4 text-sm">
             <div className="flex justify-between border-b border-line pb-3">
-              <dt className="text-ink-soft">Diseño</dt>
+              <dt className="text-ink-soft">{dict.design}</dt>
               <dd className="font-medium">{template.name}</dd>
             </div>
             <div className="flex justify-between border-b border-line pb-3">
-              <dt className="text-ink-soft">Fecha de la boda</dt>
+              <dt className="text-ink-soft">{dict.weddingDate}</dt>
               <dd className="font-medium">
                 {loaded ? formatLongDate(data.date) : "..."}
               </dd>
             </div>
             <div className="flex justify-between border-b border-line pb-3">
-              <dt className="text-ink-soft">Lugar de celebración</dt>
+              <dt className="text-ink-soft">{dict.venue}</dt>
               <dd className="font-medium">
-                {data.celebrationVenue || "Por confirmar"}
+                {data.celebrationVenue || dict.venueTBD}
               </dd>
             </div>
           </dl>
 
           <div className="mt-8 flex items-center justify-between rounded-xl bg-sage-light px-5 py-4">
-            <span className="text-sm text-ink">Total, pago único</span>
+            <span className="text-sm text-ink">{dict.totalOnce}</span>
             <span className="font-display text-2xl">{template.price} €</span>
           </div>
 
@@ -82,16 +86,16 @@ export default function ConfirmClient({ template }: { template: Template }) {
             target="_blank"
             className="mt-6 inline-block text-sm font-medium text-clay underline underline-offset-4"
           >
-            Revisar la vista previa antes de comprar
+            {dict.reviewBeforeBuy}
           </Link>
         </div>
 
         <div>
           <div className="rounded-2xl border border-line bg-paper-raised p-8">
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-ink">Datos de pago</p>
+              <p className="text-sm font-semibold text-ink">{dict.paymentData}</p>
               <span className="rounded-full bg-sage-light px-3 py-1 text-xs font-medium text-ink-soft">
-                Modo demo · sin cobro real
+                {dict.demoMode}
               </span>
             </div>
             <button
@@ -99,11 +103,11 @@ export default function ConfirmClient({ template }: { template: Template }) {
               onClick={() => setCard(TEST_CARD)}
               className="mb-6 self-start text-sm font-medium text-clay underline underline-offset-4"
             >
-              Rellenar con tarjeta de prueba
+              {dict.fillTestCard}
             </button>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label className="flex flex-col gap-1.5 text-sm">
-                <span className="font-medium text-ink">Nombre en la tarjeta</span>
+                <span className="font-medium text-ink">{dict.cardName}</span>
                 <input
                   required
                   type="text"
@@ -114,7 +118,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
                 />
               </label>
               <label className="flex flex-col gap-1.5 text-sm">
-                <span className="font-medium text-ink">Número de tarjeta</span>
+                <span className="font-medium text-ink">{dict.cardNumber}</span>
                 <input
                   required
                   inputMode="numeric"
@@ -127,7 +131,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium text-ink">Caducidad</span>
+                  <span className="font-medium text-ink">{dict.expiry}</span>
                   <input
                     required
                     type="text"
@@ -138,7 +142,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
                   />
                 </label>
                 <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium text-ink">CVC</span>
+                  <span className="font-medium text-ink">{dict.cvc}</span>
                   <input
                     required
                     inputMode="numeric"
@@ -155,13 +159,10 @@ export default function ConfirmClient({ template }: { template: Template }) {
                 disabled={submitting}
                 className="mt-4 w-full rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90 disabled:opacity-60"
               >
-                {submitting
-                  ? "Confirmando..."
-                  : `Confirmar compra · ${template.price} €`}
+                {submitting ? dict.confirming : dict.confirmBuy(template.price)}
               </button>
               <p className="text-center text-xs text-ink-soft">
-                Al confirmar aceptáis los términos del servicio. Sin llamadas,
-                sin papeleo: vuestra web queda lista al instante.
+                {dict.disclaimer}
               </p>
             </form>
           </div>

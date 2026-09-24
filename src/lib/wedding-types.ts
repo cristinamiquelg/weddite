@@ -28,7 +28,10 @@ export type DetailCard = {
 };
 
 export type WeddingData = {
-  locale: Locale;
+  /** Languages the published site is available in. At least one, in display
+   * order — the first is the default a guest sees; if there's more than
+   * one, the site shows a language switcher. */
+  locales: Locale[];
   partnerA: string;
   partnerB: string;
   date: string; // ISO date, e.g. "2027-06-12"
@@ -60,7 +63,7 @@ export type WeddingData = {
 };
 
 export const emptyWeddingData: WeddingData = {
-  locale: "es",
+  locales: ["es"],
   partnerA: "",
   partnerB: "",
   date: "",
@@ -91,7 +94,7 @@ export const emptyWeddingData: WeddingData = {
 };
 
 export const demoWeddingData: WeddingData = {
-  locale: "es",
+  locales: ["es", "en"],
   partnerA: "Laura",
   partnerB: "Marc",
   date: "2027-06-12",
@@ -139,6 +142,7 @@ export const demoWeddingData: WeddingData = {
 
 export const riberaDemoWeddingData: WeddingData = {
   ...emptyWeddingData,
+  locales: ["es", "en"],
   partnerA: "Elena",
   partnerB: "Mateo",
   date: "2027-09-11",

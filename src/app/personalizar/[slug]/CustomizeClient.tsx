@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import type { Template } from "@/lib/templates";
 import type { WeddingData } from "@/lib/wedding-types";
 import { useWeddingDraft } from "@/lib/use-wedding-draft";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 import StepCouple from "./steps/StepCouple";
 import StepStory from "./steps/StepStory";
 import StepDay from "./steps/StepDay";
@@ -18,7 +20,6 @@ import StepLanguage from "./steps/StepLanguage";
 
 type StepDef = {
   key: string;
-  label: string;
   Component: (props: {
     data: WeddingData;
     onChange: (patch: Partial<WeddingData>) => void;
@@ -26,22 +27,22 @@ type StepDef = {
 };
 
 const auroraSteps: StepDef[] = [
-  { key: "couple", label: "Pareja y fecha", Component: StepCouple },
-  { key: "story", label: "Vuestra historia", Component: StepStory },
-  { key: "day", label: "El gran día", Component: StepDay },
-  { key: "gallery", label: "Galería", Component: StepGallery },
-  { key: "rsvp", label: "RSVP y regalo", Component: StepRsvpGift },
-  { key: "style", label: "Estilo", Component: StepStyle },
-  { key: "language", label: "Idioma", Component: StepLanguage },
+  { key: "language", Component: StepLanguage },
+  { key: "couple", Component: StepCouple },
+  { key: "story", Component: StepStory },
+  { key: "day", Component: StepDay },
+  { key: "gallery", Component: StepGallery },
+  { key: "rsvp", Component: StepRsvpGift },
+  { key: "style", Component: StepStyle },
 ];
 
 const riberaSteps: StepDef[] = [
-  { key: "couple", label: "Pareja y fecha", Component: StepRiberaCouple },
-  { key: "story", label: "Vuestra historia", Component: StepStory },
-  { key: "itinerary", label: "Itinerario y lugares", Component: StepItinerary },
-  { key: "details", label: "Detalles", Component: StepDetails },
-  { key: "rsvp", label: "RSVP y regalo", Component: StepRsvpGift },
-  { key: "language", label: "Idioma", Component: StepLanguage },
+  { key: "language", Component: StepLanguage },
+  { key: "couple", Component: StepRiberaCouple },
+  { key: "story", Component: StepStory },
+  { key: "itinerary", Component: StepItinerary },
+  { key: "details", Component: StepDetails },
+  { key: "rsvp", Component: StepRsvpGift },
 ];
 
 function stepsForTemplate(slug: string): StepDef[] {
@@ -50,6 +51,8 @@ function stepsForTemplate(slug: string): StepDef[] {
 
 export default function CustomizeClient({ template }: { template: Template }) {
   const { data, setData, loaded } = useWeddingDraft(template.slug);
+  const { locale, setLocale } = useSiteLocale();
+  const dict = getSiteDict(locale);
   const steps = stepsForTemplate(template.slug);
   const [stepIndex, setStepIndex] = useState(0);
   const [mobileTab, setMobileTab] = useState<"form" | "preview">("form");
@@ -77,12 +80,36 @@ export default function CustomizeClient({ template }: { template: Template }) {
             Weddite
           </Link>
           <span className="hidden text-sm text-ink-soft sm:inline">
-            Personalizando · {template.name}
+            {dict.wizard.personalizing(template.name)}
           </span>
         </div>
-        <p className="text-xs text-ink-soft">
-          {loaded ? "Guardado automáticamente" : "Cargando..."}
-        </p>
+        <div className="flex items-center gap-4">
+          <p className="hidden text-xs text-ink-soft sm:block">
+            {loaded ? dict.wizard.savingAuto : dict.wizard.loading}
+          </p>
+          <div className="inline-flex items-center gap-0.5 rounded-full border border-line p-0.5 text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setLocale("es")}
+              aria-pressed={locale === "es"}
+              className={`rounded-full px-2.5 py-1 transition-colors ${
+                locale === "es" ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
+              }`}
+            >
+              ES
+            </button>
+            <button
+              type="button"
+              onClick={() => setLocale("en")}
+              aria-pressed={locale === "en"}
+              className={`rounded-full px-2.5 py-1 transition-colors ${
+                locale === "en" ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
+              }`}
+            >
+              EN
+            </button>
+          </div>
+        </div>
       </header>
 
       <div className="flex items-center gap-2 border-b border-line px-6 py-3 lg:hidden">
@@ -93,7 +120,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
             mobileTab === "form" ? "bg-ink text-paper" : "text-ink-soft"
           }`}
         >
-          Editar
+          {dict.wizard.editTab}
         </button>
         <button
           type="button"
@@ -102,7 +129,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
             mobileTab === "preview" ? "bg-ink text-paper" : "text-ink-soft"
           }`}
         >
-          Vista previa
+          {dict.wizard.previewTab}
         </button>
       </div>
 
@@ -124,14 +151,16 @@ export default function CustomizeClient({ template }: { template: Template }) {
                       : "border-line text-ink-soft hover:border-ink-soft"
                   }`}
                 >
-                  {i + 1}. {s.label}
+                  {i + 1}. {dict.wizard.stepLabels[s.key as keyof typeof dict.wizard.stepLabels]}
                 </button>
               </li>
             ))}
           </ol>
 
           <div className="mx-auto w-full max-w-xl flex-1">
-            <h1 className="font-display text-2xl">{steps[stepIndex].label}</h1>
+            <h1 className="font-display text-2xl">
+              {dict.wizard.stepLabels[steps[stepIndex].key as keyof typeof dict.wizard.stepLabels]}
+            </h1>
             <div className="mt-6">
               <Step data={data} onChange={patch} />
             </div>
@@ -144,14 +173,14 @@ export default function CustomizeClient({ template }: { template: Template }) {
               onClick={() => setStepIndex((i) => Math.max(0, i - 1))}
               className="rounded-full border border-line px-6 py-3 text-sm font-medium text-ink disabled:opacity-40"
             >
-              Atrás
+              {dict.wizard.back}
             </button>
             {isLast ? (
               <Link
                 href={`/personalizar/${template.slug}/confirmar`}
                 className="rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-90"
               >
-                Revisar y comprar
+                {dict.wizard.reviewAndBuy}
               </Link>
             ) : (
               <button
@@ -159,7 +188,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
                 onClick={() => setStepIndex((i) => Math.min(steps.length - 1, i + 1))}
                 className="rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-90"
               >
-                Siguiente
+                {dict.wizard.next}
               </button>
             )}
           </div>
@@ -174,12 +203,12 @@ export default function CustomizeClient({ template }: { template: Template }) {
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
-            <span className="ml-3 text-xs text-ink-soft">Vista previa en directo</span>
+            <span className="ml-3 text-xs text-ink-soft">{dict.wizard.livePreview}</span>
           </div>
           <iframe
             ref={iframeRef}
             src={`/preview/${template.slug}`}
-            title="Vista previa en directo de vuestra web de boda"
+            title={dict.wizard.iframeTitle}
             className="flex-1"
           />
         </div>

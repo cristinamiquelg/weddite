@@ -2,11 +2,13 @@ export function Field({
   label,
   hint,
   required = false,
+  requiredLabel = "Obligatorio",
   children,
 }: {
   label: string;
   hint?: string;
   required?: boolean;
+  requiredLabel?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -15,7 +17,7 @@ export function Field({
         {label}
         {required ? (
           <span className="rounded-full bg-clay/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-clay">
-            Obligatorio
+            {requiredLabel}
           </span>
         ) : null}
       </span>

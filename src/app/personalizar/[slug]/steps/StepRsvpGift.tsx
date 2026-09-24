@@ -1,5 +1,7 @@
 import type { WeddingData } from "@/lib/wedding-types";
 import { Field, TextArea, TextInput } from "@/components/customize/fields";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 export default function StepRsvpGift({
   data,
@@ -8,48 +10,51 @@ export default function StepRsvpGift({
   data: WeddingData;
   onChange: (patch: Partial<WeddingData>) => void;
 }) {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).wizard.stepRsvpGift;
+
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <p className="text-sm font-semibold text-ink">Confirmación de asistencia</p>
+        <p className="text-sm font-semibold text-ink">{dict.rsvpSectionTitle}</p>
         <div className="mt-3 flex flex-col gap-5">
-          <Field label="Fecha límite para confirmar">
+          <Field label={dict.deadline}>
             <TextInput
               type="date"
               value={data.rsvpDeadline}
               onChange={(e) => onChange({ rsvpDeadline: e.target.value })}
             />
           </Field>
-          <Field label="Nota para invitados">
+          <Field label={dict.noteForGuests}>
             <TextArea
               rows={3}
               value={data.rsvpNote}
               onChange={(e) => onChange({ rsvpNote: e.target.value })}
-              placeholder="Confirmad antes del... indicando alergias."
+              placeholder={dict.notePlaceholder}
             />
           </Field>
         </div>
       </div>
 
       <div>
-        <p className="text-sm font-semibold text-ink">Mesa de regalos</p>
+        <p className="text-sm font-semibold text-ink">{dict.giftTableTitle}</p>
         <div className="mt-3 flex flex-col gap-5">
-          <Field label="Mensaje">
+          <Field label={dict.message}>
             <TextArea
               rows={3}
               value={data.giftMessage}
               onChange={(e) => onChange({ giftMessage: e.target.value })}
-              placeholder="Vuestra presencia es el mejor regalo..."
+              placeholder={dict.messagePlaceholder}
             />
           </Field>
-          <Field label="Nombre del titular">
+          <Field label={dict.accountHolder}>
             <TextInput
               value={data.giftHolderName}
               onChange={(e) => onChange({ giftHolderName: e.target.value })}
               placeholder="Laura García"
             />
           </Field>
-          <Field label="Número de cuenta / Bizum">
+          <Field label={dict.accountNumber}>
             <TextInput
               value={data.giftAccount}
               onChange={(e) => onChange({ giftAccount: e.target.value })}
@@ -59,11 +64,11 @@ export default function StepRsvpGift({
         </div>
       </div>
 
-      <Field label="Contacto de los organizadores">
+      <Field label={dict.organizerContact}>
         <TextInput
           value={data.organizerContact}
           onChange={(e) => onChange({ organizerContact: e.target.value })}
-          placeholder="Cualquier duda, escribidnos a..."
+          placeholder={dict.organizerContactPlaceholder}
         />
       </Field>
     </div>

@@ -1,8 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
 import type { WeddingData } from "@/lib/wedding-types";
 import { formatLongDate, formatShortDate, mapsUrl } from "@/lib/format";
-import { getDict } from "@/lib/i18n";
+import { getDict, locales as localeOptions } from "@/lib/i18n";
 import { paletteCssVars } from "./palette";
 import Countdown from "./Countdown";
 import RsvpForm from "./RsvpForm";
@@ -10,8 +13,9 @@ import CopyButton from "./CopyButton";
 import PhotoPlaceholder from "./PhotoPlaceholder";
 
 export default function AuroraTemplate({ data }: { data: WeddingData }) {
-  const locale = data.locale;
+  const [locale, setLocale] = useState(data.locales[0] ?? "es");
   const dict = getDict(locale);
+  const showLocaleSwitcher = data.locales.length > 1;
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
 
   const hasCeremony = Boolean(data.ceremonyVenue || data.ceremonyAddress || data.ceremonyTime);
@@ -36,18 +40,41 @@ export default function AuroraTemplate({ data }: { data: WeddingData }) {
       <header className="sticky top-0 z-10 border-b border-[var(--w-line)] bg-[var(--w-bg)]/90 backdrop-blur">
         <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4 text-sm">
           <span className="font-display italic text-base">{names}</span>
-          <ul className="hidden gap-6 sm:flex">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="text-[var(--w-ink-soft)] transition-colors hover:text-[var(--w-accent)]"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="flex items-center gap-6">
+            <ul className="hidden gap-6 sm:flex">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="text-[var(--w-ink-soft)] transition-colors hover:text-[var(--w-accent)]"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {showLocaleSwitcher ? (
+              <div className="flex items-center gap-1 rounded-full border border-[var(--w-line)] p-0.5 text-xs">
+                {data.locales.map((id) => {
+                  const opt = localeOptions.find((l) => l.id === id);
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => setLocale(id)}
+                      className={`rounded-full px-2.5 py-1 font-medium uppercase transition-colors ${
+                        locale === id
+                          ? "bg-[var(--w-accent)] text-[var(--w-surface)]"
+                          : "text-[var(--w-ink-soft)] hover:text-[var(--w-ink)]"
+                      }`}
+                    >
+                      {opt?.id ?? id}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
         </nav>
       </header>
 

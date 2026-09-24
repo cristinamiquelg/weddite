@@ -1,5 +1,7 @@
 import type { WeddingData } from "@/lib/wedding-types";
 import { Field, TextArea, TextInput } from "@/components/customize/fields";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 export default function StepStory({
   data,
@@ -8,24 +10,24 @@ export default function StepStory({
   data: WeddingData;
   onChange: (patch: Partial<WeddingData>) => void;
 }) {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).wizard.stepStory;
+
   return (
     <div className="flex flex-col gap-5">
-      <Field label="Título de la sección">
+      <Field label={dict.sectionTitle}>
         <TextInput
           value={data.storyTitle}
           onChange={(e) => onChange({ storyTitle: e.target.value })}
-          placeholder="Nuestra historia"
+          placeholder={dict.sectionTitlePlaceholder}
         />
       </Field>
-      <Field
-        label="Vuestra historia"
-        hint="Cómo os conocisteis, algún hito importante, por qué os casáis."
-      >
+      <Field label={dict.yourStory} hint={dict.yourStoryHint}>
         <TextArea
           rows={10}
           value={data.story}
           onChange={(e) => onChange({ story: e.target.value })}
-          placeholder="Nos conocimos..."
+          placeholder={dict.yourStoryPlaceholder}
         />
       </Field>
     </div>

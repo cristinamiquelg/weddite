@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSiteLocale } from "@/lib/site-locale";
 
 type Testimonial = {
   quote: string;
@@ -9,44 +10,84 @@ type Testimonial = {
 };
 
 // Invented reviews — Weddite doesn't have real customers yet.
-const testimonials: Testimonial[] = [
-  {
-    quote:
-      "Montamos la web en una tarde, literalmente entre risas. Nuestros invitados no paraban de preguntarnos qué agencia nos la había hecho.",
-    names: "Marta & Iker",
-    detail: "Se casaron en Sitges, diseño Aurora",
-  },
-  {
-    quote:
-      "Veníamos de mirar diseños horribles durante semanas. En cuanto vimos la preview en directo de Ribera supimos que era la nuestra.",
-    names: "Alicia & Pau",
-    detail: "Se casaron en Cadaqués, diseño Ribera",
-  },
-  {
-    quote:
-      "Lo mejor fue no depender de nadie: cambiábamos el itinerario a las 11 de la noche y lo veíamos actualizado al momento.",
-    names: "Nora & Bruno",
-    detail: "Se casaron en Ronda, diseño Aurora",
-  },
-  {
-    quote:
-      "El RSVP con acompañantes nos ahorró un Excel entero. Se lo hemos recomendado a mi hermana para su boda del año que viene.",
-    names: "Julia & Adrián",
-    detail: "Se casaron en Comillas, diseño Ribera",
-  },
-  {
-    quote:
-      "Pagamos, personalizamos y publicamos en menos de una hora. Ni una llamada, ni un PDF de presupuesto.",
-    names: "Carla & Dani",
-    detail: "Se casaron en Olite, diseño Aurora",
-  },
-  {
-    quote:
-      "Buscábamos algo que no pareciera sacado de un cumpleaños de los 2000. Por fin una web de boda con buen gusto de verdad.",
-    names: "Irene & Pol",
-    detail: "Se casaron en Peñíscola, diseño Ribera",
-  },
-];
+const testimonialsByLocale: Record<"es" | "en", Testimonial[]> = {
+  es: [
+    {
+      quote:
+        "Montamos la web en una tarde, literalmente entre risas. Nuestros invitados no paraban de preguntarnos qué agencia nos la había hecho.",
+      names: "Marta & Iker",
+      detail: "Se casaron en Sitges, diseño Aurora",
+    },
+    {
+      quote:
+        "Veníamos de mirar diseños horribles durante semanas. En cuanto vimos la preview en directo de Ribera supimos que era la nuestra.",
+      names: "Alicia & Pau",
+      detail: "Se casaron en Cadaqués, diseño Ribera",
+    },
+    {
+      quote:
+        "Lo mejor fue no depender de nadie: cambiábamos el itinerario a las 11 de la noche y lo veíamos actualizado al momento.",
+      names: "Nora & Bruno",
+      detail: "Se casaron en Ronda, diseño Aurora",
+    },
+    {
+      quote:
+        "El RSVP con acompañantes nos ahorró un Excel entero. Se lo hemos recomendado a mi hermana para su boda del año que viene.",
+      names: "Julia & Adrián",
+      detail: "Se casaron en Comillas, diseño Ribera",
+    },
+    {
+      quote:
+        "Pagamos, personalizamos y publicamos en menos de una hora. Ni una llamada, ni un PDF de presupuesto.",
+      names: "Carla & Dani",
+      detail: "Se casaron en Olite, diseño Aurora",
+    },
+    {
+      quote:
+        "Buscábamos algo que no pareciera sacado de un cumpleaños de los 2000. Por fin una web de boda con buen gusto de verdad.",
+      names: "Irene & Pol",
+      detail: "Se casaron en Peñíscola, diseño Ribera",
+    },
+  ],
+  en: [
+    {
+      quote:
+        "We put the site together in one afternoon, laughing the whole time. Our guests kept asking which agency had built it for us.",
+      names: "Marta & Iker",
+      detail: "Married in Sitges, Aurora design",
+    },
+    {
+      quote:
+        "We'd been looking at ugly templates for weeks. The moment we saw Ribera's live preview, we knew it was ours.",
+      names: "Alicia & Pau",
+      detail: "Married in Cadaqués, Ribera design",
+    },
+    {
+      quote:
+        "The best part was not depending on anyone: we'd change the itinerary at 11pm and see it update instantly.",
+      names: "Nora & Bruno",
+      detail: "Married in Ronda, Aurora design",
+    },
+    {
+      quote:
+        "RSVP with plus-ones saved us an entire spreadsheet. We've already recommended it to my sister for her wedding next year.",
+      names: "Julia & Adrián",
+      detail: "Married in Comillas, Ribera design",
+    },
+    {
+      quote:
+        "We paid, personalized and published in under an hour. Not a single call, not a single PDF quote.",
+      names: "Carla & Dani",
+      detail: "Married in Olite, Aurora design",
+    },
+    {
+      quote:
+        "We wanted something that didn't look like a 2000s birthday invite. Finally a wedding website with real taste.",
+      names: "Irene & Pol",
+      detail: "Married in Peñíscola, Ribera design",
+    },
+  ],
+};
 
 function ArrowIcon({ direction }: { direction: "left" | "right" }) {
   return (
@@ -61,6 +102,8 @@ function ArrowIcon({ direction }: { direction: "left" | "right" }) {
 }
 
 export default function TestimonialsCarousel() {
+  const { locale } = useSiteLocale();
+  const testimonials = testimonialsByLocale[locale];
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -73,13 +116,17 @@ export default function TestimonialsCarousel() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [paused]);
+  }, [paused, testimonials.length]);
 
   function go(delta: number) {
     setIndex((i) => (i + delta + testimonials.length) % testimonials.length);
   }
 
   const current = testimonials[index];
+  const prevLabel = locale === "en" ? "Previous review" : "Reseña anterior";
+  const nextLabel = locale === "en" ? "Next review" : "Siguiente reseña";
+  const goToLabel = (names: string) =>
+    locale === "en" ? `Go to ${names}'s review` : `Ir a la reseña de ${names}`;
 
   return (
     <div
@@ -91,7 +138,7 @@ export default function TestimonialsCarousel() {
         <button
           type="button"
           onClick={() => go(-1)}
-          aria-label="Reseña anterior"
+          aria-label={prevLabel}
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-ink"
         >
           <ArrowIcon direction="left" />
@@ -115,7 +162,7 @@ export default function TestimonialsCarousel() {
         <button
           type="button"
           onClick={() => go(1)}
-          aria-label="Siguiente reseña"
+          aria-label={nextLabel}
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-ink"
         >
           <ArrowIcon direction="right" />
@@ -128,7 +175,7 @@ export default function TestimonialsCarousel() {
             key={t.names}
             type="button"
             onClick={() => setIndex(i)}
-            aria-label={`Ir a la reseña de ${t.names}`}
+            aria-label={goToLabel(t.names)}
             className={`h-2 rounded-full transition-all ${
               i === index ? "w-6 bg-clay" : "w-2 bg-line"
             }`}

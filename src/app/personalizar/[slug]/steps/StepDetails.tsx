@@ -1,11 +1,7 @@
 import type { DetailCard, DetailCardIcon, WeddingData } from "@/lib/wedding-types";
 import { TextInput } from "@/components/customize/fields";
-
-const ICON_LABELS: Record<DetailCardIcon, string> = {
-  dresscode: "Dresscode",
-  bus: "Autobuses",
-  hotel: "Hoteles",
-};
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 export default function StepDetails({
   data,
@@ -14,6 +10,10 @@ export default function StepDetails({
   data: WeddingData;
   onChange: (patch: Partial<WeddingData>) => void;
 }) {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).wizard;
+  const iconLabels: Record<DetailCardIcon, string> = dict.stepDetails.iconLabels;
+
   function updateCard(index: number, patch: Partial<DetailCard>) {
     onChange({
       detailCards: data.detailCards.map((c, i) => (i === index ? { ...c, ...patch } : c)),
@@ -32,10 +32,7 @@ export default function StepDetails({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-ink-soft">
-        Añadid tarjetas informativas para vuestros invitados: dresscode,
-        autobuses, hoteles recomendados...
-      </p>
+      <p className="text-sm text-ink-soft">{dict.stepDetails.intro}</p>
       {data.detailCards.map((card, i) => (
         <div key={i} className="flex flex-wrap gap-3 rounded-lg border border-line p-4">
           <select
@@ -43,22 +40,22 @@ export default function StepDetails({
             onChange={(e) => updateCard(i, { icon: e.target.value as DetailCardIcon })}
             className="min-w-[120px] rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-sm text-ink outline-none focus:border-clay"
           >
-            {(Object.keys(ICON_LABELS) as DetailCardIcon[]).map((icon) => (
+            {(Object.keys(iconLabels) as DetailCardIcon[]).map((icon) => (
               <option key={icon} value={icon}>
-                {ICON_LABELS[icon]}
+                {iconLabels[icon]}
               </option>
             ))}
           </select>
           <TextInput
             value={card.title}
             onChange={(e) => updateCard(i, { title: e.target.value })}
-            placeholder="Dresscode"
+            placeholder={dict.stepDetails.titlePlaceholder}
             className="min-w-[140px] flex-1"
           />
           <TextInput
             value={card.ctaLabel}
             onChange={(e) => updateCard(i, { ctaLabel: e.target.value })}
-            placeholder="Inspiración"
+            placeholder={dict.stepDetails.ctaPlaceholder}
             className="min-w-[140px] flex-1"
           />
           <button
@@ -66,7 +63,7 @@ export default function StepDetails({
             onClick={() => removeCard(i)}
             className="shrink-0 rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
           >
-            Quitar
+            {dict.remove}
           </button>
         </div>
       ))}
@@ -75,7 +72,7 @@ export default function StepDetails({
         onClick={addCard}
         className="self-start text-sm font-medium text-clay hover:underline"
       >
-        + Añadir tarjeta
+        {dict.stepDetails.addCard}
       </button>
     </div>
   );

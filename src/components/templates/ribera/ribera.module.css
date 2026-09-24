@@ -143,6 +143,21 @@
 }
 .navCta { grid-area: cta; justify-self: end; padding: 0.7em 1em; font-size: var(--r-fs-small); }
 
+.localeSwitch { display: inline-flex; gap: 2px; border: 1px solid var(--r-navy); border-radius: 100px; padding: 2px; }
+.localeBtn {
+  border: 0;
+  background: transparent;
+  color: var(--r-navy);
+  font-family: var(--r-gothic);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--r-fs-micro);
+  padding: 4px 10px;
+  border-radius: 100px;
+  cursor: pointer;
+}
+.localeBtnActive { background: var(--r-navy); color: var(--r-cream); }
+
 @media (min-width: 1200px) {
   .header {
     grid-template-columns: 1fr auto 1fr;

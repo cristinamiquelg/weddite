@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import Logo from "./Logo";
 import SparkleIcon from "./SparkleIcon";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 const scatter: { top: string; left: string; size: string; opacity: number; rotate: string }[] = [
   { top: "8%", left: "6%", size: "2.5rem", opacity: 0.5, rotate: "-12deg" },
@@ -11,25 +15,28 @@ const scatter: { top: string; left: string; size: string; opacity: number; rotat
   { top: "85%", left: "40%", size: "1.6rem", opacity: 0.3, rotate: "-20deg" },
 ];
 
-const columns: { heading: string; links: { label: string; href: string }[] }[] = [
-  {
-    heading: "Producto",
-    links: [
-      { label: "Diseños", href: "/plantillas" },
-      { label: "Cómo funciona", href: "/#como-funciona" },
-      { label: "Contacto", href: "/#contacto" },
-    ],
-  },
-  {
-    heading: "Weddite",
-    links: [
-      { label: "Quiénes somos", href: "/quienes-somos" },
-      { label: "Política de privacidad", href: "/privacidad" },
-    ],
-  },
-];
-
 export default function Footer() {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale);
+
+  const columns: { heading: string; links: { label: string; href: string }[] }[] = [
+    {
+      heading: dict.footer.product,
+      links: [
+        { label: dict.footer.designs, href: "/plantillas" },
+        { label: dict.footer.howItWorks, href: "/#como-funciona" },
+        { label: dict.footer.contact, href: "/#contacto" },
+      ],
+    },
+    {
+      heading: dict.footer.weddite,
+      links: [
+        { label: dict.footer.whoWeAre, href: "/quienes-somos" },
+        { label: dict.footer.privacy, href: "/privacidad" },
+      ],
+    },
+  ];
+
   return (
     <footer className="relative overflow-hidden border-t border-line bg-ink text-paper" data-reveal>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -54,10 +61,7 @@ export default function Footer() {
         <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-sm">
             <Logo className="text-3xl text-paper sm:text-4xl" />
-            <p className="mt-5 text-sm leading-relaxed text-paper/70">
-              Webs de boda modernas, listas en minutos. Sin llamadas, sin
-              presupuestos por correo: todo a golpe de clic.
-            </p>
+            <p className="mt-5 text-sm leading-relaxed text-paper/70">{dict.footer.tagline}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:flex sm:gap-16">
@@ -84,7 +88,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 border-t border-paper/10 pt-8 text-xs text-paper/50">
-          <p>© {new Date().getFullYear()} Weddite. Todos los derechos reservados.</p>
+          <p>{dict.footer.rights(new Date().getFullYear())}</p>
         </div>
       </div>
     </footer>

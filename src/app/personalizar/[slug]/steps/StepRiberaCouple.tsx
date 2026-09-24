@@ -1,5 +1,7 @@
 import type { WeddingData } from "@/lib/wedding-types";
 import { Field, TextArea, TextInput } from "@/components/customize/fields";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 const NAME_MAX_LENGTH = 40;
 
@@ -10,10 +12,18 @@ export default function StepRiberaCouple({
   data: WeddingData;
   onChange: (patch: Partial<WeddingData>) => void;
 }) {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).wizard;
+
   return (
     <div className="flex flex-col gap-5">
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Vuestro nombre" required hint={`Máx. ${NAME_MAX_LENGTH} caracteres`}>
+        <Field
+          label={dict.stepCouple.yourName}
+          required
+          requiredLabel={dict.required}
+          hint={dict.stepCouple.maxChars(NAME_MAX_LENGTH)}
+        >
           <TextInput
             value={data.partnerA}
             onChange={(e) => onChange({ partnerA: e.target.value })}
@@ -21,7 +31,12 @@ export default function StepRiberaCouple({
             maxLength={NAME_MAX_LENGTH}
           />
         </Field>
-        <Field label="Nombre de tu pareja" required hint={`Máx. ${NAME_MAX_LENGTH} caracteres`}>
+        <Field
+          label={dict.stepCouple.partnerName}
+          required
+          requiredLabel={dict.required}
+          hint={dict.stepCouple.maxChars(NAME_MAX_LENGTH)}
+        >
           <TextInput
             value={data.partnerB}
             onChange={(e) => onChange({ partnerB: e.target.value })}
@@ -30,7 +45,7 @@ export default function StepRiberaCouple({
           />
         </Field>
       </div>
-      <Field label="Fecha de la boda" required>
+      <Field label={dict.stepCouple.weddingDate} required requiredLabel={dict.required}>
         <TextInput
           type="date"
           value={data.date}
@@ -38,14 +53,14 @@ export default function StepRiberaCouple({
         />
       </Field>
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Finca / lugar principal" hint="El que aparece en la portada">
+        <Field label={dict.stepCouple.estateName} hint={dict.stepCouple.estateNameHint}>
           <TextInput
             value={data.estateName}
             onChange={(e) => onChange({ estateName: e.target.value })}
             placeholder="Finca del Faro"
           />
         </Field>
-        <Field label="Ubicación">
+        <Field label={dict.stepCouple.location}>
           <TextInput
             value={data.estateLocation}
             onChange={(e) => onChange({ estateLocation: e.target.value })}
@@ -53,19 +68,19 @@ export default function StepRiberaCouple({
           />
         </Field>
       </div>
-      <Field label="Hashtag de la boda" hint="Para redes sociales">
+      <Field label={dict.stepCouple.hashtag} hint={dict.stepCouple.hashtagHint}>
         <TextInput
           value={data.hashtag}
           onChange={(e) => onChange({ hashtag: e.target.value })}
           placeholder="#CassandraYJonathan"
         />
       </Field>
-      <Field label="Mensaje de bienvenida">
+      <Field label={dict.stepCouple.welcomeMessage}>
         <TextArea
           rows={4}
           value={data.welcomeMessage}
           onChange={(e) => onChange({ welcomeMessage: e.target.value })}
-          placeholder="Lo primero que leerán vuestros invitados al entrar en la web."
+          placeholder={dict.stepCouple.welcomeMessagePlaceholder}
         />
       </Field>
     </div>
