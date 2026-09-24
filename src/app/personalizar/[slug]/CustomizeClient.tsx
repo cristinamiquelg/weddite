@@ -207,7 +207,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
           </div>
           <iframe
             ref={iframeRef}
-            src={`/preview/${template.slug}`}
+            src={`/preview/${template.slug}?draft=1`}
             title={dict.wizard.iframeTitle}
             className="flex-1"
           />

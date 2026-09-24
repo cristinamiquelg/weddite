@@ -82,7 +82,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
           </div>
 
           <Link
-            href={`/preview/${template.slug}`}
+            href={`/preview/${template.slug}?draft=1`}
             target="_blank"
             className="mt-6 inline-block text-sm font-medium text-clay underline underline-offset-4"
           >

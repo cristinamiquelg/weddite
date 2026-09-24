@@ -46,7 +46,7 @@ export default function GraciasContent({
       <div className="mt-10 flex flex-col gap-3 sm:flex-row">
         {slug ? (
           <Link
-            href={`/preview/${slug}`}
+            href={`/preview/${slug}?draft=1`}
             target="_blank"
             className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
           >
