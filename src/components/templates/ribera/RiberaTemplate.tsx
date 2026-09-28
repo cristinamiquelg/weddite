@@ -90,7 +90,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
   const hasItinerary = data.phases.length > 0;
   const hasDetails = data.detailCards.length > 0;
   const hasGift = Boolean(data.giftMessage || data.giftAccount);
-  const hasContact = Boolean(data.organizerContact);
+  const hasContact = data.organizerContacts.some((c) => c.name || c.phone || c.email);
   const hasBus = data.detailCards.some((c) => c.icon === "bus");
 
   const NAV_LINKS = [
@@ -218,8 +218,6 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             </div>
           ) : null}
 
-          {data.welcomeMessage ? <p className={styles.leadText}>{data.welcomeMessage}</p> : null}
-
           <a href="#rsvp" className={`${styles.btnSolid} ${styles.heroCta}`}>
             {dict.rsvpForm.submit}
           </a>
@@ -232,11 +230,8 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             <h2 id="ribera-cuando-title" className={styles.countdownTitle}>
               {dict.ribera.countdownTitle}
             </h2>
-            {data.date ? (
-              <p className={styles.countdownDate}>
-                {formatLongDate(data.date, locale)}
-                {data.estateLocation ? ` · ${data.estateLocation}` : ""}
-              </p>
+            {data.welcomeMessage ? (
+              <p className={styles.countdownMessage}>{data.welcomeMessage}</p>
             ) : null}
           </div>
           <RiberaCountdown date={data.date} locale={locale} />
@@ -387,7 +382,27 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             <h2 id="ribera-contact-title" className={styles.sectionTitle}>
               {dict.ribera.contact.title}
             </h2>
-            <p className={styles.leadText}>{data.organizerContact}</p>
+            <div className={styles.contactPeople}>
+              {data.organizerContacts.map((contact, i) =>
+                contact.name || contact.phone || contact.email ? (
+                  <div key={i} className={styles.contactPerson}>
+                    {contact.name ? <p className={styles.leadText}>{contact.name}</p> : null}
+                    <div className={styles.contactLinks}>
+                      {contact.phone ? (
+                        <a href={`tel:${contact.phone.replace(/\s+/g, "")}`} className={styles.contactLink}>
+                          {contact.phone}
+                        </a>
+                      ) : null}
+                      {contact.email ? (
+                        <a href={`mailto:${contact.email}`} className={styles.contactLink}>
+                          {contact.email}
+                        </a>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null,
+              )}
+            </div>
           </div>
         </section>
       ) : null}

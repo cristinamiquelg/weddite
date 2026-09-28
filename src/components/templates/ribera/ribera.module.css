@@ -34,19 +34,21 @@
     90deg, rgba(239, 236, 227, 0.1) 0 1px, transparent 1px 12px);
 
   /* ---- type scale ----
-     Guests range from teens to grandparents reading on a phone: body text
-     never goes below 16px and nothing functional below 13px. */
-  --r-fs-display: 32px;
-  --r-fs-place: 22px;
-  --r-fs-h2: 24px;
-  --r-fs-script: 21px;
-  --r-fs-eyebrow: 15px;
-  --r-fs-lead: 17px;
-  --r-fs-phase: 17px;
-  --r-fs-num: 48px;
-  --r-fs-body: 17px;
-  --r-fs-small: 15px;
-  --r-fs-micro: 13px;
+     Body copy sits in the 14–16px range and small/label text at 12px —
+     the desktop default (this un-prefixed tier) used to be the largest
+     size in the scale, which read as oversized; narrower breakpoints
+     below only rescale the display/heading sizes now, not body text. */
+  --r-fs-display: 26px;
+  --r-fs-place: 18px;
+  --r-fs-h2: 20px;
+  --r-fs-script: 18px;
+  --r-fs-eyebrow: 13px;
+  --r-fs-lead: 16px;
+  --r-fs-phase: 15px;
+  --r-fs-num: 40px;
+  --r-fs-body: 16px;
+  --r-fs-small: 14px;
+  --r-fs-micro: 12px;
 
   --r-track-display: 0.16em;
 
@@ -315,12 +317,12 @@
   padding: 0 clamp(16px, 6vw, 96px);
 }
 .countdownTitle { font-style: italic; font-weight: 400; font-size: var(--r-fs-h2); margin: 0; }
-.countdownDate {
-  margin: 8px 0 0;
-  font-family: var(--r-gothic);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: var(--r-fs-small);
+.countdownMessage {
+  margin: 10px 0 0;
+  max-width: 380px;
+  font-size: var(--r-fs-body);
+  line-height: 1.5;
+  opacity: 0.9;
 }
 .countdownUnits { display: flex; gap: clamp(24px, 4vw, 56px); }
 .unit { display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -371,13 +373,32 @@
   justify-content: center;
 }
 .contactInner {
-  max-width: 540px;
+  max-width: 640px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
   text-align: center;
 }
+.contactPeople {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+@media (min-width: 600px) {
+  .contactPeople { flex-direction: row; justify-content: center; gap: 48px; flex-wrap: wrap; }
+}
+.contactPerson { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.contactLinks { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; }
+.contactLink {
+  color: var(--r-coral-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: var(--r-fs-small);
+}
+.contactLink:hover { color: var(--r-navy); }
 
 /* ---------- Itinerario ---------- */
 .itinerary {
@@ -691,12 +712,11 @@
 
 @media (max-width: 1199px) {
   .root {
-    --r-fs-display: 28px;
-    --r-fs-place: 20px;
-    --r-fs-h2: 22px;
-    --r-fs-script: 20px;
-    --r-fs-num: 44px;
-    --r-fs-body: 16px;
+    --r-fs-display: 24px;
+    --r-fs-place: 17px;
+    --r-fs-h2: 19px;
+    --r-fs-script: 17px;
+    --r-fs-num: 36px;
     --r-track-display: 0.14em;
 
     --r-sp-section: 52px;
@@ -714,12 +734,12 @@
 
 @media (max-width: 899px) {
   .root {
-    --r-fs-display: 26px;
-    --r-fs-h2: 21px;
-    --r-fs-script: 19px;
-    --r-fs-eyebrow: 14px;
-    --r-fs-phase: 16px;
-    --r-fs-num: 40px;
+    --r-fs-display: 22px;
+    --r-fs-h2: 18px;
+    --r-fs-script: 16px;
+    --r-fs-eyebrow: 12px;
+    --r-fs-phase: 14px;
+    --r-fs-num: 32px;
 
     --r-sp-section: 44px;
     --r-sp-card-x: 22px;
@@ -742,12 +762,11 @@
 
 @media (max-width: 599px) {
   .root {
-    --r-fs-display: 23px;
-    --r-fs-place: 18px;
-    --r-fs-h2: 20px;
-    --r-fs-script: 18px;
-    --r-fs-num: 38px;
-    --r-fs-small: 15px;
+    --r-fs-display: 20px;
+    --r-fs-place: 16px;
+    --r-fs-h2: 17px;
+    --r-fs-script: 15px;
+    --r-fs-num: 30px;
     --r-track-display: 0.08em;
 
     --r-sp-section: 40px;

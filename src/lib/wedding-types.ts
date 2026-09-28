@@ -23,6 +23,12 @@ export type WeddingPhase = {
   places: WeddingPlace[];
 };
 
+export type ContactPerson = {
+  name: string;
+  phone?: string;
+  email?: string;
+};
+
 export type DetailCardIcon = "dresscode" | "bus" | "hotel";
 
 export type DetailCard = {
@@ -53,7 +59,8 @@ export type WeddingData = {
   giftMessage: string;
   giftAccount: string;
   giftHolderName: string;
-  organizerContact: string;
+  /** Up to 2 people guests can reach with questions. */
+  organizerContacts: ContactPerson[];
   // Fields used by the "Ribera" template's itinerary-by-phase layout.
   estateName: string;
   estateLocation: string;
@@ -76,7 +83,7 @@ export const emptyWeddingData: WeddingData = {
   giftMessage: "",
   giftAccount: "",
   giftHolderName: "",
-  organizerContact: "",
+  organizerContacts: [],
   estateName: "",
   estateLocation: "",
   phases: [],
@@ -146,7 +153,9 @@ export const riberaDemoWeddingData: WeddingData = {
     "Tu presencia es nuestro mejor regalo, pero si quieres ayudarnos a crear nuestro nuevo hogar, puedes hacerlo por transferencia a",
   giftAccount: "ES00 0000 0000 0000 0000 0000",
   giftHolderName: "Elena Ruiz",
-  organizerContact: "Cualquier duda, escribidnos a elenaymateo@example.com",
+  organizerContacts: [
+    { name: "Elena", phone: "+34 600 11 22 33", email: "elenaymateo@example.com" },
+  ],
 };
 
 export function getDemoWeddingData(): WeddingData {

@@ -157,8 +157,14 @@ type SiteDict = {
       messagePlaceholder: string;
       accountHolder: string;
       accountNumber: string;
-      organizerContact: string;
-      organizerContactPlaceholder: string;
+      contactSectionTitle: string;
+      contactPersonLabel: (n: number) => string;
+      contactNamePlaceholder: string;
+      contactPhonePlaceholder: string;
+      contactEmailPlaceholder: string;
+      contactHint: string;
+      addContactPerson: string;
+      removeContactPerson: string;
     };
     stepItinerary: {
       intro: string;
@@ -388,8 +394,14 @@ const es: SiteDict = {
       messagePlaceholder: "Vuestra presencia es el mejor regalo...",
       accountHolder: "Nombre del titular",
       accountNumber: "Número de cuenta / Bizum",
-      organizerContact: "Contacto de los organizadores",
-      organizerContactPlaceholder: "Cualquier duda, escribidnos a...",
+      contactSectionTitle: "Persona de contacto",
+      contactPersonLabel: (n) => `Persona ${n}`,
+      contactNamePlaceholder: "Nombre",
+      contactPhonePlaceholder: "Teléfono",
+      contactEmailPlaceholder: "Email",
+      contactHint: "Indicad al menos un teléfono o un email.",
+      addContactPerson: "+ Añadir persona de contacto",
+      removeContactPerson: "Quitar",
     },
     stepItinerary: {
       intro: "Organizad el día en fases (pre-boda, boda, post-boda...) y añadid los lugares de cada una.",
@@ -620,8 +632,14 @@ const en: SiteDict = {
       messagePlaceholder: "Your presence is the best gift...",
       accountHolder: "Account holder name",
       accountNumber: "Account number / bank transfer",
-      organizerContact: "Organizers' contact",
-      organizerContactPlaceholder: "Any questions, write to us at...",
+      contactSectionTitle: "Contact person",
+      contactPersonLabel: (n) => `Person ${n}`,
+      contactNamePlaceholder: "Name",
+      contactPhonePlaceholder: "Phone",
+      contactEmailPlaceholder: "Email",
+      contactHint: "Add at least a phone number or an email.",
+      addContactPerson: "+ Add contact person",
+      removeContactPerson: "Remove",
     },
     stepItinerary: {
       intro: "Organize the day into phases (pre-wedding, wedding, after-party...) and add the venues for each one.",
