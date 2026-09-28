@@ -38,17 +38,17 @@ export default function HomePage() {
         <p className="mx-auto mt-6 max-w-xl text-balance text-lg text-ink-soft">
           {home.subhead}
         </p>
-        <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-4">
+        <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row sm:items-center sm:gap-4">
           <Link
             href="/plantillas"
-            className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+            className="rounded-full bg-ink px-7 py-3.5 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90"
           >
             {home.ctaExplore}
           </Link>
           <Link
             href={`/preview/${featured.slug}`}
             target="_blank"
-            className="rounded-full border border-line px-7 py-3.5 text-sm font-medium text-ink transition-colors hover:border-ink"
+            className="rounded-full border border-line px-7 py-3.5 text-center text-sm font-medium text-ink transition-colors hover:border-ink"
           >
             {home.ctaExample}
           </Link>

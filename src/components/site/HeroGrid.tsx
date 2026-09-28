@@ -10,13 +10,10 @@ type Shot = {
   label: string;
 };
 
-// Real screenshots of the templates Weddite actually ships today (Aurora,
-// Ribera) — no invented sites. As the catalog grows, add more shots here
-// and they'll flow into the columns automatically.
+// Real screenshots of the templates Weddite actually ships today (Ribera)
+// — no invented sites. As the catalog grows, add more shots here and
+// they'll flow into the columns automatically.
 const shots: Shot[] = [
-  { src: "/hero/aurora-hero.jpg", template: "Aurora", slug: "aurora", label: "Portada" },
-  { src: "/hero/aurora-historia.jpg", template: "Aurora", slug: "aurora", label: "Historia" },
-  { src: "/hero/aurora-dia.jpg", template: "Aurora", slug: "aurora", label: "El día" },
   { src: "/hero/ribera-hero.jpg", template: "Ribera", slug: "ribera", label: "Portada" },
   { src: "/hero/ribera-itinerario.jpg", template: "Ribera", slug: "ribera", label: "Itinerario" },
   { src: "/hero/ribera-detalles.jpg", template: "Ribera", slug: "ribera", label: "Detalles" },
@@ -49,10 +46,6 @@ function Card({ shot }: { shot: Shot }) {
         quality={90}
         className="object-cover object-top"
       />
-      <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/55 to-transparent px-3 pb-2 pt-6 text-[10px] uppercase tracking-[0.18em] text-white/90">
-        {shot.template}
-        <span className="opacity-70">{shot.label}</span>
-      </span>
     </div>
   );
 }
@@ -127,7 +120,7 @@ export default function HeroGrid() {
               className={`${visibility} -mt-24 flex-col gap-4 will-change-transform sm:gap-5`}
             >
               {col.order.map((shotIndex, i) => (
-                <Card key={i} shot={shots[shotIndex]} />
+                <Card key={i} shot={shots[shotIndex % shots.length]} />
               ))}
             </div>
           );

@@ -18,13 +18,6 @@ export default function StepRsvpGift({
       <div>
         <p className="text-sm font-semibold text-ink">{dict.rsvpSectionTitle}</p>
         <div className="mt-3 flex flex-col gap-5">
-          <Field label={dict.deadline}>
-            <TextInput
-              type="date"
-              value={data.rsvpDeadline}
-              onChange={(e) => onChange({ rsvpDeadline: e.target.value })}
-            />
-          </Field>
           <Field label={dict.noteForGuests}>
             <TextArea
               rows={3}

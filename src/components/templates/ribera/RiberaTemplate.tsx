@@ -3,7 +3,7 @@
 import { Fragment, useState } from "react";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
-import type { WeddingData, WeddingPlace } from "@/lib/wedding-types";
+import type { PlaceIllustration, WeddingData, WeddingPlace } from "@/lib/wedding-types";
 import { formatLongDate, mapsUrl } from "@/lib/format";
 import { getDict, locales as localeOptions } from "@/lib/i18n";
 import RiberaCountdown from "./RiberaCountdown";
@@ -12,32 +12,29 @@ import RiberaCopyButton from "./RiberaCopyButton";
 import styles from "./ribera.module.css";
 
 // Real line-art illustrations from the L&J invitation this template is
-// modeled on. Detail cards map 1:1 to their icon; itinerary places don't
-// carry an icon of their own in the data model (any couple can add any
-// place), so they cycle through the four venue illustrations for variety,
-// same as the four distinct places in the original design.
+// modeled on. Detail cards map 1:1 to their icon; a place falls back to
+// cycling through these four venue illustrations when the couple hasn't
+// picked one explicitly for it.
 const DETAIL_ILLUSTRATIONS = {
   dresscode: "/ribera/dresscode.svg",
   bus: "/ribera/autobuses.svg",
   hotel: "/ribera/hoteles.svg",
 };
-const PLACE_ILLUSTRATIONS = [
-  "/ribera/casa-monico.svg",
-  "/ribera/catedral.svg",
-  "/ribera/cortijo.svg",
-  "/ribera/restaurante.svg",
-];
-
-// Font families now resolve through the CSS tokens in ribera.module.css
-// (--r-serif / --r-gothic point at the next/font variables), so no inline
-// font styles are needed here.
+const PLACE_ILLUSTRATION_FILES: Record<PlaceIllustration, string> = {
+  casa: "/ribera/casa-monico.svg",
+  catedral: "/ribera/catedral.svg",
+  cortijo: "/ribera/cortijo.svg",
+  restaurante: "/ribera/restaurante.svg",
+};
+const PLACE_ILLUSTRATION_FALLBACKS = Object.values(PLACE_ILLUSTRATION_FILES);
 
 type VisiblePlace = WeddingPlace & { illus: string };
 type VisiblePhase = { name: string; when: string; places: VisiblePlace[]; placeholderCount: number };
 
-// Assigns each visible place a venue illustration by its position across
-// the whole itinerary (not reset per phase), matching the variety of the
-// four distinct places in the original design. Computed once, outside any
+// Assigns each visible place an illustration: the couple's own choice when
+// set, otherwise a venue illustration cycling by position across the whole
+// itinerary (not reset per phase), matching the variety of the four
+// distinct places in the original design. Computed once, outside any
 // JSX-embedded callback, so no mutable counter is captured by render.
 function buildVisiblePhases(phases: WeddingData["phases"]): VisiblePhase[] {
   let cursor = 0;
@@ -45,7 +42,10 @@ function buildVisiblePhases(phases: WeddingData["phases"]): VisiblePhase[] {
     const places = phase.places
       .filter((place) => place.name || place.address)
       .map((place) => {
-        const illus = PLACE_ILLUSTRATIONS[cursor % PLACE_ILLUSTRATIONS.length];
+        if (place.illustration) {
+          return { ...place, illus: PLACE_ILLUSTRATION_FILES[place.illustration] };
+        }
+        const illus = PLACE_ILLUSTRATION_FALLBACKS[cursor % PLACE_ILLUSTRATION_FALLBACKS.length];
         cursor += 1;
         return { ...place, illus };
       });
@@ -64,8 +64,21 @@ function heroDateParts(iso: string) {
   };
 }
 
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" className={styles.menuIcon} fill="none" stroke="currentColor" strokeWidth={2}>
+      {open ? (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
+      ) : (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+      )}
+    </svg>
+  );
+}
+
 export default function RiberaTemplate({ data }: { data: WeddingData }) {
   const [locale, setLocale] = useState(data.locales[0] ?? "es");
+  const [menuOpen, setMenuOpen] = useState(false);
   const dict = getDict(locale);
   const showLocaleSwitcher = data.locales.length > 1;
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
@@ -73,16 +86,20 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
   const { day, month, year } = heroDateParts(data.date);
 
   const hasEstate = Boolean(data.estateName || data.estateLocation);
+  const hasStory = Boolean(data.story);
   const hasItinerary = data.phases.length > 0;
   const hasDetails = data.detailCards.length > 0;
   const hasGift = Boolean(data.giftMessage || data.giftAccount);
+  const hasContact = Boolean(data.organizerContact);
   const hasBus = data.detailCards.some((c) => c.icon === "bus");
 
   const NAV_LINKS = [
     { href: "#cuando", label: dict.ribera.nav.cuando },
+    hasStory ? { href: "#historia", label: dict.ribera.nav.historia } : null,
     hasItinerary ? { href: "#itinerario", label: dict.ribera.nav.itinerario } : null,
     hasDetails ? { href: "#detalles", label: dict.ribera.nav.detalles } : null,
     hasGift ? { href: "#regalos", label: dict.ribera.nav.regalos } : null,
+    hasContact ? { href: "#contacto", label: dict.ribera.nav.contacto } : null,
   ].filter((l): l is { href: string; label: string } => l !== null);
 
   const DETAIL_DEFAULTS = {
@@ -93,36 +110,76 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
 
   const visiblePhases = hasItinerary ? buildVisiblePhases(data.phases) : [];
 
+  function closeMenu() {
+    setMenuOpen(false);
+  }
+
+  const localeSwitch = showLocaleSwitcher ? (
+    <span className={styles.localeSwitch}>
+      {data.locales.map((id) => (
+        <button
+          key={id}
+          type="button"
+          onClick={() => setLocale(id)}
+          className={`${styles.localeBtn} ${locale === id ? styles.localeBtnActive : ""}`}
+        >
+          {localeOptions.find((l) => l.id === id)?.id ?? id}
+        </button>
+      ))}
+    </span>
+  ) : null;
+
   return (
     <div className={styles.root}>
       <header className={styles.header}>
+        <a href="#top" className={styles.logo} aria-label={names}>
+          {initials}
+        </a>
+
         <nav className={styles.nav} aria-label={locale === "en" ? "Sections" : "Secciones"}>
           {NAV_LINKS.map((link) => (
             <a key={link.href} href={link.href}>
               {link.label}
             </a>
           ))}
-          {showLocaleSwitcher ? (
-            <span className={styles.localeSwitch}>
-              {data.locales.map((id) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setLocale(id)}
-                  className={`${styles.localeBtn} ${locale === id ? styles.localeBtnActive : ""}`}
-                >
-                  {localeOptions.find((l) => l.id === id)?.id ?? id}
-                </button>
-              ))}
-            </span>
-          ) : null}
+          {localeSwitch}
         </nav>
-        <a href="#top" className={styles.logo} aria-label={names}>
-          {initials}
-        </a>
-        <a href="#rsvp" className={`${styles.btnSolid} ${styles.navCta}`}>
-          {dict.ribera.nav.confirm}
-        </a>
+
+        <div className={styles.headerActions}>
+          <a href="#rsvp" className={`${styles.btnSolid} ${styles.navCta}`}>
+            {dict.ribera.nav.confirm}
+          </a>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-label={
+              menuOpen
+                ? locale === "en"
+                  ? "Close menu"
+                  : "Cerrar menú"
+                : locale === "en"
+                  ? "Open menu"
+                  : "Abrir menú"
+            }
+            className={styles.menuBtn}
+          >
+            <MenuIcon open={menuOpen} />
+          </button>
+        </div>
+
+        {menuOpen ? (
+          <div className={styles.mobileMenu}>
+            <nav className={styles.mobileNav} aria-label={locale === "en" ? "Sections" : "Secciones"}>
+              {NAV_LINKS.map((link) => (
+                <a key={link.href} href={link.href} onClick={closeMenu}>
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+            {localeSwitch}
+          </div>
+        ) : null}
       </header>
 
       <section id="top" className={`${styles.hero} fade-in-load`}>
@@ -131,6 +188,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             <p className={styles.scriptText}>{dict.ribera.hero.saveTheDate}</p>
             <p className={styles.eyebrow}>{dict.ribera.hero.forTheWeddingOf}</p>
             <h1 className={styles.heroNames}>{names}</h1>
+            {data.hashtag ? <p className={styles.heroHashtag}>{data.hashtag}</p> : null}
           </div>
 
           <p className={styles.heroDate}>
@@ -159,13 +217,11 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
               ) : null}
             </div>
           ) : null}
+
+          {data.welcomeMessage ? <p className={styles.leadText}>{data.welcomeMessage}</p> : null}
+
           <a href="#rsvp" className={`${styles.btnSolid} ${styles.heroCta}`}>
             {dict.rsvpForm.submit}
-            {data.rsvpDeadline ? (
-              <span className={styles.heroCtaSub}>
-                {dict.ribera.rsvp.deadlinePrefix.toLowerCase()} {formatLongDate(data.rsvpDeadline, locale)}
-              </span>
-            ) : null}
           </a>
         </div>
       </section>
@@ -186,6 +242,15 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
           <RiberaCountdown date={data.date} locale={locale} />
         </div>
       </section>
+
+      {hasStory ? (
+        <section className={styles.bandStriped} id="historia">
+          <div data-reveal className={styles.card}>
+            <h2 className={styles.sectionTitle}>{data.storyTitle || dict.ribera.storyTitleFallback}</h2>
+            <p className={styles.storyText}>{data.story}</p>
+          </div>
+        </section>
+      ) : null}
 
       {hasItinerary ? (
         <section className={styles.bandSolid} id="itinerario">
@@ -220,9 +285,9 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                       {place.address ? (
                         <p className={styles.placeAddr}>{place.address}</p>
                       ) : null}
-                      {place.address ? (
+                      {place.mapsUrl || place.address ? (
                         <a
-                          href={mapsUrl(place.address)}
+                          href={place.mapsUrl || mapsUrl(place.address)}
                           target="_blank"
                           rel="noreferrer"
                           className={styles.btnOutline}
@@ -312,17 +377,22 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         <div data-reveal className={styles.rsvpCard}>
           <h2 className={styles.sectionTitle}>{dict.ribera.rsvp.title}</h2>
           {data.rsvpNote ? <p className={styles.rsvpIntro}>{data.rsvpNote}</p> : null}
-          {data.rsvpDeadline ? (
-            <p className={styles.rsvpDeadline}>
-              {dict.ribera.rsvp.deadlinePrefix} {formatLongDate(data.rsvpDeadline, locale)}
-            </p>
-          ) : null}
           <RiberaRsvpForm locale={locale} showBus={hasBus} />
         </div>
       </section>
 
+      {hasContact ? (
+        <section id="contacto" className={styles.contactSection} aria-labelledby="ribera-contact-title">
+          <div data-reveal className={styles.contactInner}>
+            <h2 id="ribera-contact-title" className={styles.sectionTitle}>
+              {dict.ribera.contact.title}
+            </h2>
+            <p className={styles.leadText}>{data.organizerContact}</p>
+          </div>
+        </section>
+      ) : null}
+
       <footer className={styles.footer}>
-        {data.organizerContact ? <p>{data.organizerContact}</p> : null}
         <p>
           {dict.ribera.footer.madeWith}{" "}
           <Link href="/" className="group inline-flex items-center gap-1" style={{ color: "var(--r-coral-text)" }}>

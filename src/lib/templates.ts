@@ -17,28 +17,6 @@ export type Template = {
 
 export const templates: Template[] = [
   {
-    id: "tpl-aurora",
-    slug: "aurora",
-    name: "Aurora",
-    tagline: "Editorial, cálida y atemporal",
-    summary: "Diseño editorial, cálido y sin adornos de más: bonito hoy y dentro de diez años.",
-    description:
-      "Para una boda que no necesita adornos para tener personalidad: tipografía elegante, mucho aire y una estética que seguirá gustándoos cuando hayan pasado las fotos de la boda.",
-    price: 39,
-    tags: ["Minimalista", "Editorial", "Atemporal"],
-    colors: ["Terracota", "Verde salvia", "Azul medianoche"],
-    tools: ["RSVP", "Itinerario", "Galería", "Regalo"],
-    features: [
-      "Cuenta atrás en directo",
-      "Itinerario del día con horarios",
-      "Galería de fotos personalizable",
-      "Confirmación de asistencia (RSVP) integrada",
-      "Sección de lista de regalos / bizum",
-      "3 paletas de color a elegir",
-      "100% adaptada a móvil",
-    ],
-  },
-  {
     id: "tpl-ribera",
     slug: "ribera",
     name: "Ribera",

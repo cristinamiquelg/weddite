@@ -7,12 +7,8 @@ import type { WeddingData } from "@/lib/wedding-types";
 import { useWeddingDraft } from "@/lib/use-wedding-draft";
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
-import StepCouple from "./steps/StepCouple";
 import StepStory from "./steps/StepStory";
-import StepDay from "./steps/StepDay";
-import StepGallery from "./steps/StepGallery";
 import StepRsvpGift from "./steps/StepRsvpGift";
-import StepStyle from "./steps/StepStyle";
 import StepRiberaCouple from "./steps/StepRiberaCouple";
 import StepItinerary from "./steps/StepItinerary";
 import StepDetails from "./steps/StepDetails";
@@ -26,17 +22,7 @@ type StepDef = {
   }) => React.ReactElement;
 };
 
-const auroraSteps: StepDef[] = [
-  { key: "language", Component: StepLanguage },
-  { key: "couple", Component: StepCouple },
-  { key: "story", Component: StepStory },
-  { key: "day", Component: StepDay },
-  { key: "gallery", Component: StepGallery },
-  { key: "rsvp", Component: StepRsvpGift },
-  { key: "style", Component: StepStyle },
-];
-
-const riberaSteps: StepDef[] = [
+const steps: StepDef[] = [
   { key: "language", Component: StepLanguage },
   { key: "couple", Component: StepRiberaCouple },
   { key: "story", Component: StepStory },
@@ -45,15 +31,10 @@ const riberaSteps: StepDef[] = [
   { key: "rsvp", Component: StepRsvpGift },
 ];
 
-function stepsForTemplate(slug: string): StepDef[] {
-  return slug === "ribera" ? riberaSteps : auroraSteps;
-}
-
 export default function CustomizeClient({ template }: { template: Template }) {
   const { data, setData, loaded } = useWeddingDraft(template.slug);
   const { locale, setLocale } = useSiteLocale();
   const dict = getSiteDict(locale);
-  const steps = stepsForTemplate(template.slug);
   const [stepIndex, setStepIndex] = useState(0);
   const [mobileTab, setMobileTab] = useState<"form" | "preview">("form");
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -93,7 +74,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
               onClick={() => setLocale("es")}
               aria-pressed={locale === "es"}
               className={`rounded-full px-2.5 py-1 transition-colors ${
-                locale === "es" ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
+                locale === "es" ? "bg-ink text-paper" : "text-ink-soft hover:bg-line/60 hover:text-ink"
               }`}
             >
               ES
@@ -103,7 +84,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
               onClick={() => setLocale("en")}
               aria-pressed={locale === "en"}
               className={`rounded-full px-2.5 py-1 transition-colors ${
-                locale === "en" ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
+                locale === "en" ? "bg-ink text-paper" : "text-ink-soft hover:bg-line/60 hover:text-ink"
               }`}
             >
               EN
@@ -166,19 +147,19 @@ export default function CustomizeClient({ template }: { template: Template }) {
             </div>
           </div>
 
-          <div className="mx-auto mt-10 flex w-full max-w-xl justify-between">
+          <div className="mx-auto mt-10 flex w-full max-w-xl flex-col-reverse gap-3 sm:flex-row sm:justify-between">
             <button
               type="button"
               disabled={stepIndex === 0}
               onClick={() => setStepIndex((i) => Math.max(0, i - 1))}
-              className="rounded-full border border-line px-6 py-3 text-sm font-medium text-ink disabled:opacity-40"
+              className="w-full rounded-full border border-line px-6 py-3 text-center text-sm font-medium text-ink disabled:opacity-40 sm:w-auto"
             >
               {dict.wizard.back}
             </button>
             {isLast ? (
               <Link
                 href={`/personalizar/${template.slug}/confirmar`}
-                className="rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+                className="w-full rounded-full bg-ink px-6 py-3 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90 sm:w-auto"
               >
                 {dict.wizard.reviewAndBuy}
               </Link>
@@ -186,7 +167,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
               <button
                 type="button"
                 onClick={() => setStepIndex((i) => Math.min(steps.length - 1, i + 1))}
-                className="rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+                className="w-full rounded-full bg-ink px-6 py-3 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90 sm:w-auto"
               >
                 {dict.wizard.next}
               </button>

@@ -71,7 +71,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
             <div className="flex justify-between border-b border-line pb-3">
               <dt className="text-ink-soft">{dict.venue}</dt>
               <dd className="font-medium">
-                {data.celebrationVenue || dict.venueTBD}
+                {data.estateName || data.estateLocation || dict.venueTBD}
               </dd>
             </div>
           </dl>

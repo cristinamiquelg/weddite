@@ -1,5 +1,7 @@
-import type { WeddingData, WeddingPhase, WeddingPlace } from "@/lib/wedding-types";
+import type { PlaceIllustration, WeddingData, WeddingPhase, WeddingPlace } from "@/lib/wedding-types";
 import { TextInput } from "@/components/customize/fields";
+
+const illustrationIds: PlaceIllustration[] = ["casa", "catedral", "cortijo", "restaurante"];
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
 
@@ -78,7 +80,24 @@ export default function StepItinerary({
 
           <div className="flex flex-col gap-3 pl-4">
             {phase.places.map((place, li) => (
-              <div key={li} className="flex flex-wrap gap-3">
+              <div key={li} className="flex flex-wrap gap-3 rounded-lg border border-line/60 p-3">
+                <select
+                  value={place.illustration ?? ""}
+                  onChange={(e) =>
+                    updatePlace(pi, li, {
+                      illustration: e.target.value ? (e.target.value as PlaceIllustration) : undefined,
+                    })
+                  }
+                  aria-label={dict.stepItinerary.placeIllustrationAriaLabel}
+                  className="min-w-[120px] rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-sm text-ink outline-none focus:border-clay"
+                >
+                  <option value="">{dict.stepItinerary.placeIllustrationAriaLabel}</option>
+                  {illustrationIds.map((id) => (
+                    <option key={id} value={id}>
+                      {dict.stepItinerary.illustrationLabels[id]}
+                    </option>
+                  ))}
+                </select>
                 <TextInput
                   value={place.name}
                   onChange={(e) => updatePlace(pi, li, { name: e.target.value })}
@@ -90,6 +109,15 @@ export default function StepItinerary({
                   onChange={(e) => updatePlace(pi, li, { address: e.target.value })}
                   placeholder={dict.stepItinerary.placeAddressPlaceholder}
                   className="min-w-[140px] flex-1"
+                />
+                <TextInput
+                  value={place.mapsUrl ?? ""}
+                  onChange={(e) => updatePlace(pi, li, { mapsUrl: e.target.value })}
+                  placeholder={dict.stepItinerary.placeMapsUrlPlaceholder}
+                  aria-label={dict.stepItinerary.placeMapsUrlAriaLabel}
+                  type="url"
+                  inputMode="url"
+                  className="min-w-[200px] flex-[2]"
                 />
                 <button
                   type="button"

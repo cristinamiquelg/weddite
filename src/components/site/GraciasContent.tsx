@@ -48,7 +48,7 @@ export default function GraciasContent({
           <Link
             href={`/preview/${slug}?draft=1`}
             target="_blank"
-            className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+            className="rounded-full bg-ink px-7 py-3.5 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90"
           >
             {dict.viewSite}
           </Link>
@@ -56,7 +56,7 @@ export default function GraciasContent({
         {slug ? (
           <Link
             href={`/personalizar/${slug}`}
-            className="rounded-full border border-line px-7 py-3.5 text-sm font-medium transition-colors hover:border-ink"
+            className="rounded-full border border-line px-7 py-3.5 text-center text-sm font-medium transition-colors hover:border-ink"
           >
             {dict.keepEditing}
           </Link>

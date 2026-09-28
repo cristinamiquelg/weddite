@@ -49,7 +49,7 @@ type SiteDict = {
     payOnce: string;
   };
   templates: Record<
-    "aurora" | "ribera",
+    "ribera",
     { tagline: string; summary: string; description: string; features: string[] }
   >;
   quienesSomos: {
@@ -121,16 +121,12 @@ type SiteDict = {
       language: string;
       couple: string;
       story: string;
-      day: string;
-      gallery: string;
       rsvp: string;
-      style: string;
       itinerary: string;
       details: string;
     };
     required: string;
     remove: string;
-    paletteLabels: { clay: string; sage: string; midnight: string };
     stepLanguage: { intro: string; included: string; summary: (langs: string) => string };
     stepCouple: {
       yourName: string;
@@ -152,26 +148,8 @@ type SiteDict = {
       yourStoryHint: string;
       yourStoryPlaceholder: string;
     };
-    stepDay: {
-      ceremony: string;
-      celebration: string;
-      venue: string;
-      time: string;
-      address: string;
-      addressHint: string;
-      dayItinerary: string;
-      addMoment: string;
-      momentTitlePlaceholder: string;
-      detailPlaceholder: string;
-      emptyTimeline: string;
-      dressCode: string;
-      dressCodeHint: string;
-      dressCodePlaceholder: string;
-    };
-    stepGallery: { intro: string; captionPlaceholder: string; addPhoto: string };
     stepRsvpGift: {
       rsvpSectionTitle: string;
-      deadline: string;
       noteForGuests: string;
       notePlaceholder: string;
       giftTableTitle: string;
@@ -182,7 +160,6 @@ type SiteDict = {
       organizerContact: string;
       organizerContactPlaceholder: string;
     };
-    stepStyle: { intro: string };
     stepItinerary: {
       intro: string;
       phaseNamePlaceholder: string;
@@ -190,6 +167,10 @@ type SiteDict = {
       removePhase: string;
       placeNamePlaceholder: string;
       placeAddressPlaceholder: string;
+      placeMapsUrlPlaceholder: string;
+      placeMapsUrlAriaLabel: string;
+      placeIllustrationAriaLabel: string;
+      illustrationLabels: { casa: string; catedral: string; cortijo: string; restaurante: string };
       addPlace: string;
       addPhase: string;
     };
@@ -279,20 +260,6 @@ const es: SiteDict = {
     payOnce: "Pago único, sin cuotas.",
   },
   templates: {
-    aurora: {
-      tagline: "Editorial, cálida y atemporal",
-      summary: "Diseño editorial, cálido y sin adornos de más: bonito hoy y dentro de diez años.",
-      description: "Para una boda que no necesita adornos para tener personalidad: tipografía elegante, mucho aire y una estética que seguirá gustándoos cuando hayan pasado las fotos de la boda.",
-      features: [
-        "Cuenta atrás en directo",
-        "Itinerario del día con horarios",
-        "Galería de fotos personalizable",
-        "Confirmación de asistencia (RSVP) integrada",
-        "Sección de lista de regalos / bizum",
-        "3 paletas de color a elegir",
-        "100% adaptada a móvil",
-      ],
-    },
     ribera: {
       tagline: "Elegante, náutica y con carácter",
       summary: "Elegante, náutica y con carácter, para bodas que no empiezan el día de la boda.",
@@ -321,7 +288,7 @@ const es: SiteDict = {
       "Una preview antes de pagar.",
       "Y una web que podéis tener lista en minutos.",
     ],
-    closingPre: "Hoy Weddite es un proyecto pequeño, hecho a mano, con dos diseños propios —Aurora y Ribera— y la idea de seguir añadiendo más. Si tenéis feedback, ideas o simplemente queréis contarnos cómo va la boda, nos encanta escuchar: podéis escribirnos desde el",
+    closingPre: "Hoy Weddite es un proyecto pequeño, hecho a mano, con un diseño propio —Ribera— y la idea de seguir añadiendo más. Si tenéis feedback, ideas o simplemente queréis contarnos cómo va la boda, nos encanta escuchar: podéis escribirnos desde el",
     closingLinkText: "formulario de contacto",
     closingPost: ".",
   },
@@ -381,16 +348,12 @@ const es: SiteDict = {
       language: "Idioma",
       couple: "Pareja y fecha",
       story: "Vuestra historia",
-      day: "El gran día",
-      gallery: "Galería",
       rsvp: "RSVP y regalo",
-      style: "Estilo",
       itinerary: "Itinerario y lugares",
       details: "Detalles",
     },
     required: "Obligatorio",
     remove: "Quitar",
-    paletteLabels: { clay: "Terracota", sage: "Verde salvia", midnight: "Azul medianoche" },
     stepLanguage: {
       intro: "Elegid en qué idiomas estará disponible vuestra web. Podéis elegir más de uno: si la boda es bilingüe, vuestros invitados podrán cambiar de idioma con un selector en la propia web. Esto afecta a los textos fijos (menú, botones, RSVP...); lo que escribáis vosotros (historia, mensajes...) se mostrará tal cual lo escribáis.",
       included: "Incluido",
@@ -416,30 +379,8 @@ const es: SiteDict = {
       yourStoryHint: "Cómo os conocisteis, algún hito importante, por qué os casáis.",
       yourStoryPlaceholder: "Nos conocimos...",
     },
-    stepDay: {
-      ceremony: "Ceremonia",
-      celebration: "Celebración",
-      venue: "Lugar",
-      time: "Hora",
-      address: "Dirección",
-      addressHint: "Se usará para el enlace al mapa",
-      dayItinerary: "Itinerario del día",
-      addMoment: "+ Añadir momento",
-      momentTitlePlaceholder: "Cóctel de bienvenida",
-      detailPlaceholder: "Detalle (opcional)",
-      emptyTimeline: "Añadid los momentos clave del día: ceremonia, cóctel, banquete, fiesta...",
-      dressCode: "Código de vestimenta",
-      dressCodeHint: "Opcional",
-      dressCodePlaceholder: "Elegante de jardín, evitad el blanco",
-    },
-    stepGallery: {
-      intro: "En esta primera versión las fotos se muestran como marcadores de posición: añadid un pie de foto para cada una. La subida de imágenes reales llegará cuando compréis el diseño.",
-      captionPlaceholder: "Pedida de mano",
-      addPhoto: "+ Añadir foto",
-    },
     stepRsvpGift: {
       rsvpSectionTitle: "Confirmación de asistencia",
-      deadline: "Fecha límite para confirmar",
       noteForGuests: "Nota para invitados",
       notePlaceholder: "Confirmad antes del... indicando alergias.",
       giftTableTitle: "Mesa de regalos",
@@ -450,7 +391,6 @@ const es: SiteDict = {
       organizerContact: "Contacto de los organizadores",
       organizerContactPlaceholder: "Cualquier duda, escribidnos a...",
     },
-    stepStyle: { intro: "Elegid la paleta de color que mejor pegue con vuestra boda." },
     stepItinerary: {
       intro: "Organizad el día en fases (pre-boda, boda, post-boda...) y añadid los lugares de cada una.",
       phaseNamePlaceholder: "La boda",
@@ -458,6 +398,10 @@ const es: SiteDict = {
       removePhase: "Quitar fase",
       placeNamePlaceholder: "Ermita de Sant Baldiri",
       placeAddressPlaceholder: "Dirección",
+      placeMapsUrlPlaceholder: "Enlace de Google Maps (opcional)",
+      placeMapsUrlAriaLabel: "Enlace de Google Maps del lugar",
+      placeIllustrationAriaLabel: "Ilustración del lugar",
+      illustrationLabels: { casa: "Casa", catedral: "Catedral", cortijo: "Cortijo", restaurante: "Restaurante" },
       addPlace: "+ Añadir lugar",
       addPhase: "+ Añadir fase",
     },
@@ -548,20 +492,6 @@ const en: SiteDict = {
     payOnce: "One-time payment, no subscriptions.",
   },
   templates: {
-    aurora: {
-      tagline: "Editorial, warm and timeless",
-      summary: "Editorial, warm design with no unnecessary flourishes: beautiful today and in ten years.",
-      description: "For a wedding that doesn't need decoration to have personality: elegant typography, plenty of breathing room, and a look you'll still love once the wedding photos have faded.",
-      features: [
-        "Live countdown",
-        "Day itinerary with schedule",
-        "Customizable photo gallery",
-        "Built-in RSVP",
-        "Gift list / bank transfer section",
-        "3 color palettes to choose from",
-        "100% mobile-friendly",
-      ],
-    },
     ribera: {
       tagline: "Elegant, nautical and full of character",
       summary: "Elegant, nautical and full of character, for weddings that don't start on the wedding day.",
@@ -590,7 +520,7 @@ const en: SiteDict = {
       "A preview before you pay.",
       "And a website you can have ready in minutes.",
     ],
-    closingPre: "Today Weddite is a small, handmade project, with two designs of our own —Aurora and Ribera— and the plan to keep adding more. If you have feedback, ideas, or just want to tell us how the wedding planning is going, we'd love to hear from you: write to us from the",
+    closingPre: "Today Weddite is a small, handmade project, with one design of our own —Ribera— and the plan to keep adding more. If you have feedback, ideas, or just want to tell us how the wedding planning is going, we'd love to hear from you: write to us from the",
     closingLinkText: "contact form",
     closingPost: ".",
   },
@@ -650,16 +580,12 @@ const en: SiteDict = {
       language: "Language",
       couple: "Couple and date",
       story: "Your story",
-      day: "The big day",
-      gallery: "Gallery",
       rsvp: "RSVP and gift",
-      style: "Style",
       itinerary: "Itinerary and venues",
       details: "Details",
     },
     required: "Required",
     remove: "Remove",
-    paletteLabels: { clay: "Terracotta", sage: "Sage green", midnight: "Midnight blue" },
     stepLanguage: {
       intro: "Choose which languages your website will be available in. You can pick more than one: if the wedding is bilingual, your guests will be able to switch language with a selector on the site itself. This affects the fixed text (menu, buttons, RSVP...); whatever you write yourselves (story, messages...) will show up exactly as you wrote it.",
       included: "Included",
@@ -685,30 +611,8 @@ const en: SiteDict = {
       yourStoryHint: "How you met, a key milestone, why you're getting married.",
       yourStoryPlaceholder: "We met...",
     },
-    stepDay: {
-      ceremony: "Ceremony",
-      celebration: "Reception",
-      venue: "Venue",
-      time: "Time",
-      address: "Address",
-      addressHint: "Used for the map link",
-      dayItinerary: "Day itinerary",
-      addMoment: "+ Add a moment",
-      momentTitlePlaceholder: "Welcome cocktail",
-      detailPlaceholder: "Detail (optional)",
-      emptyTimeline: "Add the key moments of the day: ceremony, cocktail, dinner, party...",
-      dressCode: "Dress code",
-      dressCodeHint: "Optional",
-      dressCodePlaceholder: "Garden elegant, avoid white",
-    },
-    stepGallery: {
-      intro: "In this first version, photos are shown as placeholders: add a caption for each one. Uploading real photos will be available once you buy the design.",
-      captionPlaceholder: "The proposal",
-      addPhoto: "+ Add photo",
-    },
     stepRsvpGift: {
       rsvpSectionTitle: "RSVP",
-      deadline: "RSVP deadline",
       noteForGuests: "Note for guests",
       notePlaceholder: "Please confirm by... and let us know about any allergies.",
       giftTableTitle: "Gift registry",
@@ -719,7 +623,6 @@ const en: SiteDict = {
       organizerContact: "Organizers' contact",
       organizerContactPlaceholder: "Any questions, write to us at...",
     },
-    stepStyle: { intro: "Choose the color palette that best fits your wedding." },
     stepItinerary: {
       intro: "Organize the day into phases (pre-wedding, wedding, after-party...) and add the venues for each one.",
       phaseNamePlaceholder: "The wedding",
@@ -727,6 +630,10 @@ const en: SiteDict = {
       removePhase: "Remove phase",
       placeNamePlaceholder: "St. Baldiri's Chapel",
       placeAddressPlaceholder: "Address",
+      placeMapsUrlPlaceholder: "Google Maps link (optional)",
+      placeMapsUrlAriaLabel: "Venue's Google Maps link",
+      placeIllustrationAriaLabel: "Venue illustration",
+      illustrationLabels: { casa: "House", catedral: "Cathedral", cortijo: "Country estate", restaurante: "Restaurant" },
       addPlace: "+ Add venue",
       addPhase: "+ Add phase",
     },

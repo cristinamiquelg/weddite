@@ -14,13 +14,14 @@ function getRemaining(target: string) {
     days: Math.floor(clamped / (1000 * 60 * 60 * 24)),
     hours: Math.floor((clamped / (1000 * 60 * 60)) % 24),
     minutes: Math.floor((clamped / (1000 * 60)) % 60),
+    seconds: Math.floor((clamped / 1000) % 60),
     isPast: diff <= 0,
   };
 }
 
 // Ribera-specific countdown: same ticking logic as the shared Countdown
 // component, but with the exact big-serif-number look of the L&J
-// invitation (days/hours/minutes only, no seconds).
+// invitation.
 export default function RiberaCountdown({ date, locale }: { date: string; locale?: Locale }) {
   const [remaining, setRemaining] = useState<ReturnType<typeof getRemaining> | null>(null);
   const dict = getDict(locale);
@@ -29,9 +30,7 @@ export default function RiberaCountdown({ date, locale }: { date: string; locale
     if (!date) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- first tick must run immediately, not a second after mount
     setRemaining(getRemaining(date));
-    // Only minutes are shown, so ticking every 15s is plenty and saves
-    // re-renders (and battery) on low-end phones.
-    const id = setInterval(() => setRemaining(getRemaining(date)), 15000);
+    const id = setInterval(() => setRemaining(getRemaining(date)), 1000);
     return () => clearInterval(id);
   }, [date]);
 
@@ -42,11 +41,12 @@ export default function RiberaCountdown({ date, locale }: { date: string; locale
   }
 
   // Days is the headline number, left unpadded (e.g. "524", not "0524");
-  // hours/minutes pad to 2 digits, matching the original invitation.
+  // hours/minutes/seconds pad to 2 digits, matching the original invitation.
   const units: [string, string][] = [
     [String(remaining.days), dict.countdown.days],
     [String(remaining.hours).padStart(2, "0"), dict.countdown.hours],
     [String(remaining.minutes).padStart(2, "0"), dict.countdown.minutes],
+    [String(remaining.seconds).padStart(2, "0"), dict.countdown.seconds],
   ];
 
   return (

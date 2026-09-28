@@ -7,18 +7,19 @@ export const locales: { id: Locale; label: string }[] = [
 
 type Dict = {
   hero: { weAreGettingMarried: string };
-  aurora: {
-    nav: { historia: string; dia: string; galeria: string; rsvp: string; regalo: string };
-    day: { eyebrow: string; ceremony: string; celebration: string; seeOnMap: string; dressCode: string };
-    gallery: string;
-    rsvp: { eyebrow: string; heading: string; deadlinePrefix: string };
-    gift: { eyebrow: string };
-    footer: { madeWith: string };
-  };
   ribera: {
-    nav: { cuando: string; itinerario: string; detalles: string; regalos: string; confirm: string };
+    nav: {
+      cuando: string;
+      historia: string;
+      itinerario: string;
+      detalles: string;
+      regalos: string;
+      contacto: string;
+      confirm: string;
+    };
     hero: { saveTheDate: string; forTheWeddingOf: string };
     countdownTitle: string;
+    storyTitleFallback: string;
     giftTitle: string;
     itinerary: { title: string; comoLlegar: string };
     details: {
@@ -27,7 +28,8 @@ type Dict = {
       bus: { title: string; cta: string };
       hotel: { title: string; cta: string };
     };
-    rsvp: { title: string; deadlinePrefix: string };
+    rsvp: { title: string };
+    contact: { title: string };
     footer: { madeWith: string };
     form: {
       legend: string;
@@ -81,28 +83,19 @@ type Dict = {
 
 const es: Dict = {
   hero: { weAreGettingMarried: "Nos casamos" },
-  aurora: {
-    nav: { historia: "Historia", dia: "El día", galeria: "Galería", rsvp: "RSVP", regalo: "Regalo" },
-    day: {
-      eyebrow: "El gran día",
-      ceremony: "Ceremonia",
-      celebration: "Celebración",
-      seeOnMap: "Ver en el mapa",
-      dressCode: "Código de vestimenta",
-    },
-    gallery: "Galería",
-    rsvp: {
-      eyebrow: "Confirmación de asistencia",
-      heading: "¿Nos acompañáis?",
-      deadlinePrefix: "Antes del",
-    },
-    gift: { eyebrow: "Mesa de regalos" },
-    footer: { madeWith: "Hecho con" },
-  },
   ribera: {
-    nav: { cuando: "Cuándo", itinerario: "Itinerario", detalles: "Detalles", regalos: "Regalos", confirm: "Confirmar" },
+    nav: {
+      cuando: "Cuándo",
+      historia: "Historia",
+      itinerario: "Itinerario",
+      detalles: "Detalles",
+      regalos: "Regalos",
+      contacto: "Contacto",
+      confirm: "Confirmar",
+    },
     hero: { saveTheDate: "Save the Date", forTheWeddingOf: "la boda de" },
     countdownTitle: "¡Se acerca el gran día!",
+    storyTitleFallback: "Nuestra historia",
     giftTitle: "Regalos",
     itinerary: { title: "Itinerario y lugares", comoLlegar: "Cómo llegar" },
     details: {
@@ -111,7 +104,8 @@ const es: Dict = {
       bus: { title: "Autobuses", cta: "Cómo llegar" },
       hotel: { title: "Hoteles", cta: "Más información" },
     },
-    rsvp: { title: "¿Nos acompañáis?", deadlinePrefix: "Antes del" },
+    rsvp: { title: "¿Nos acompañáis?" },
+    contact: { title: "¿Alguna duda?" },
     footer: { madeWith: "Hecho con" },
     form: {
       legend: "Tu información",
@@ -165,28 +159,19 @@ const es: Dict = {
 
 const en: Dict = {
   hero: { weAreGettingMarried: "We're getting married" },
-  aurora: {
-    nav: { historia: "Our story", dia: "The day", galeria: "Gallery", rsvp: "RSVP", regalo: "Gift" },
-    day: {
-      eyebrow: "The big day",
-      ceremony: "Ceremony",
-      celebration: "Reception",
-      seeOnMap: "View on map",
-      dressCode: "Dress code",
-    },
-    gallery: "Gallery",
-    rsvp: {
-      eyebrow: "RSVP",
-      heading: "Will you join us?",
-      deadlinePrefix: "Before",
-    },
-    gift: { eyebrow: "Gift registry" },
-    footer: { madeWith: "Made with" },
-  },
   ribera: {
-    nav: { cuando: "When", itinerario: "Itinerary", detalles: "Details", regalos: "Gifts", confirm: "RSVP" },
+    nav: {
+      cuando: "When",
+      historia: "Our story",
+      itinerario: "Itinerary",
+      detalles: "Details",
+      regalos: "Gifts",
+      contacto: "Contact",
+      confirm: "RSVP",
+    },
     hero: { saveTheDate: "Save the Date", forTheWeddingOf: "for the wedding of" },
     countdownTitle: "The big day is getting close!",
+    storyTitleFallback: "Our story",
     giftTitle: "Gifts",
     itinerary: { title: "Itinerary & venues", comoLlegar: "Get directions" },
     details: {
@@ -195,7 +180,8 @@ const en: Dict = {
       bus: { title: "Shuttle buses", cta: "Get directions" },
       hotel: { title: "Hotels", cta: "More info" },
     },
-    rsvp: { title: "Will you join us?", deadlinePrefix: "Before" },
+    rsvp: { title: "Will you join us?" },
+    contact: { title: "Got a question?" },
     footer: { madeWith: "Made with" },
     form: {
       legend: "Your information",

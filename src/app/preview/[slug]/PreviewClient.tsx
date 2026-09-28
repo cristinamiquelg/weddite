@@ -8,7 +8,7 @@ import { draftStorageKey } from "@/lib/draft-storage";
 import { renderTemplate, type TemplateSlug } from "@/components/templates/registry";
 
 export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
-  const [data, setData] = useState<WeddingData>(() => getDemoWeddingData(slug));
+  const [data, setData] = useState<WeddingData>(() => getDemoWeddingData());
   // Marketing previews (catalog cards, "ver preview" links) always show the
   // curated demo — only ?draft=1 (the wizard's own live iframe, "review
   // before buying", "view your site") should reflect a saved draft, so a
@@ -25,7 +25,7 @@ export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
       // draft: an older draft saved before a field existed (e.g. `locales`)
       // would otherwise leave that field `undefined` and crash the template.
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from localStorage after mount
-      if (raw) setData({ ...getDemoWeddingData(slug), ...JSON.parse(raw) });
+      if (raw) setData({ ...getDemoWeddingData(), ...JSON.parse(raw) });
     } catch {
       // ignore malformed/unavailable storage
     }

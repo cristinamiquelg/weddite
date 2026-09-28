@@ -18,7 +18,7 @@ export default function CatalogContent() {
 
       <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
         {templates.map((tpl, i) => {
-          const tplDict = dict.templates[tpl.slug as "aurora" | "ribera"];
+          const tplDict = dict.templates[tpl.slug as "ribera"];
           return (
             <article
               key={tpl.id}

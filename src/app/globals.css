@@ -33,6 +33,17 @@ body {
   color: var(--color-ink);
 }
 
+/* Tailwind's preflight resets buttons to `cursor: default` (matching native
+   browser behavior) instead of the `cursor: pointer` people expect from a
+   clickable control. Restore it site-wide for anything actually clickable. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+[type="submit"]:not(:disabled),
+label:has(> input[type="checkbox"]),
+label:has(> input[type="radio"]) {
+  cursor: pointer;
+}
+
 ::selection {
   background: var(--color-clay);
   color: var(--color-paper);

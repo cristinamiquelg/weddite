@@ -137,43 +137,20 @@
 .header {
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-areas:
-    "logo cta"
-    "nav nav";
+  grid-template-areas: "logo cta";
   align-items: center;
   gap: 4px 16px;
-  padding: 10px var(--r-sp-header-x) 0;
+  padding: 10px var(--r-sp-header-x);
   background: var(--r-cream);
   border-bottom: 1px solid rgba(14, 20, 83, 0.12);
   position: sticky;
   top: 0;
   z-index: 10;
 }
-/* Mobile/tablet: one scrollable row instead of wrapping onto 2–3 lines
-   (the wrapped version ate ~30% of a phone screen while sticky). */
-.nav {
-  grid-area: nav;
-  display: flex;
-  gap: 24px;
-  justify-content: flex-start;
-  overflow-x: auto;
-  scrollbar-width: none;
-  margin-inline: calc(var(--r-sp-header-x) * -1);
-  padding-inline: var(--r-sp-header-x);
-  mask-image: linear-gradient(90deg, #000 85%, transparent);
-}
-.nav::-webkit-scrollbar { display: none; }
-.nav a {
-  color: var(--r-navy);
-  text-decoration: none;
-  font-size: var(--r-fs-small);
-  white-space: nowrap;
-  padding: 12px 0;          /* 44px+ tap target */
-}
-.nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
-@media (min-width: 600px) {
-  .nav { justify-content: center; mask-image: none; }
-}
+/* Below 1200px, the full nav is replaced by the hamburger + mobileMenu
+   below — a scrollable nav row ate too much of a phone screen while
+   sticky, and wrapped onto 2–3 lines otherwise. */
+.nav { display: none; }
 .logo {
   grid-area: logo;
   justify-self: start;
@@ -182,13 +159,47 @@
   text-decoration: none;
   letter-spacing: 0.02em;
 }
+.headerActions { grid-area: cta; justify-self: end; display: flex; align-items: center; gap: 10px; }
 .navCta {
-  grid-area: cta;
-  justify-self: end;
   min-height: 44px;
   padding: 0.5em 1.1em;
   font-size: var(--r-fs-small);
 }
+.menuBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--r-navy);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--r-navy);
+  cursor: pointer;
+  flex: none;
+}
+.menuIcon { width: 18px; height: 18px; }
+
+.mobileMenu {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(14, 20, 83, 0.12);
+}
+.mobileNav { display: flex; flex-direction: column; }
+.mobileNav a {
+  color: var(--r-navy);
+  text-decoration: none;
+  font-size: var(--r-fs-body);
+  padding: 12px 4px;          /* 44px+ tap target */
+  border-bottom: 1px solid rgba(14, 20, 83, 0.08);
+}
+.mobileNav a:last-child { border-bottom: 0; }
+.mobileNav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.mobileMenu .localeSwitch { align-self: flex-start; }
 
 .localeSwitch { display: inline-flex; gap: 2px; border: 1px solid var(--r-navy); border-radius: 100px; padding: 2px; }
 .localeBtn {
@@ -213,15 +224,17 @@
     padding: 24px var(--r-sp-header-x);
   }
   .nav {
+    grid-area: nav;
+    display: flex;
     justify-content: flex-start;
-    overflow: visible;
-    margin-inline: 0;
-    padding-inline: 0;
+    align-items: center;
     gap: 28px;
   }
-  .nav a { font-size: var(--r-fs-body); padding: 8px 0; }
+  .nav a { color: var(--r-navy); text-decoration: none; font-size: var(--r-fs-body); padding: 8px 0; }
+  .nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
   .logo { justify-self: center; }
   .navCta { padding: 0.75em 1.4em; font-size: var(--r-fs-body); min-height: 48px; }
+  .menuBtn, .mobileMenu { display: none; }
 }
 
 /* ============================================================
@@ -258,6 +271,14 @@
   composes: heroNames;
   font-size: var(--r-fs-place);
 }
+.heroHashtag {
+  font-family: var(--r-gothic);
+  color: var(--r-coral-text);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: var(--r-fs-small);
+  margin: -8px 0 0;
+}
 .heroDate {
   display: flex;
   align-items: center;
@@ -273,13 +294,7 @@
   font-weight: 500;
 }
 .heroBouquet { width: var(--r-illus-bouquet); height: auto; }
-.heroCta {
-  flex-direction: column;
-  gap: 2px;
-  line-height: 1.25;
-  padding-block: 0.7em;
-}
-.heroCtaSub { font-size: var(--r-fs-micro); font-style: italic; opacity: 0.85; }
+.heroCta { padding-block: 0.75em; }
 
 /* ============================================================
    Countdown
@@ -336,6 +351,32 @@
   flex-direction: column;
   align-items: center;
   gap: var(--r-sp-stack);
+}
+
+/* ---------- Vuestra historia ---------- */
+.storyText {
+  max-width: 640px;
+  text-align: center;
+  font-size: var(--r-fs-lead);
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* ---------- Contacto ---------- */
+.contactSection {
+  background: var(--r-cream);
+  padding: var(--r-sp-section) 24px;
+  display: flex;
+  justify-content: center;
+}
+.contactInner {
+  max-width: 540px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
 }
 
 /* ---------- Itinerario ---------- */
@@ -689,6 +730,14 @@
     --r-illus-place: 200px;
     --r-illus-detail: 150px;
   }
+  /* A hairline border read as almost nothing between stacked phases on a
+     phone; make the seam between itinerary phases unmistakable. */
+  .phase {
+    margin-top: 16px;
+    padding-top: 24px;
+    border-top: 2px solid var(--r-navy);
+  }
+  .phase:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
 }
 
 @media (max-width: 599px) {
