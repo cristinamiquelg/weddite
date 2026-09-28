@@ -43,6 +43,10 @@ function Card({ shot }: { shot: Shot }) {
         alt={`Diseño ${shot.template} — ${shot.label}`}
         fill
         sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 45vw"
+        // These are UI screenshots with fine text and thin lines, not
+        // photos — the default quality (75) shows visible JPEG artifacting
+        // on that kind of high-frequency content at small sizes.
+        quality={90}
         className="object-cover object-top"
       />
       <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/55 to-transparent px-3 pb-2 pt-6 text-[10px] uppercase tracking-[0.18em] text-white/90">
