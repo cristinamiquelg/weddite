@@ -38,7 +38,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-[#0e1453] text-paper" data-reveal>
+    <footer className="relative overflow-hidden border-t border-line bg-ink text-paper" data-reveal>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         {scatter.map((s, i) => (
           <SparkleIcon

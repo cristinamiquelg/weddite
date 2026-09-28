@@ -719,7 +719,8 @@
    Footer
    ============================================================ */
 .footer {
-  background: var(--r-cream);
+  background: var(--r-navy);
+  color: var(--r-cream);
   padding: 28px var(--r-sp-header-x);
   display: flex;
   flex-direction: column;
