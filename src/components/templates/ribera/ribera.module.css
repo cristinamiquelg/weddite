@@ -95,7 +95,7 @@
 :global(html):has(.root),
 :global(body):has(.root) {
   scrollbar-width: thin;
-  scrollbar-color: #dd3e3e #efece3;
+  scrollbar-color: #2d3588 #efece3;
 }
 :global(html):has(.root)::-webkit-scrollbar,
 :global(body):has(.root)::-webkit-scrollbar {
@@ -107,13 +107,13 @@
 }
 :global(html):has(.root)::-webkit-scrollbar-thumb,
 :global(body):has(.root)::-webkit-scrollbar-thumb {
-  background-color: #0e1453;
+  background-color: #2d3588;
   border-radius: 8px;
   border: 3px solid #efece3;
 }
 :global(html):has(.root)::-webkit-scrollbar-thumb:hover,
 :global(body):has(.root)::-webkit-scrollbar-thumb:hover {
-  background-color: #dd3e3e;
+  background-color: #0e1453;
 }
 
 /* ---------- shared type helpers ---------- */
