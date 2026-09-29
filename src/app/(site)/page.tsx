@@ -35,7 +35,7 @@ export default function HomePage() {
           {home.h1}
           <SparkleIcon className="ml-2 inline-block h-[0.6em] w-[0.6em] -translate-y-1 text-clay" />
         </h1>
-        <p className="mx-auto mt-6 max-w-xl text-balance text-lg text-ink-soft">
+        <p className="mx-auto mt-6 max-w-3xl text-balance text-lg text-ink-soft">
           {home.subhead}
         </p>
         <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row sm:items-center sm:gap-4">
