@@ -250,7 +250,7 @@ const es: SiteDict = {
     steps: [
       { title: "Configurad vuestro diseño", body: "Añadid vuestra historia, itinerario, RSVP y todo lo que necesiten saber vuestros invitados. Sin registros ni compromiso." },
       { title: "Publicadla", body: "Elegid vuestro propio dominio entre los disponibles y hacedla pública con un único pago." },
-      { title: "Compartidla y recoged las confirmaciones", body: "Os mandamos una tabla descargable en la que podréis ordenar y filtrar todas las respuestas a vuestro formulario de confirmación." },
+      { title: "Compartidla y recoged las confirmaciones", body: "Tendréis una tabla descargable en la que gestionar todas las respuestas al formulario de confirmación." },
     ],
     mockupPublishCta: "Pagar y publicar",
     testimonialsLabel: "Parejas reales",
