@@ -33,7 +33,7 @@ export default function QuienesSomosContent() {
         />
       </div>
 
-      <div className="mt-10 space-y-6 text-lg leading-relaxed text-ink-soft" data-reveal style={{ transitionDelay: "80ms" }}>
+      <div className="mt-10 space-y-6 text-base leading-relaxed text-ink-soft" data-reveal style={{ transitionDelay: "80ms" }}>
         <p>{dict.p1}</p>
         <p>{dict.p2}</p>
         <p className="font-display text-2xl italic text-ink">{dict.p3}</p>
@@ -41,7 +41,7 @@ export default function QuienesSomosContent() {
 
       <ul className="mt-10 space-y-3" data-reveal style={{ transitionDelay: "140ms" }}>
         {dict.bullets.map((line) => (
-          <li key={line} className="flex items-start gap-3 text-lg text-ink">
+          <li key={line} className="flex items-start gap-3 text-base text-ink">
             <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" />
             {line}
           </li>
@@ -49,7 +49,7 @@ export default function QuienesSomosContent() {
       </ul>
 
       <p
-        className="mt-10 text-lg leading-relaxed text-ink-soft"
+        className="mt-10 text-base leading-relaxed text-ink-soft"
         data-reveal
         style={{ transitionDelay: "200ms" }}
       >

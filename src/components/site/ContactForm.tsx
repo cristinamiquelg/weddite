@@ -80,7 +80,7 @@ export default function ContactForm() {
         />
       </div>
 
-      <div className="flex flex-col items-start gap-3">
+      <div className="flex flex-col items-start gap-4">
         <button
           type="submit"
           disabled={pending}
@@ -89,14 +89,29 @@ export default function ContactForm() {
           {pending ? dict.submitting : dict.submit}
         </button>
         {state.status === "success" && (
-          <p className="text-sm text-sage" role="status">
+          <div
+            role="status"
+            className="flex w-full items-start gap-3 rounded-xl border border-sage bg-sage-light px-4 py-3.5 text-sm font-medium text-ink"
+          >
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="mt-0.5 h-5 w-5 shrink-0 text-sage">
+              <circle cx="10" cy="10" r="8.5" />
+              <path d="M6.5 10.2l2.4 2.4 4.6-5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             {dict.success}
-          </p>
+          </div>
         )}
         {errorMessage && (
-          <p className="text-sm text-clay" role="alert">
+          <div
+            role="alert"
+            className="flex w-full items-start gap-3 rounded-xl border border-clay/40 bg-clay/10 px-4 py-3.5 text-sm font-medium text-clay-dark"
+          >
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="mt-0.5 h-5 w-5 shrink-0 text-clay">
+              <circle cx="10" cy="10" r="8.5" />
+              <path d="M10 6v4.5" strokeLinecap="round" />
+              <circle cx="10" cy="13.5" r="0.75" fill="currentColor" stroke="none" />
+            </svg>
             {errorMessage}
-          </p>
+          </div>
         )}
       </div>
     </form>
