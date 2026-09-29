@@ -18,6 +18,73 @@ const ctaScatter: { top: string; left: string; size: string; opacity: number; ro
   { top: "45%", left: "95%", size: "1.4rem", opacity: 0.3, rotate: "-15deg" },
 ];
 
+// Small, language-neutral illustrations for the "Cómo funciona" steps —
+// abstract bars/panels rather than screenshots, so they read at a glance
+// without needing to stay in sync with the real product UI.
+function EditorMockup() {
+  return (
+    <div className="flex h-full gap-2">
+      <div className="flex w-2/5 flex-col gap-1.5 rounded-lg bg-paper p-2.5">
+        <div className="h-1.5 w-3/4 rounded-full bg-line" />
+        <div className="h-1.5 w-full rounded-full bg-line" />
+        <div className="h-1.5 w-2/3 rounded-full bg-line" />
+        <div className="mt-1 h-5 w-full rounded-md bg-clay/25" />
+      </div>
+      <div className="flex flex-1 flex-col gap-1.5 rounded-lg bg-paper p-2.5">
+        <div className="h-2 w-1/2 rounded-full bg-clay/50" />
+        <div className="mt-1 h-9 w-full rounded-md bg-sage-light" />
+        <div className="h-1.5 w-full rounded-full bg-line" />
+        <div className="h-1.5 w-4/5 rounded-full bg-line" />
+      </div>
+    </div>
+  );
+}
+
+function PublishMockup({ cta }: { cta: string }) {
+  return (
+    <div className="flex h-full flex-col justify-center gap-3">
+      <div className="flex items-center gap-2 rounded-full border border-line bg-paper px-3 py-2.5">
+        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-sage" />
+        <span className="truncate text-xs text-ink-soft">elenaymateo.love</span>
+        <svg viewBox="0 0 20 20" className="ml-auto h-3 w-3 shrink-0 text-ink-soft" fill="none" stroke="currentColor" strokeWidth="1.8">
+          <path d="M5 8l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+      <div className="rounded-full bg-ink px-3 py-2.5 text-center text-xs font-medium text-paper">
+        {cta}
+      </div>
+    </div>
+  );
+}
+
+function ResponsesMockup() {
+  const rows: ("yes" | "no")[] = ["yes", "yes", "no"];
+  return (
+    <div className="flex h-full flex-col justify-center gap-2 rounded-lg bg-paper p-2.5">
+      <div className="flex items-center gap-2 px-1">
+        <div className="h-1.5 w-8 rounded-full bg-ink-soft/40" />
+        <div className="h-1.5 flex-1 rounded-full bg-ink-soft/40" />
+        <div className="h-1.5 w-6 rounded-full bg-ink-soft/40" />
+      </div>
+      {rows.map((status, i) => (
+        <div key={i} className="flex items-center gap-2 rounded-md bg-paper-raised px-2 py-1.5">
+          <div className="h-1.5 w-10 rounded-full bg-line" />
+          <div className="h-1.5 flex-1 rounded-full bg-line" />
+          {status === "yes" ? (
+            <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0 text-sage" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 8.5l3 3 7-7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0 text-clay" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 4l8 8M12 4l-8 8" strokeLinecap="round" />
+            </svg>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function HomePage() {
   const featured = templates[0];
   const { locale } = useSiteLocale();
@@ -123,7 +190,10 @@ export default function HomePage() {
         <div className="mt-16 grid gap-10 sm:grid-cols-3">
           {home.steps.map((step, i) => (
             <div key={step.title} data-reveal style={{ transitionDelay: `${i * 120}ms` }}>
-              <span className="font-display text-4xl text-clay">{String(i + 1).padStart(2, "0")}</span>
+              <div className="h-32 rounded-xl border border-line bg-paper-raised p-3">
+                {i === 0 ? <EditorMockup /> : i === 1 ? <PublishMockup cta={home.mockupPublishCta} /> : <ResponsesMockup />}
+              </div>
+              <span className="mt-5 block font-display text-4xl text-clay">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="mt-4 font-display text-xl">{step.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft">
                 {step.body}

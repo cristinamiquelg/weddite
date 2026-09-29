@@ -31,6 +31,7 @@ type SiteDict = {
     howItWorksLabel: string;
     howItWorksHeading: string;
     steps: { title: string; body: string }[];
+    mockupPublishCta: string;
     testimonialsLabel: string;
     testimonialsHeading: string;
     ctaFinalPre: string;
@@ -247,10 +248,11 @@ const es: SiteDict = {
     howItWorksLabel: "Cómo funciona",
     howItWorksHeading: "De cero a web de boda en tres pasos",
     steps: [
-      { title: "Elegid vuestro diseño", body: "Mirad los diseños, abrid la preview y elegid vuestro favorito. Sin registros, llamadas ni compromiso." },
-      { title: "Hacedla vuestra", body: "Añadid vuestros nombres, historia, fotos, horarios, ubicaciones, RSVP y todo lo que necesitan vuestros invitados." },
-      { title: "Publicadla", body: "Cuando esté lista, la compráis y podéis compartirla con vuestros invitados. Así de fácil." },
+      { title: "Configurad vuestro diseño", body: "Añadid vuestra historia, itinerario, RSVP y todo lo que necesiten saber vuestros invitados. Sin registros ni compromiso." },
+      { title: "Publicadla", body: "Elegid vuestro propio dominio entre los disponibles y hacedla pública con un único pago." },
+      { title: "Compartidla y recoged las confirmaciones", body: "Os mandamos una tabla descargable en la que podréis ordenar y filtrar todas las respuestas a vuestro formulario de confirmación." },
     ],
+    mockupPublishCta: "Pagar y publicar",
     testimonialsLabel: "Parejas reales",
     testimonialsHeading: "Lo que dicen las parejas que ya se casaron",
     ctaFinalPre: "Vuestra boda merece",
@@ -496,10 +498,11 @@ const en: SiteDict = {
     howItWorksLabel: "How it works",
     howItWorksHeading: "From zero to wedding website in three steps",
     steps: [
-      { title: "Choose your design", body: "Browse the designs, open the preview and pick your favorite. No sign-ups, calls or commitment." },
-      { title: "Make it yours", body: "Add your names, story, photos, schedule, venues, RSVP and everything your guests need." },
-      { title: "Publish it", body: "Once it's ready, you buy it and can share it with your guests. That easy." },
+      { title: "Set up your design", body: "Add your story, itinerary, RSVP and everything your guests need to know. No sign-ups, no commitment." },
+      { title: "Publish it", body: "Choose your own domain from the ones available and make it live with a single payment." },
+      { title: "Share it and start collecting responses", body: "We'll send you a downloadable spreadsheet where you can sort and filter every RSVP response." },
     ],
+    mockupPublishCta: "Pay & publish",
     testimonialsLabel: "Real couples",
     testimonialsHeading: "What couples who already got married say",
     ctaFinalPre: "Your wedding deserves",
