@@ -22,6 +22,7 @@ type SiteDict = {
     ctaExample: string;
     problemLabel: string;
     problemHeading: string;
+    otherProvidersLabel: string;
     painPoints: string[];
     wedditeLabel: string;
     promisesHeadingPre: string;
@@ -227,6 +228,7 @@ const es: SiteDict = {
     ctaExample: "Ver un ejemplo en directo",
     problemLabel: "El problema",
     problemHeading: "Una boda se cuida hasta el último detalle. Su web también debería.",
+    otherProvidersLabel: "Otros proveedores",
     painPoints: [
       "Diseños que parecen sacados de otra década.",
       "Cambios que requieren tres emails y una llamada.",
@@ -475,6 +477,7 @@ const en: SiteDict = {
     ctaExample: "See a live example",
     problemLabel: "The problem",
     problemHeading: "A wedding gets cared for down to the last detail. Its website should too.",
+    otherProvidersLabel: "Other providers",
     painPoints: [
       "Designs that look like they're from another decade.",
       "Changes that take three emails and a phone call.",

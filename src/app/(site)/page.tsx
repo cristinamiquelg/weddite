@@ -74,7 +74,7 @@ export default function HomePage() {
             className="relative mt-14 grid overflow-hidden rounded-2xl border border-line sm:grid-cols-2"
           >
             <div className="flex flex-col gap-5 p-8 sm:p-10">
-              <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">{home.problemLabel}</p>
+              <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">{home.otherProvidersLabel}</p>
               <ul className="flex flex-col gap-4">
                 {home.painPoints.map((p) => (
                   <li key={p} className="flex items-start gap-3 text-ink-soft">
@@ -103,13 +103,6 @@ export default function HomePage() {
                 ))}
               </ul>
             </div>
-
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-line bg-paper px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:block"
-            >
-              vs
-            </span>
           </div>
 
           <h2 className="mt-14 text-center font-display text-3xl">
@@ -118,7 +111,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="como-funciona" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-24">
+      <section id="como-funciona" className="mx-auto max-w-5xl scroll-mt-20 px-6 py-24">
         <div data-reveal>
           <p className="text-center text-xs uppercase tracking-[0.3em] text-clay">
             {home.howItWorksLabel}
@@ -189,7 +182,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contacto" className="scroll-mt-24 border-t border-line">
+      <section id="contacto" className="scroll-mt-20 border-t border-line">
         <div className="mx-auto max-w-2xl px-6 py-24">
           <div data-reveal>
             <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.contactLabel}</p>
