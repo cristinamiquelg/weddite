@@ -5,7 +5,7 @@ import { sendContactMessage, type ContactFormState } from "@/app/actions/contact
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
 
-const initialState: ContactFormState = { status: "idle", message: "" };
+const initialState: ContactFormState = { status: "idle" };
 
 export default function ContactForm() {
   const [state, formAction, pending] = useActionState(sendContactMessage, initialState);
@@ -18,6 +18,20 @@ export default function ContactForm() {
       formRef.current?.reset();
     }
   }, [state]);
+
+  // Mapped client-side, from the *current* locale — the server only ever
+  // returns a status code, so the message always matches what's on screen
+  // even if the visitor switched language between load and submit.
+  const errorMessage =
+    state.status === "missing"
+      ? dict.errorMissing
+      : state.status === "invalid-email"
+        ? dict.errorInvalidEmail
+        : state.status === "not-configured"
+          ? dict.errorNotConfigured
+          : state.status === "send-failed"
+            ? dict.errorSendFailed
+            : null;
 
   return (
     <form ref={formRef} action={formAction} className="mt-10 space-y-5">
@@ -66,7 +80,7 @@ export default function ContactForm() {
         />
       </div>
 
-      <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col items-start gap-3">
         <button
           type="submit"
           disabled={pending}
@@ -76,12 +90,12 @@ export default function ContactForm() {
         </button>
         {state.status === "success" && (
           <p className="text-sm text-sage" role="status">
-            {state.message}
+            {dict.success}
           </p>
         )}
-        {state.status === "error" && (
+        {errorMessage && (
           <p className="text-sm text-clay" role="alert">
-            {state.message}
+            {errorMessage}
           </p>
         )}
       </div>

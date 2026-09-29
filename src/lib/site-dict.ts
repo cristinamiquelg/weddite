@@ -84,6 +84,11 @@ type SiteDict = {
     messagePlaceholder: string;
     submit: string;
     submitting: string;
+    errorMissing: string;
+    errorInvalidEmail: string;
+    errorNotConfigured: string;
+    errorSendFailed: string;
+    success: string;
   };
   checkout: {
     backEdit: string;
@@ -147,6 +152,10 @@ type SiteDict = {
       yourStory: string;
       yourStoryHint: string;
       yourStoryPlaceholder: string;
+      storyImage: string;
+      storyImageHint: string;
+      storyImageChoose: string;
+      storyImageRemove: string;
     };
     stepRsvpGift: {
       rsvpSectionTitle: string;
@@ -229,8 +238,8 @@ const es: SiteDict = {
     promisesHeadingItalic: "deberían de ser.",
     promises: [
       { title: "Diseño cuidado", body: "Diseños editoriales, sin clichés de boda." },
-      { title: "La veis antes de comprarla", body: "Probad la web en directo antes de pagar." },
       { title: "La tenéis en minutos", body: "Sin llamadas, presupuestos ni intermediarios." },
+      { title: "La veis antes de comprarla", body: "Probad la web en directo antes de pagar." },
       { title: "Pensada para móvil", body: "Porque vuestros invitados probablemente la abrirán desde WhatsApp." },
     ],
     howItWorksLabel: "Cómo funciona",
@@ -317,6 +326,12 @@ const es: SiteDict = {
     messagePlaceholder: "Contadnos qué necesitáis",
     submit: "Enviar mensaje",
     submitting: "Enviando…",
+    errorMissing: "Rellenad nombre, email y mensaje.",
+    errorInvalidEmail: "Ese email no parece válido.",
+    errorNotConfigured:
+      "No hemos podido enviar el mensaje ahora mismo. Escríbenos directamente a crismiquelg@gmail.com.",
+    errorSendFailed: "No hemos podido enviar el mensaje ahora mismo. Inténtalo de nuevo en un momento.",
+    success: "¡Gracias! Os responderemos en cuanto podamos.",
   },
   checkout: {
     backEdit: "← Seguir editando",
@@ -384,6 +399,10 @@ const es: SiteDict = {
       yourStory: "Vuestra historia",
       yourStoryHint: "Cómo os conocisteis, algún hito importante, por qué os casáis.",
       yourStoryPlaceholder: "Nos conocimos...",
+      storyImage: "Foto (opcional)",
+      storyImageHint: "Una imagen para acompañar vuestra historia.",
+      storyImageChoose: "Elegir imagen",
+      storyImageRemove: "Quitar",
     },
     stepRsvpGift: {
       rsvpSectionTitle: "Confirmación de asistencia",
@@ -467,8 +486,8 @@ const en: SiteDict = {
     promisesHeadingItalic: "deserve.",
     promises: [
       { title: "Considered design", body: "Editorial designs, no wedding clichés." },
-      { title: "See it before you buy it", body: "Try the site live before paying." },
       { title: "Ready in minutes", body: "No calls, no quotes, no middlemen." },
+      { title: "See it before you buy it", body: "Try the site live before paying." },
       { title: "Built for mobile", body: "Because your guests will most likely open it from a WhatsApp group." },
     ],
     howItWorksLabel: "How it works",
@@ -555,6 +574,12 @@ const en: SiteDict = {
     messagePlaceholder: "Tell us what you need",
     submit: "Send message",
     submitting: "Sending…",
+    errorMissing: "Please fill in name, email and message.",
+    errorInvalidEmail: "That email doesn't look valid.",
+    errorNotConfigured:
+      "We couldn't send the message right now. Write to us directly at crismiquelg@gmail.com.",
+    errorSendFailed: "We couldn't send the message right now. Please try again in a moment.",
+    success: "Thanks! We'll get back to you as soon as we can.",
   },
   checkout: {
     backEdit: "← Keep editing",
@@ -622,6 +647,10 @@ const en: SiteDict = {
       yourStory: "Your story",
       yourStoryHint: "How you met, a key milestone, why you're getting married.",
       yourStoryPlaceholder: "We met...",
+      storyImage: "Photo (optional)",
+      storyImageHint: "An image to go alongside your story.",
+      storyImageChoose: "Choose image",
+      storyImageRemove: "Remove",
     },
     stepRsvpGift: {
       rsvpSectionTitle: "RSVP",

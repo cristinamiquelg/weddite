@@ -142,10 +142,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
               {link.label}
             </a>
           ))}
-          {localeSwitch}
         </nav>
 
         <div className={styles.headerActions}>
+          <span className={styles.headerLocaleSwitch}>{localeSwitch}</span>
           <a href="#rsvp" className={`${styles.btnSolid} ${styles.navCta}`}>
             {dict.ribera.nav.confirm}
           </a>
@@ -188,7 +188,6 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             <p className={styles.scriptText}>{dict.ribera.hero.saveTheDate}</p>
             <p className={styles.eyebrow}>{dict.ribera.hero.forTheWeddingOf}</p>
             <h1 className={styles.heroNames}>{names}</h1>
-            {data.hashtag ? <p className={styles.heroHashtag}>{data.hashtag}</p> : null}
           </div>
 
           <p className={styles.heroDate}>
@@ -217,10 +216,6 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
               ) : null}
             </div>
           ) : null}
-
-          <a href="#rsvp" className={`${styles.btnSolid} ${styles.heroCta}`}>
-            {dict.rsvpForm.submit}
-          </a>
         </div>
       </section>
 
@@ -242,7 +237,12 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         <section className={styles.bandStriped} id="historia">
           <div data-reveal className={styles.card}>
             <h2 className={styles.sectionTitle}>{data.storyTitle || dict.ribera.storyTitleFallback}</h2>
+            {data.storyImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={data.storyImage} alt="" className={styles.storyImage} />
+            ) : null}
             <p className={styles.storyText}>{data.story}</p>
+            {data.hashtag ? <p className={styles.storyHashtag}>{data.hashtag}</p> : null}
           </div>
         </section>
       ) : null}
@@ -356,10 +356,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                 {data.giftAccount ? (
                   <div className={styles.giftAccount}>
                     {data.giftHolderName ? <p className={styles.leadText}>{data.giftHolderName}</p> : null}
-                    <p className={styles.giftIban}>
-                      {data.giftAccount}
-                    </p>
-                    <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} locale={locale} />
+                    <div className={styles.giftIbanRow}>
+                      <p className={styles.giftIban}>{data.giftAccount}</p>
+                      <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} locale={locale} icon />
+                    </div>
                   </div>
                 ) : null}
               </div>
@@ -408,6 +408,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
       ) : null}
 
       <footer className={styles.footer}>
+        {data.hashtag ? <p className={styles.footerHashtag}>{data.hashtag}</p> : null}
         <p>
           {dict.ribera.footer.madeWith}{" "}
           <Link href="/" className="group inline-flex items-center gap-1" style={{ color: "var(--r-coral)" }}>

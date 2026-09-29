@@ -60,44 +60,65 @@ export default function HomePage() {
       </section>
 
       <section className="border-t border-line bg-paper-raised">
-        <div className="mx-auto grid max-w-5xl gap-12 px-6 py-20 sm:grid-cols-2">
-          <div data-reveal>
-            <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">
-              {home.problemLabel}
-            </p>
-            <h2 className="mt-4 font-display text-3xl">{home.problemHeading}</h2>
-            <ul className="mt-6 space-y-4">
-              {home.painPoints.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-ink-soft">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-line" />
-                  {p}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div data-reveal style={{ transitionDelay: "120ms" }}>
-            <p className="text-xs uppercase tracking-[0.3em] text-clay">
-              {home.wedditeLabel}
-            </p>
-            <h2 className="mt-4 font-display text-3xl">
-              {home.promisesHeadingPre} <em className="italic">{home.promisesHeadingItalic}</em>
+        <div className="mx-auto max-w-5xl px-6 py-20">
+          <div data-reveal className="text-center">
+            <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">{home.problemLabel}</p>
+            <h2 className="mx-auto mt-4 max-w-2xl text-balance font-display text-3xl">
+              {home.problemHeading}
             </h2>
-            <ul className="mt-6 space-y-5">
-              {home.promises.map((p) => (
-                <li key={p.title} className="flex items-start gap-3 text-ink">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" />
-                  <span>
-                    <span className="font-medium text-ink">{p.title}</span>
-                    <span className="block text-sm text-ink-soft">{p.body}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
+
+          <div
+            data-reveal
+            style={{ transitionDelay: "120ms" }}
+            className="relative mt-14 grid overflow-hidden rounded-2xl border border-line sm:grid-cols-2"
+          >
+            <div className="flex flex-col gap-5 p-8 sm:p-10">
+              <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">{home.problemLabel}</p>
+              <ul className="flex flex-col gap-4">
+                {home.painPoints.map((p) => (
+                  <li key={p} className="flex items-start gap-3 text-ink-soft">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-line text-[10px] text-ink-soft/70">
+                      ✕
+                    </span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-5 border-t border-line bg-clay/5 p-8 sm:border-t-0 sm:border-l sm:p-10">
+              <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.wedditeLabel}</p>
+              <ul className="flex flex-col gap-4">
+                {home.promises.map((p) => (
+                  <li key={p.title} className="flex items-start gap-3 text-ink">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-clay text-[10px] font-bold text-paper">
+                      ✓
+                    </span>
+                    <span>
+                      <span className="font-medium text-ink">{p.title}</span>
+                      <span className="block text-sm text-ink-soft">{p.body}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-line bg-paper px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:block"
+            >
+              vs
+            </span>
+          </div>
+
+          <h2 className="mt-14 text-center font-display text-3xl">
+            {home.promisesHeadingPre} <em className="italic">{home.promisesHeadingItalic}</em>
+          </h2>
         </div>
       </section>
 
-      <section id="como-funciona" className="mx-auto max-w-5xl px-6 py-24">
+      <section id="como-funciona" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-24">
         <div data-reveal>
           <p className="text-center text-xs uppercase tracking-[0.3em] text-clay">
             {home.howItWorksLabel}
@@ -168,7 +189,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="contacto" className="border-t border-line">
+      <section id="contacto" className="scroll-mt-24 border-t border-line">
         <div className="mx-auto max-w-2xl px-6 py-24">
           <div data-reveal>
             <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.contactLabel}</p>

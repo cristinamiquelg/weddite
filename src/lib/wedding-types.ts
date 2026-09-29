@@ -53,6 +53,8 @@ export type WeddingData = {
   welcomeMessage: string;
   storyTitle: string;
   story: string;
+  /** Optional photo shown alongside the story text. Data URL from the wizard's file picker. */
+  storyImage?: string;
   timeline: TimelineItem[];
   galleryCaptions: string[];
   rsvpNote: string;
