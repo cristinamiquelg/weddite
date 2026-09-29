@@ -16,6 +16,10 @@ import StepLanguage from "./steps/StepLanguage";
 
 type StepDef = {
   key: string;
+  // The template section this step's fields land in, so the preview can
+  // scroll there when the couple opens the step — null for steps (like
+  // the language picker) that don't map to one spot on the page.
+  sectionId: string | null;
   Component: (props: {
     data: WeddingData;
     onChange: (patch: Partial<WeddingData>) => void;
@@ -23,12 +27,12 @@ type StepDef = {
 };
 
 const steps: StepDef[] = [
-  { key: "language", Component: StepLanguage },
-  { key: "couple", Component: StepRiberaCouple },
-  { key: "story", Component: StepStory },
-  { key: "itinerary", Component: StepItinerary },
-  { key: "details", Component: StepDetails },
-  { key: "rsvp", Component: StepRsvpGift },
+  { key: "language", sectionId: null, Component: StepLanguage },
+  { key: "couple", sectionId: "top", Component: StepRiberaCouple },
+  { key: "story", sectionId: "historia", Component: StepStory },
+  { key: "itinerary", sectionId: "itinerario", Component: StepItinerary },
+  { key: "details", sectionId: "detalles", Component: StepDetails },
+  { key: "rsvp", sectionId: "rsvp", Component: StepRsvpGift },
 ];
 
 export default function CustomizeClient({ template }: { template: Template }) {
@@ -45,6 +49,15 @@ export default function CustomizeClient({ template }: { template: Template }) {
       window.location.origin,
     );
   }, [data, template.slug]);
+
+  const sectionId = steps[stepIndex].sectionId;
+  useEffect(() => {
+    if (!sectionId) return;
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "weddite:scrollTo", sectionId },
+      window.location.origin,
+    );
+  }, [sectionId]);
 
   function patch(p: Partial<WeddingData>) {
     setData((prev) => ({ ...prev, ...p }));

@@ -32,11 +32,12 @@ const content = {
         body: (
           <p>
             Cuando personalizáis un diseño (nombres, fecha, itinerario,
-            textos, etc.), esos datos se guardan únicamente en el navegador
-            de vuestro dispositivo (localStorage), para que podáis retomar
-            el proceso donde lo dejasteis. No se envían a ningún servidor ni
-            base de datos: si borráis los datos del navegador o cambiáis de
-            dispositivo, se pierden.
+            textos, etc.), esos datos se guardan únicamente en la memoria
+            temporal de esa pestaña del navegador (sessionStorage), para
+            que podáis pasar de un paso a otro y llegar con ellos al
+            checkout. No se envían a ningún servidor ni base de datos, y
+            desaparecen en cuanto cerráis la pestaña: cada vez que empezáis
+            a personalizar un diseño, partís de cero.
           </p>
         ),
       },
@@ -69,8 +70,9 @@ const content = {
           <p>
             Esta web no utiliza cookies de seguimiento ni herramientas de
             analítica de terceros. El único almacenamiento local que
-            usamos es el localStorage descrito arriba, necesario para que
-            funcione la personalización.
+            usamos es el sessionStorage descrito arriba, necesario para que
+            funcione la personalización, y que se borra solo al cerrar la
+            pestaña.
           </p>
         ),
       },
@@ -108,10 +110,11 @@ const content = {
         body: (
           <p>
             When you personalize a design (names, date, itinerary, text,
-            etc.), that data is stored only in your device&apos;s browser
-            (localStorage), so you can pick up where you left off. It is
-            never sent to any server or database: if you clear your browser
-            data or switch devices, it is lost.
+            etc.), that data is stored only in that browser tab&apos;s
+            temporary memory (sessionStorage), so you can move between steps
+            and carry it through to checkout. It is never sent to any server
+            or database, and disappears as soon as you close the tab: every
+            time you start personalizing a design, you start from scratch.
           </p>
         ),
       },
@@ -144,8 +147,8 @@ const content = {
           <p>
             This website does not use tracking cookies or third-party
             analytics tools. The only local storage we use is the
-            localStorage described above, needed for the personalization
-            to work.
+            sessionStorage described above, needed for the personalization
+            to work, which clears itself when you close the tab.
           </p>
         ),
       },

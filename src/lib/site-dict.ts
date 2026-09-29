@@ -134,11 +134,11 @@ type SiteDict = {
     };
     required: string;
     remove: string;
+    maxChars: (n: number) => string;
     stepLanguage: { intro: string; included: string; summary: (langs: string) => string };
     stepCouple: {
       yourName: string;
       partnerName: string;
-      maxChars: (n: number) => string;
       weddingDate: string;
       hashtag: string;
       hashtagHint: string;
@@ -379,6 +379,7 @@ const es: SiteDict = {
     },
     required: "Obligatorio",
     remove: "Quitar",
+    maxChars: (n) => `Máx. ${n} caracteres`,
     stepLanguage: {
       intro: "Elegid en qué idiomas estará disponible vuestra web. Podéis elegir más de uno: si la boda es bilingüe, vuestros invitados podrán cambiar de idioma con un selector en la propia web. Esto afecta a los textos fijos (menú, botones, RSVP...); lo que escribáis vosotros (historia, mensajes...) se mostrará tal cual lo escribáis.",
       included: "Incluido",
@@ -387,7 +388,6 @@ const es: SiteDict = {
     stepCouple: {
       yourName: "Vuestro nombre",
       partnerName: "Nombre de tu pareja",
-      maxChars: (n) => `Máx. ${n} caracteres`,
       weddingDate: "Fecha de la boda",
       hashtag: "Hashtag de la boda",
       hashtagHint: "Para redes sociales",
@@ -629,6 +629,7 @@ const en: SiteDict = {
     },
     required: "Required",
     remove: "Remove",
+    maxChars: (n) => `Max. ${n} characters`,
     stepLanguage: {
       intro: "Choose which languages your website will be available in. You can pick more than one: if the wedding is bilingual, your guests will be able to switch language with a selector on the site itself. This affects the fixed text (menu, buttons, RSVP...); whatever you write yourselves (story, messages...) will show up exactly as you wrote it.",
       included: "Included",
@@ -637,7 +638,6 @@ const en: SiteDict = {
     stepCouple: {
       yourName: "Your name",
       partnerName: "Your partner's name",
-      maxChars: (n) => `Max. ${n} characters`,
       weddingDate: "Wedding date",
       hashtag: "Wedding hashtag",
       hashtagHint: "For social media",

@@ -2,6 +2,11 @@ import type { PlaceIllustration, WeddingData, WeddingPhase, WeddingPlace } from 
 import { TextInput } from "@/components/customize/fields";
 
 const illustrationIds: PlaceIllustration[] = ["casa", "catedral", "cortijo", "restaurante"];
+const PHASE_NAME_MAX_LENGTH = 40;
+const PHASE_WHEN_MAX_LENGTH = 40;
+const PLACE_NAME_MAX_LENGTH = 50;
+const PLACE_ADDRESS_MAX_LENGTH = 80;
+const MAPS_URL_MAX_LENGTH = 300;
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
 
@@ -62,11 +67,13 @@ export default function StepItinerary({
                 value={phase.name}
                 onChange={(e) => updatePhase(pi, { name: e.target.value })}
                 placeholder={dict.stepItinerary.phaseNamePlaceholder}
+                maxLength={PHASE_NAME_MAX_LENGTH}
               />
               <TextInput
                 value={phase.when}
                 onChange={(e) => updatePhase(pi, { when: e.target.value })}
                 placeholder={dict.stepItinerary.phaseWhenPlaceholder}
+                maxLength={PHASE_WHEN_MAX_LENGTH}
               />
             </div>
             <button
@@ -103,12 +110,14 @@ export default function StepItinerary({
                   onChange={(e) => updatePlace(pi, li, { name: e.target.value })}
                   placeholder={dict.stepItinerary.placeNamePlaceholder}
                   className="min-w-[140px] flex-1"
+                  maxLength={PLACE_NAME_MAX_LENGTH}
                 />
                 <TextInput
                   value={place.address}
                   onChange={(e) => updatePlace(pi, li, { address: e.target.value })}
                   placeholder={dict.stepItinerary.placeAddressPlaceholder}
                   className="min-w-[140px] flex-1"
+                  maxLength={PLACE_ADDRESS_MAX_LENGTH}
                 />
                 <TextInput
                   value={place.mapsUrl ?? ""}
@@ -118,6 +127,7 @@ export default function StepItinerary({
                   type="url"
                   inputMode="url"
                   className="min-w-[200px] flex-[2]"
+                  maxLength={MAPS_URL_MAX_LENGTH}
                 />
                 <button
                   type="button"

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
 import type { PlaceIllustration, WeddingData, WeddingPlace } from "@/lib/wedding-types";
@@ -79,6 +79,26 @@ function MenuIcon({ open }: { open: boolean }) {
 export default function RiberaTemplate({ data }: { data: WeddingData }) {
   const [locale, setLocale] = useState(data.locales[0] ?? "es");
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Keep the preview's displayed language in sync with the wizard's
+  // language step: every `data` update arrives through postMessage, which
+  // structured-clones it, so `data.locales` is a new array on every render
+  // even when unchanged — compare by value, not reference. Switch straight
+  // to a language the couple just turned on; fall back to whatever's left
+  // if the one currently shown was just turned off.
+  const prevLocalesRef = useRef(data.locales);
+  useEffect(() => {
+    const prev = prevLocalesRef.current;
+    if (prev.join(",") !== data.locales.join(",")) {
+      const added = data.locales.find((l) => !prev.includes(l));
+      if (added) {
+        setLocale(added);
+      } else if (!data.locales.includes(locale)) {
+        setLocale(data.locales[0] ?? "es");
+      }
+      prevLocalesRef.current = data.locales;
+    }
+  }, [data.locales, locale]);
   const dict = getDict(locale);
   const showLocaleSwitcher = data.locales.length > 1;
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
@@ -114,6 +134,17 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
     setMenuOpen(false);
   }
 
+  // The mobile menu is a full-viewport overlay; lock background scroll
+  // while it's open so the page underneath doesn't scroll with it.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
+
   const localeSwitch = showLocaleSwitcher ? (
     <span className={styles.localeSwitch}>
       {data.locales.map((id) => (
@@ -132,6 +163,24 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
   return (
     <div className={styles.root}>
       <header className={styles.header}>
+        <button
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-expanded={menuOpen}
+          aria-label={
+            menuOpen
+              ? locale === "en"
+                ? "Close menu"
+                : "Cerrar menú"
+              : locale === "en"
+                ? "Open menu"
+                : "Abrir menú"
+          }
+          className={styles.menuBtn}
+        >
+          <MenuIcon open={menuOpen} />
+        </button>
+
         <a href="#top" className={styles.logo} aria-label={names}>
           {initials}
         </a>
@@ -149,23 +198,6 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
           <a href="#rsvp" className={`${styles.btnSolid} ${styles.navCta}`}>
             {dict.ribera.nav.confirm}
           </a>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-expanded={menuOpen}
-            aria-label={
-              menuOpen
-                ? locale === "en"
-                  ? "Close menu"
-                  : "Cerrar menú"
-                : locale === "en"
-                  ? "Open menu"
-                  : "Abrir menú"
-            }
-            className={styles.menuBtn}
-          >
-            <MenuIcon open={menuOpen} />
-          </button>
         </div>
 
         {menuOpen ? (
@@ -238,11 +270,20 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
           <div data-reveal className={styles.card}>
             <h2 className={styles.sectionTitle}>{data.storyTitle || dict.ribera.storyTitleFallback}</h2>
             {data.storyImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={data.storyImage} alt="" className={styles.storyImage} />
-            ) : null}
-            <p className={styles.storyText}>{data.story}</p>
-            {data.hashtag ? <p className={styles.storyHashtag}>{data.hashtag}</p> : null}
+              <div className={styles.storyRow}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={data.storyImage} alt="" className={styles.storyImage} />
+                <div className={styles.storyTextCol}>
+                  <p className={styles.storyText}>{data.story}</p>
+                  {data.hashtag ? <p className={styles.storyHashtag}>{data.hashtag}</p> : null}
+                </div>
+              </div>
+            ) : (
+              <>
+                <p className={styles.storyText}>{data.story}</p>
+                {data.hashtag ? <p className={styles.storyHashtag}>{data.hashtag}</p> : null}
+              </>
+            )}
           </div>
         </section>
       ) : null}

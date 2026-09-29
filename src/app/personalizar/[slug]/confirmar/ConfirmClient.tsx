@@ -84,8 +84,12 @@ export default function ConfirmClient({ template }: { template: Template }) {
           <Link
             href={`/preview/${template.slug}?draft=1`}
             target="_blank"
-            className="mt-6 inline-block text-sm font-medium text-clay underline underline-offset-4"
+            className="mt-4 flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-center text-sm font-medium text-ink transition-colors hover:border-ink"
           >
+            <svg viewBox="0 0 20 20" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <path d="M2 10s3-5.5 8-5.5S18 10 18 10s-3 5.5-8 5.5S2 10 2 10z" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="10" cy="10" r="2.3" />
+            </svg>
             {dict.reviewBeforeBuy}
           </Link>
         </div>

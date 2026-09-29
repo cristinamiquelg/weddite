@@ -9,11 +9,15 @@ export function useWeddingDraft(slug: string) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    // One-time hydration from localStorage after mount: reading it during
+    // One-time hydration from sessionStorage after mount: reading it during
     // render would desync the client from the server-rendered markup.
+    // sessionStorage (not localStorage): the customization must always
+    // start from scratch for a new visit — it only carries the draft
+    // across steps and to checkout within the same tab, and disappears
+    // the moment that tab closes.
     try {
-      const raw = window.localStorage.getItem(draftStorageKey(slug));
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from localStorage after mount
+      const raw = window.sessionStorage.getItem(draftStorageKey(slug));
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from sessionStorage after mount
       setData(raw ? { ...emptyWeddingData, ...JSON.parse(raw) } : emptyWeddingData);
     } catch {
       setData(emptyWeddingData);
@@ -29,7 +33,7 @@ export function useWeddingDraft(slug: string) {
     // default over whatever the load effect above just read.
     if (!loaded) return;
     try {
-      window.localStorage.setItem(draftStorageKey(slug), JSON.stringify(data));
+      window.sessionStorage.setItem(draftStorageKey(slug), JSON.stringify(data));
     } catch {
       // storage unavailable (private mode, quota, etc.) — safe to ignore
     }

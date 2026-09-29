@@ -3,6 +3,9 @@ import { Field, TextArea, TextInput } from "@/components/customize/fields";
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
 
+const TITLE_MAX_LENGTH = 50;
+const STORY_MAX_LENGTH = 600;
+
 export default function StepStory({
   data,
   onChange,
@@ -12,22 +15,25 @@ export default function StepStory({
 }) {
   const { locale } = useSiteLocale();
   const dict = getSiteDict(locale).wizard.stepStory;
+  const maxChars = getSiteDict(locale).wizard.maxChars;
 
   return (
     <div className="flex flex-col gap-5">
-      <Field label={dict.sectionTitle}>
+      <Field label={dict.sectionTitle} hint={maxChars(TITLE_MAX_LENGTH)}>
         <TextInput
           value={data.storyTitle}
           onChange={(e) => onChange({ storyTitle: e.target.value })}
           placeholder={dict.sectionTitlePlaceholder}
+          maxLength={TITLE_MAX_LENGTH}
         />
       </Field>
-      <Field label={dict.yourStory} hint={dict.yourStoryHint}>
+      <Field label={dict.yourStory} hint={`${dict.yourStoryHint} — ${maxChars(STORY_MAX_LENGTH)}`}>
         <TextArea
           rows={10}
           value={data.story}
           onChange={(e) => onChange({ story: e.target.value })}
           placeholder={dict.yourStoryPlaceholder}
+          maxLength={STORY_MAX_LENGTH}
         />
       </Field>
       <Field label={dict.storyImage} hint={dict.storyImageHint}>

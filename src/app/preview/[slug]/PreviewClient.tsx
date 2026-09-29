@@ -20,11 +20,11 @@ export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
     if (!isDraft) return;
 
     try {
-      const raw = window.localStorage.getItem(draftStorageKey(slug));
+      const raw = window.sessionStorage.getItem(draftStorageKey(slug));
       // Merge onto the template's own defaults, not just the raw parsed
       // draft: an older draft saved before a field existed (e.g. `locales`)
       // would otherwise leave that field `undefined` and crash the template.
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from localStorage after mount
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from sessionStorage after mount
       if (raw) setData({ ...getDemoWeddingData(), ...JSON.parse(raw) });
     } catch {
       // ignore malformed/unavailable storage
@@ -34,6 +34,9 @@ export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
       const msg = event.data;
       if (msg && msg.type === "weddite:update" && msg.slug === slug) {
         setData(msg.data as WeddingData);
+      }
+      if (msg && msg.type === "weddite:scrollTo" && typeof msg.sectionId === "string") {
+        document.getElementById(msg.sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
     window.addEventListener("message", onMessage);

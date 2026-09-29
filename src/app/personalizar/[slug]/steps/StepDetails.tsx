@@ -3,6 +3,10 @@ import { TextArea, TextInput } from "@/components/customize/fields";
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
 
+const TITLE_MAX_LENGTH = 50;
+const URL_MAX_LENGTH = 300;
+const CTA_MAX_LENGTH = 30;
+
 export default function StepDetails({
   data,
   onChange,
@@ -52,6 +56,7 @@ export default function StepDetails({
             placeholder={dict.stepDetails.titlePlaceholder}
             aria-label={dict.stepDetails.titleAriaLabel}
             className="min-w-[140px] flex-1"
+            maxLength={TITLE_MAX_LENGTH}
           />
           <TextArea
             value={card.description ?? ""}
@@ -70,6 +75,7 @@ export default function StepDetails({
             type="url"
             inputMode="url"
             className="min-w-[220px] flex-[2]"
+            maxLength={URL_MAX_LENGTH}
           />
           <TextInput
             value={card.ctaLabel}
@@ -77,6 +83,7 @@ export default function StepDetails({
             placeholder={dict.stepDetails.ctaPlaceholder}
             aria-label={dict.stepDetails.ctaAriaLabel}
             className="min-w-[140px] flex-1"
+            maxLength={CTA_MAX_LENGTH}
           />
           <button
             type="button"
