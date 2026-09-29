@@ -45,9 +45,14 @@ type Dict = {
       companionYes: string;
       companionNo: string;
       howManyCompanions: string;
+      decreaseCompanions: string;
+      increaseCompanions: string;
       companionInfo: string;
       removeCompanion: string;
       submit: string;
+      next: string;
+      back: string;
+      stepOf: string;
       thanks: string;
       optional: string;
       attendingQ: string;
@@ -121,9 +126,14 @@ const es: Dict = {
       companionYes: "Sí",
       companionNo: "No, voy solo/a",
       howManyCompanions: "¿Cuántas personas vienen contigo?",
+      decreaseCompanions: "Quitar un acompañante",
+      increaseCompanions: "Añadir un acompañante",
       companionInfo: "Acompañante",
       removeCompanion: "Quitar acompañante",
       submit: "Enviar confirmación",
+      next: "Siguiente",
+      back: "Atrás",
+      stepOf: "Paso {n} de {total}",
       thanks: "¡Gracias! Hemos recibido tu confirmación. 🤍",
       optional: "opcional",
       attendingQ: "¿Vienes a la boda?",
@@ -197,9 +207,14 @@ const en: Dict = {
       companionYes: "Yes",
       companionNo: "No, just me",
       howManyCompanions: "How many people are coming with you?",
+      decreaseCompanions: "Remove one guest",
+      increaseCompanions: "Add one guest",
       companionInfo: "Guest",
       removeCompanion: "Remove guest",
       submit: "Send RSVP",
+      next: "Next",
+      back: "Back",
+      stepOf: "Step {n} of {total}",
       thanks: "Thank you! We've received your RSVP. 🤍",
       optional: "optional",
       attendingQ: "Are you coming to the wedding?",
