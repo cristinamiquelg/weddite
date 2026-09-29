@@ -1,5 +1,5 @@
 import type { DetailCard, DetailCardIcon, WeddingData } from "@/lib/wedding-types";
-import { TextArea, TextInput } from "@/components/customize/fields";
+import { Select, TextArea, TextInput } from "@/components/customize/fields";
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
 
@@ -39,17 +39,17 @@ export default function StepDetails({
       <p className="text-sm text-ink-soft">{dict.stepDetails.intro}</p>
       {data.detailCards.map((card, i) => (
         <div key={i} className="flex flex-wrap gap-3 rounded-lg border border-line p-4">
-          <select
+          <Select
             value={card.icon}
             onChange={(e) => updateCard(i, { icon: e.target.value as DetailCardIcon })}
-            className="min-w-[120px] rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-sm text-ink outline-none focus:border-clay"
+            className="min-w-[140px]"
           >
             {(Object.keys(iconLabels) as DetailCardIcon[]).map((icon) => (
               <option key={icon} value={icon}>
                 {iconLabels[icon]}
               </option>
             ))}
-          </select>
+          </Select>
           <TextInput
             value={card.title}
             onChange={(e) => updateCard(i, { title: e.target.value })}

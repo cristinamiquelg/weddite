@@ -140,6 +140,7 @@ type SiteDict = {
       yourName: string;
       partnerName: string;
       weddingDate: string;
+      weddingDateHint: string;
       hashtag: string;
       hashtagHint: string;
       welcomeMessage: string;
@@ -389,6 +390,7 @@ const es: SiteDict = {
       yourName: "Vuestro nombre",
       partnerName: "Nombre de tu pareja",
       weddingDate: "Fecha de la boda",
+      weddingDateHint: "Tiene que ser una fecha futura",
       hashtag: "Hashtag de la boda",
       hashtagHint: "Para redes sociales",
       welcomeMessage: "Mensaje de bienvenida",
@@ -639,6 +641,7 @@ const en: SiteDict = {
       yourName: "Your name",
       partnerName: "Your partner's name",
       weddingDate: "Wedding date",
+      weddingDateHint: "Must be a date in the future",
       hashtag: "Wedding hashtag",
       hashtagHint: "For social media",
       welcomeMessage: "Welcome message",

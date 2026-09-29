@@ -286,7 +286,12 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             )}
           </div>
         </section>
-      ) : null}
+      ) : (
+        // The section itself only exists once there's a story to show, but
+        // the wizard's "scroll the preview to this step" still needs an
+        // anchor to land on before that's true.
+        <span id="historia" aria-hidden="true" />
+      )}
 
       {hasItinerary ? (
         <section className={styles.bandSolid} id="itinerario">
@@ -342,7 +347,9 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             </div>
           </div>
         </section>
-      ) : null}
+      ) : (
+        <span id="itinerario" aria-hidden="true" />
+      )}
 
       {hasDetails ? (
         <section className={styles.bandStriped} id="detalles">
@@ -381,7 +388,9 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             </div>
           </div>
         </section>
-      ) : null}
+      ) : (
+        <span id="detalles" aria-hidden="true" />
+      )}
 
       {hasGift ? (
         <section id="regalos" className={styles.giftSection} aria-labelledby="ribera-gift-title">

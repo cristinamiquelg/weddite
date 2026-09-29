@@ -1,5 +1,5 @@
 import type { PlaceIllustration, WeddingData, WeddingPhase, WeddingPlace } from "@/lib/wedding-types";
-import { TextInput } from "@/components/customize/fields";
+import { Select, TextInput } from "@/components/customize/fields";
 
 const illustrationIds: PlaceIllustration[] = ["casa", "catedral", "cortijo", "restaurante"];
 const PHASE_NAME_MAX_LENGTH = 40;
@@ -88,7 +88,7 @@ export default function StepItinerary({
           <div className="flex flex-col gap-3 pl-4">
             {phase.places.map((place, li) => (
               <div key={li} className="flex flex-wrap gap-3 rounded-lg border border-line/60 p-3">
-                <select
+                <Select
                   value={place.illustration ?? ""}
                   onChange={(e) =>
                     updatePlace(pi, li, {
@@ -96,7 +96,7 @@ export default function StepItinerary({
                     })
                   }
                   aria-label={dict.stepItinerary.placeIllustrationAriaLabel}
-                  className="min-w-[120px] rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-sm text-ink outline-none focus:border-clay"
+                  className="min-w-[140px]"
                 >
                   <option value="">{dict.stepItinerary.placeIllustrationAriaLabel}</option>
                   {illustrationIds.map((id) => (
@@ -104,7 +104,7 @@ export default function StepItinerary({
                       {dict.stepItinerary.illustrationLabels[id]}
                     </option>
                   ))}
-                </select>
+                </Select>
                 <TextInput
                   value={place.name}
                   onChange={(e) => updatePlace(pi, li, { name: e.target.value })}

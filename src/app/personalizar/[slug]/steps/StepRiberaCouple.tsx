@@ -8,6 +8,10 @@ const PLACE_MAX_LENGTH = 60;
 const HASHTAG_MAX_LENGTH = 30;
 const WELCOME_MAX_LENGTH = 160;
 
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export default function StepRiberaCouple({
   data,
   onChange,
@@ -17,6 +21,7 @@ export default function StepRiberaCouple({
 }) {
   const { locale } = useSiteLocale();
   const dict = getSiteDict(locale).wizard;
+  const minDate = todayISO();
 
   return (
     <div className="flex flex-col gap-5">
@@ -48,11 +53,24 @@ export default function StepRiberaCouple({
           />
         </Field>
       </div>
-      <Field label={dict.stepCouple.weddingDate} required requiredLabel={dict.required}>
+      <Field
+        label={dict.stepCouple.weddingDate}
+        required
+        requiredLabel={dict.required}
+        hint={dict.stepCouple.weddingDateHint}
+      >
         <TextInput
           type="date"
           value={data.date}
-          onChange={(e) => onChange({ date: e.target.value })}
+          min={minDate}
+          onChange={(e) => {
+            const v = e.target.value;
+            // Belt and suspenders: the min attribute blocks the native
+            // picker, but a typed/pasted value could still slip a past
+            // date through in browsers that don't enforce it.
+            if (v && v < minDate) return;
+            onChange({ date: v });
+          }}
         />
       </Field>
       <div className="grid gap-5 sm:grid-cols-2">

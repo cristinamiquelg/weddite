@@ -37,3 +37,34 @@ export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
 export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea {...props} className={`${baseInputClass} ${props.className ?? ""}`} />;
 }
+
+const selectClass =
+  "w-full appearance-none rounded-lg border border-line bg-paper-raised py-2.5 pl-3.5 pr-10 text-sm text-ink outline-none transition-colors focus:border-clay";
+
+// A plain <select> renders its own dropdown arrow, and browsers don't
+// reliably respect padding-right when positioning it — it can end up
+// nearly flush with the edge. appearance-none drops that native arrow so
+// this chevron (and its padding) is the only one, with room to breathe.
+export function Select({ className, children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <div className={`relative ${className ?? ""}`}>
+      <select {...props} className={selectClass}>
+        {children}
+      </select>
+      <svg
+        viewBox="0 0 20 20"
+        aria-hidden="true"
+        className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-soft"
+      >
+        <path
+          d="M5 7.5 10 12.5 15 7.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
