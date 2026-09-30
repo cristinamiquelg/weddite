@@ -38,7 +38,11 @@ export default function StepDetails({
     <div className="flex flex-col gap-4">
       <p className="text-sm text-ink-soft">{dict.stepDetails.intro}</p>
       {data.detailCards.map((card, i) => (
-        <div key={i} className="flex flex-wrap gap-3 rounded-lg border border-line p-4">
+        <div
+          key={i}
+          data-scroll-section={`detalle-${i}`}
+          className="flex flex-wrap gap-3 rounded-lg border border-line p-4"
+        >
           <Select
             value={card.icon}
             onChange={(e) => updateCard(i, { icon: e.target.value as DetailCardIcon })}

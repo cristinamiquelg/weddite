@@ -141,8 +141,6 @@ type SiteDict = {
       partnerName: string;
       weddingDate: string;
       weddingDateHint: string;
-      hashtag: string;
-      hashtagHint: string;
       welcomeMessage: string;
       welcomeMessagePlaceholder: string;
       estateName: string;
@@ -159,6 +157,8 @@ type SiteDict = {
       storyImageHint: string;
       storyImageChoose: string;
       storyImageRemove: string;
+      hashtag: string;
+      hashtagHint: string;
     };
     stepRsvpGift: {
       rsvpSectionTitle: string;
@@ -391,8 +391,6 @@ const es: SiteDict = {
       partnerName: "Nombre de tu pareja",
       weddingDate: "Fecha de la boda",
       weddingDateHint: "Tiene que ser una fecha futura",
-      hashtag: "Hashtag de la boda",
-      hashtagHint: "Para redes sociales",
       welcomeMessage: "Mensaje de bienvenida",
       welcomeMessagePlaceholder: "Lo primero que leerán vuestros invitados al entrar en la web.",
       estateName: "Finca / lugar principal",
@@ -409,6 +407,8 @@ const es: SiteDict = {
       storyImageHint: "Una imagen para acompañar vuestra historia.",
       storyImageChoose: "Elegir imagen",
       storyImageRemove: "Quitar",
+      hashtag: "Hashtag de la boda",
+      hashtagHint: "Para redes sociales",
     },
     stepRsvpGift: {
       rsvpSectionTitle: "Confirmación de asistencia",
@@ -642,8 +642,6 @@ const en: SiteDict = {
       partnerName: "Your partner's name",
       weddingDate: "Wedding date",
       weddingDateHint: "Must be a date in the future",
-      hashtag: "Wedding hashtag",
-      hashtagHint: "For social media",
       welcomeMessage: "Welcome message",
       welcomeMessagePlaceholder: "The first thing your guests will read when they open the site.",
       estateName: "Venue / main location",
@@ -660,6 +658,8 @@ const en: SiteDict = {
       storyImageHint: "An image to go alongside your story.",
       storyImageChoose: "Choose image",
       storyImageRemove: "Remove",
+      hashtag: "Wedding hashtag",
+      hashtagHint: "For social media",
     },
     stepRsvpGift: {
       rsvpSectionTitle: "RSVP",

@@ -5,7 +5,6 @@ import { getSiteDict } from "@/lib/site-dict";
 
 const NAME_MAX_LENGTH = 40;
 const PLACE_MAX_LENGTH = 60;
-const HASHTAG_MAX_LENGTH = 30;
 const WELCOME_MAX_LENGTH = 160;
 
 function todayISO() {
@@ -94,22 +93,9 @@ export default function StepRiberaCouple({
           />
         </Field>
       </div>
-      {/* These two show up elsewhere on the page (footer, countdown), not in
-          the hero with the rest of this step's fields — flagged so the
-          preview scrolls to where they actually render. */}
-      <div data-scroll-section="footer">
-        <Field
-          label={dict.stepCouple.hashtag}
-          hint={`${dict.stepCouple.hashtagHint} — ${dict.maxChars(HASHTAG_MAX_LENGTH)}`}
-        >
-          <TextInput
-            value={data.hashtag}
-            onChange={(e) => onChange({ hashtag: e.target.value })}
-            placeholder="#CassandraYJonathan"
-            maxLength={HASHTAG_MAX_LENGTH}
-          />
-        </Field>
-      </div>
+      {/* Shows up in the countdown section, not the hero with the rest of
+          this step's fields — flagged so the preview scrolls to where it
+          actually renders. */}
       <div data-scroll-section="cuando">
         <Field label={dict.stepCouple.welcomeMessage} hint={dict.maxChars(WELCOME_MAX_LENGTH)}>
           <TextArea

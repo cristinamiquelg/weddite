@@ -5,6 +5,7 @@ import { getSiteDict } from "@/lib/site-dict";
 
 const TITLE_MAX_LENGTH = 50;
 const STORY_MAX_LENGTH = 600;
+const HASHTAG_MAX_LENGTH = 30;
 
 export default function StepStory({
   data,
@@ -72,6 +73,14 @@ export default function StepStory({
             </button>
           ) : null}
         </div>
+      </Field>
+      <Field label={dict.hashtag} hint={`${dict.hashtagHint} — ${maxChars(HASHTAG_MAX_LENGTH)}`}>
+        <TextInput
+          value={data.hashtag}
+          onChange={(e) => onChange({ hashtag: e.target.value })}
+          placeholder="#CassandraYJonathan"
+          maxLength={HASHTAG_MAX_LENGTH}
+        />
       </Field>
     </div>
   );

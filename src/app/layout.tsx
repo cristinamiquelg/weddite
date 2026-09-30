@@ -42,6 +42,9 @@ export const metadata: Metadata = {
   title: "Weddite — Webs de boda que enamoran",
   description:
     "Elige un diseño de web de boda moderno, personalízalo con vuestra historia y hazlo vuestro en minutos. Sin llamadas, sin correos, todo a golpe de clic.",
+  // Pre-launch: keep the whole app (including every couple's personal
+  // wedding page under /preview) out of search results for now.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

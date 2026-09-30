@@ -16,6 +16,14 @@ const ctaScatter: { top: string; left: string; size: string; opacity: number; ro
   { top: "78%", left: "88%", size: "2.6rem", opacity: 0.4, rotate: "-8deg" },
   { top: "50%", left: "4%", size: "1.1rem", opacity: 0.25, rotate: "12deg" },
   { top: "45%", left: "95%", size: "1.4rem", opacity: 0.3, rotate: "-15deg" },
+  { top: "6%", left: "42%", size: "1.2rem", opacity: 0.28, rotate: "22deg" },
+  { top: "90%", left: "45%", size: "1.5rem", opacity: 0.32, rotate: "-20deg" },
+  { top: "30%", left: "22%", size: "0.9rem", opacity: 0.22, rotate: "8deg" },
+  { top: "62%", left: "78%", size: "1.1rem", opacity: 0.26, rotate: "-14deg" },
+  { top: "8%", left: "68%", size: "1.8rem", opacity: 0.38, rotate: "14deg" },
+  { top: "88%", left: "22%", size: "1.2rem", opacity: 0.28, rotate: "-6deg" },
+  { top: "38%", left: "8%", size: "1.6rem", opacity: 0.3, rotate: "-24deg" },
+  { top: "36%", left: "96%", size: "1.2rem", opacity: 0.25, rotate: "10deg" },
 ];
 
 // Small, language-neutral illustrations for the "Cómo funciona" steps —
@@ -143,8 +151,13 @@ export default function HomePage() {
             <div className="flex flex-col gap-5 p-8 sm:p-10">
               <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">{home.otherProvidersLabel}</p>
               <ul className="flex flex-col gap-4">
-                {home.painPoints.map((p) => (
-                  <li key={p} className="flex items-start gap-3 text-ink-soft">
+                {home.painPoints.map((p, i) => (
+                  <li
+                    key={p}
+                    data-reveal
+                    style={{ transitionDelay: `${i * 90}ms` }}
+                    className="flex items-start gap-3 text-ink-soft"
+                  >
                     <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-line text-[10px] text-ink-soft/70">
                       ✕
                     </span>
@@ -157,8 +170,13 @@ export default function HomePage() {
             <div className="flex flex-col gap-5 border-t border-line bg-clay/5 p-8 sm:border-t-0 sm:border-l sm:p-10">
               <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.wedditeLabel}</p>
               <ul className="flex flex-col gap-4">
-                {home.promises.map((p) => (
-                  <li key={p.title} className="flex items-start gap-3 text-ink">
+                {home.promises.map((p, i) => (
+                  <li
+                    key={p.title}
+                    data-reveal
+                    style={{ transitionDelay: `${i * 90}ms` }}
+                    className="flex items-start gap-3 text-ink"
+                  >
                     <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-clay text-[10px] font-bold text-paper">
                       ✓
                     </span>

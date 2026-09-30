@@ -55,7 +55,9 @@ export default function StepRsvpGift({
         </div>
       </div>
 
-      <div>
+      {/* Gift fields render in the "Regalos" section, not "RSVP" — flagged
+          so the preview scrolls to where they actually show up. */}
+      <div data-scroll-section="regalos">
         <p className="text-sm font-semibold text-ink">{dict.giftTableTitle}</p>
         <div className="mt-3 flex flex-col gap-5">
           <Field label={dict.message} hint={maxChars(GIFT_MESSAGE_MAX_LENGTH)}>
@@ -86,11 +88,16 @@ export default function StepRsvpGift({
         </div>
       </div>
 
-      <div>
+      {/* Contact people render in the "Contacto" section, not "RSVP". */}
+      <div data-scroll-section="contacto">
         <p className="text-sm font-semibold text-ink">{dict.contactSectionTitle}</p>
         <div className="mt-3 flex flex-col gap-4">
           {data.organizerContacts.map((contact, i) => (
-            <div key={i} className="flex flex-col gap-3 rounded-lg border border-line p-4">
+            <div
+              key={i}
+              data-scroll-section={`contacto-${i}`}
+              className="flex flex-col gap-3 rounded-lg border border-line p-4"
+            >
               <div className="flex items-center justify-between">
                 <span className="text-xs uppercase tracking-wide text-ink-soft">
                   {dict.contactPersonLabel(i + 1)}

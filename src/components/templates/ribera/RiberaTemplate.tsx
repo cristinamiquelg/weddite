@@ -102,7 +102,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
   const dict = getDict(locale);
   const showLocaleSwitcher = data.locales.length > 1;
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
-  const initials = `${(data.partnerA || "L")[0]}&${(data.partnerB || "J")[0]}`;
+  const initials = `${(data.partnerA || "L")[0].toUpperCase()}&${(data.partnerB || "J")[0].toUpperCase()}`;
   const { day, month, year } = heroDateParts(data.date);
 
   const hasEstate = Boolean(data.estateName || data.estateLocation);
@@ -271,8 +271,10 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             <h2 className={styles.sectionTitle}>{data.storyTitle || dict.ribera.storyTitleFallback}</h2>
             {data.storyImage ? (
               <div className={styles.storyRow}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={data.storyImage} alt="" className={styles.storyImage} />
+                <div className={styles.storyImageWrap}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={data.storyImage} alt="" className={styles.storyImage} />
+                </div>
                 <div className={styles.storyTextCol}>
                   <p className={styles.storyText}>{data.story}</p>
                   {data.hashtag ? <p className={styles.storyHashtag}>{data.hashtag}</p> : null}
@@ -302,7 +304,13 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
               {visiblePhases.map((phase, pi) => (
                 <Fragment key={`phase-${pi}`}>
                   {phase.name || phase.when ? (
-                    <div className={styles.phase}>
+                    // The id (used by the wizard's "scroll to this phase")
+                    // has to sit on a real, laid-out element — a display:none
+                    // anchor reports no position at all, so scrollIntoView on
+                    // it is a silent no-op. The phase header is the natural
+                    // target when it exists; the first place picks it up
+                    // otherwise (see below).
+                    <div id={`fase-${pi}`} className={styles.phase}>
                       {phase.name ? <p className={styles.phaseName}>{phase.name}</p> : null}
                       {phase.when ? (
                         <p className={styles.phaseWhen}>
@@ -312,7 +320,11 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                     </div>
                   ) : null}
                   {phase.places.map((place, li) => (
-                    <article key={`place-${pi}-${li}`} className={styles.place}>
+                    <article
+                      key={`place-${pi}-${li}`}
+                      id={!phase.name && !phase.when && li === 0 ? `fase-${pi}` : undefined}
+                      className={styles.place}
+                    >
                       <img
                         src={place.illus}
                         alt=""
@@ -359,7 +371,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
               {data.detailCards.map((card, i) => {
                 const fallback = DETAIL_DEFAULTS[card.icon];
                 return (
-                  <article key={i} className={styles.detail}>
+                  <article key={i} id={`detalle-${i}`} className={styles.detail}>
                     <img
                       src={DETAIL_ILLUSTRATIONS[card.icon]}
                       alt=""
@@ -416,7 +428,9 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             </div>
           </div>
         </section>
-      ) : null}
+      ) : (
+        <span id="regalos" aria-hidden="true" />
+      )}
 
       <section id="rsvp" className={`${styles.bandStriped} ${styles.rsvpBand}`}>
         <div data-reveal className={styles.rsvpCard}>
@@ -435,7 +449,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             <div className={styles.contactPeople}>
               {data.organizerContacts.map((contact, i) =>
                 contact.name || contact.phone || contact.email ? (
-                  <div key={i} className={styles.contactPerson}>
+                  <div key={i} id={`contacto-${i}`} className={styles.contactPerson}>
                     {contact.name ? <p className={styles.leadText}>{contact.name}</p> : null}
                     <div className={styles.contactLinks}>
                       {contact.phone ? (
@@ -450,12 +464,27 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                       ) : null}
                     </div>
                   </div>
-                ) : null,
+                ) : (
+                  // A display:none anchor reports no position, so
+                  // scrollIntoView on it would silently do nothing — this
+                  // stays a plain (zero-content, still laid-out) span so it
+                  // actually has somewhere to scroll to.
+                  <span key={i} id={`contacto-${i}`} aria-hidden="true" />
+                ),
               )}
             </div>
           </div>
         </section>
-      ) : null}
+      ) : (
+        // Neither contact person has any content yet, so the whole section
+        // is absent — but the wizard can still focus either contact's
+        // fields before that's true, so both indices need an anchor too.
+        <>
+          <span id="contacto" aria-hidden="true" />
+          <span id="contacto-0" aria-hidden="true" />
+          <span id="contacto-1" aria-hidden="true" />
+        </>
+      )}
 
       <footer id="footer" className={styles.footer}>
         {data.hashtag ? <p className={styles.footerHashtag}>{data.hashtag}</p> : null}

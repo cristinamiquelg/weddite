@@ -406,8 +406,9 @@
 .storyRow {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
 }
 .storyTextCol {
   display: flex;
@@ -415,15 +416,29 @@
   align-items: center;
   gap: 16px;
 }
-.storyImage {
-  width: 140px;
-  height: 140px;
+/* Full-width, edge-to-edge photo strip, left-aligned, proportions intact —
+   no crop box, no rounding, no border. The navy tone comes from a blend
+   overlay rather than a filter hue-rotate guess, so it lands on the exact
+   couple-selected hex instead of an approximation. */
+.storyImageWrap {
+  position: relative;
   flex: none;
-  border-radius: 3px;
-  object-fit: cover;
-  border: 1px solid var(--r-coral);
-  /* duotone: desaturate, then push the remaining tone through blue */
-  filter: grayscale(1) sepia(25%) hue-rotate(175deg) saturate(350%) brightness(0.96);
+  width: 100%;
+  overflow: hidden;
+}
+.storyImageWrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--r-navy);
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+.storyImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1);
 }
 .storyText {
   max-width: 640px;
@@ -439,12 +454,6 @@
   letter-spacing: 0.02em;
   font-size: var(--r-fs-small);
   margin: 0;
-}
-@media (min-width: 600px) {
-  .storyRow { flex-direction: row; align-items: center; gap: 32px; max-width: 640px; }
-  .storyTextCol { align-items: flex-start; }
-  .storyRow .storyText { text-align: left; max-width: none; }
-  .storyImage { width: 170px; height: 170px; }
 }
 
 /* ---------- Contacto ---------- */
@@ -878,11 +887,12 @@
     --r-illus-detail: 150px;
   }
   /* A hairline border read as almost nothing between stacked phases on a
-     phone; make the seam between itinerary phases unmistakable. */
+     phone; a solid (if still thin) line plus more breathing room makes the
+     seam between phases unmistakable without turning it into a slab. */
   .phase {
-    margin-top: 16px;
-    padding-top: 24px;
-    border-top: 2px solid var(--r-navy);
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--r-navy);
   }
   .phase:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
 }

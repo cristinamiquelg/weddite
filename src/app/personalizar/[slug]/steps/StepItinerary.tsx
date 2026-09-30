@@ -60,7 +60,11 @@ export default function StepItinerary({
     <div className="flex flex-col gap-6">
       <p className="text-sm text-ink-soft">{dict.stepItinerary.intro}</p>
       {data.phases.map((phase, pi) => (
-        <div key={pi} className="flex flex-col gap-4 rounded-lg border border-line p-4">
+        <div
+          key={pi}
+          data-scroll-section={`fase-${pi}`}
+          className="flex flex-col gap-4 rounded-lg border border-line p-4"
+        >
           <div className="flex items-center justify-between gap-3">
             <div className="grid flex-1 gap-3 sm:grid-cols-2">
               <TextInput
