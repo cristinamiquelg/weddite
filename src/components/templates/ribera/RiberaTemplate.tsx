@@ -457,7 +457,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         </section>
       ) : null}
 
-      <footer className={styles.footer}>
+      <footer id="footer" className={styles.footer}>
         {data.hashtag ? <p className={styles.footerHashtag}>{data.hashtag}</p> : null}
         <p>
           {dict.ribera.footer.madeWith}{" "}

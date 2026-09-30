@@ -94,26 +94,33 @@ export default function StepRiberaCouple({
           />
         </Field>
       </div>
-      <Field
-        label={dict.stepCouple.hashtag}
-        hint={`${dict.stepCouple.hashtagHint} — ${dict.maxChars(HASHTAG_MAX_LENGTH)}`}
-      >
-        <TextInput
-          value={data.hashtag}
-          onChange={(e) => onChange({ hashtag: e.target.value })}
-          placeholder="#CassandraYJonathan"
-          maxLength={HASHTAG_MAX_LENGTH}
-        />
-      </Field>
-      <Field label={dict.stepCouple.welcomeMessage} hint={dict.maxChars(WELCOME_MAX_LENGTH)}>
-        <TextArea
-          rows={4}
-          value={data.welcomeMessage}
-          onChange={(e) => onChange({ welcomeMessage: e.target.value })}
-          placeholder={dict.stepCouple.welcomeMessagePlaceholder}
-          maxLength={WELCOME_MAX_LENGTH}
-        />
-      </Field>
+      {/* These two show up elsewhere on the page (footer, countdown), not in
+          the hero with the rest of this step's fields — flagged so the
+          preview scrolls to where they actually render. */}
+      <div data-scroll-section="footer">
+        <Field
+          label={dict.stepCouple.hashtag}
+          hint={`${dict.stepCouple.hashtagHint} — ${dict.maxChars(HASHTAG_MAX_LENGTH)}`}
+        >
+          <TextInput
+            value={data.hashtag}
+            onChange={(e) => onChange({ hashtag: e.target.value })}
+            placeholder="#CassandraYJonathan"
+            maxLength={HASHTAG_MAX_LENGTH}
+          />
+        </Field>
+      </div>
+      <div data-scroll-section="cuando">
+        <Field label={dict.stepCouple.welcomeMessage} hint={dict.maxChars(WELCOME_MAX_LENGTH)}>
+          <TextArea
+            rows={4}
+            value={data.welcomeMessage}
+            onChange={(e) => onChange({ welcomeMessage: e.target.value })}
+            placeholder={dict.stepCouple.welcomeMessagePlaceholder}
+            maxLength={WELCOME_MAX_LENGTH}
+          />
+        </Field>
+      </div>
     </div>
   );
 }

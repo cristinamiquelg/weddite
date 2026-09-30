@@ -35,6 +35,24 @@ const steps: StepDef[] = [
   { key: "rsvp", sectionId: "rsvp", Component: StepRsvpGift },
 ];
 
+// How much *visible* content a step's repeating fields hold, so patch()
+// can tell an edit from an addition and scroll to reveal the new row.
+// Counting array length isn't enough: the template hides an empty phase,
+// place, or contact entirely (no name/address/etc. yet) — clicking "add"
+// alone doesn't add anything a guest would see, so it shouldn't move the
+// preview. What actually needs to scroll into view is the moment a blank
+// row gets its first bit of content and the template starts rendering it
+// for real; this mirrors the exact conditions RiberaTemplate.tsx uses to
+// decide what to show.
+function contentDepth(d: WeddingData) {
+  const phaseHeaders = d.phases.filter((p) => p.name || p.when).length;
+  const places = d.phases.reduce((n, p) => n + p.places.filter((pl) => pl.name || pl.address).length, 0);
+  const contacts = d.organizerContacts.filter((c) => c.name || c.phone || c.email).length;
+  // Detail cards render unconditionally (with fallback copy) as soon as
+  // they're added, so plain count already matches what's visible.
+  return phaseHeaders + places + d.detailCards.length + contacts;
+}
+
 export default function CustomizeClient({ template }: { template: Template }) {
   const { data, setData, loaded } = useWeddingDraft(template.slug);
   const { locale, setLocale } = useSiteLocale();
@@ -42,12 +60,18 @@ export default function CustomizeClient({ template }: { template: Template }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [mobileTab, setMobileTab] = useState<"form" | "preview">("form");
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  // Set by patch() right before a state update that adds a new phase/place/
+  // card/contact; read (and cleared) by the data-sync effect below so the
+  // "scroll to reveal it" request rides along with the update that actually
+  // renders the new item, instead of racing ahead of it.
+  const pendingScrollRef = useRef<{ sectionId: string; align: "end" } | null>(null);
 
   useEffect(() => {
     iframeRef.current?.contentWindow?.postMessage(
-      { type: "weddite:update", slug: template.slug, data },
+      { type: "weddite:update", slug: template.slug, data, scrollTo: pendingScrollRef.current },
       window.location.origin,
     );
+    pendingScrollRef.current = null;
   }, [data, template.slug]);
 
   const sectionId = steps[stepIndex].sectionId;
@@ -66,7 +90,22 @@ export default function CustomizeClient({ template }: { template: Template }) {
   }, [sectionId]);
 
   function patch(p: Partial<WeddingData>) {
-    setData((prev) => ({ ...prev, ...p }));
+    setData((prev) => {
+      const next = { ...prev, ...p };
+      if (sectionId && contentDepth(next) > contentDepth(prev)) {
+        pendingScrollRef.current = { sectionId, align: "end" };
+      }
+      return next;
+    });
+  }
+
+  // A field can live in a step whose sectionId doesn't match where it
+  // actually renders (e.g. the hashtag is edited alongside the couple's
+  // names, but shows up in the footer, not the hero) — such fields carry
+  // a data-scroll-section override that wins over the step's default.
+  function focusedSectionId(target: EventTarget | null): string | null {
+    const el = target instanceof HTMLElement ? target.closest<HTMLElement>("[data-scroll-section]") : null;
+    return el?.dataset.scrollSection ?? sectionId;
   }
 
   const Step = steps[stepIndex].Component;
@@ -165,7 +204,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
                 field) re-sends the scroll on every click/tab into a field —
                 not just once when the step first opens — since a step like
                 "Detalles" can have several cards spread further down. */}
-            <div className="mt-6" onFocus={() => scrollToSection(sectionId)}>
+            <div className="mt-6" onFocus={(e) => scrollToSection(focusedSectionId(e.target))}>
               <Step data={data} onChange={patch} />
             </div>
           </div>
