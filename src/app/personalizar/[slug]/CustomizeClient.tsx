@@ -51,12 +51,18 @@ export default function CustomizeClient({ template }: { template: Template }) {
   }, [data, template.slug]);
 
   const sectionId = steps[stepIndex].sectionId;
-  useEffect(() => {
-    if (!sectionId) return;
+
+  function scrollToSection(id: string | null) {
+    if (!id) return;
     iframeRef.current?.contentWindow?.postMessage(
-      { type: "weddite:scrollTo", sectionId },
+      { type: "weddite:scrollTo", sectionId: id },
       window.location.origin,
     );
+  }
+
+  // Scroll as soon as the step opens, even before the couple clicks into a field.
+  useEffect(() => {
+    scrollToSection(sectionId);
   }, [sectionId]);
 
   function patch(p: Partial<WeddingData>) {
@@ -155,7 +161,11 @@ export default function CustomizeClient({ template }: { template: Template }) {
             <h1 className="font-display text-2xl">
               {dict.wizard.stepLabels[steps[stepIndex].key as keyof typeof dict.wizard.stepLabels]}
             </h1>
-            <div className="mt-6">
+            {/* onFocus (React delegates it, so it fires for any descendant
+                field) re-sends the scroll on every click/tab into a field —
+                not just once when the step first opens — since a step like
+                "Detalles" can have several cards spread further down. */}
+            <div className="mt-6" onFocus={() => scrollToSection(sectionId)}>
               <Step data={data} onChange={patch} />
             </div>
           </div>
