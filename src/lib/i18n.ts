@@ -53,6 +53,8 @@ type Dict = {
       next: string;
       back: string;
       stepOf: string;
+      sectionAttendance: string;
+      sectionCompanions: string;
       thanks: string;
       optional: string;
       attendingQ: string;
@@ -134,6 +136,8 @@ const es: Dict = {
       next: "Siguiente",
       back: "Atrás",
       stepOf: "Paso {n} de {total}",
+      sectionAttendance: "Tu asistencia",
+      sectionCompanions: "Tus acompañantes",
       thanks: "¡Gracias! Hemos recibido tu confirmación. 🤍",
       optional: "opcional",
       attendingQ: "¿Vienes a la boda?",
@@ -215,6 +219,8 @@ const en: Dict = {
       next: "Next",
       back: "Back",
       stepOf: "Step {n} of {total}",
+      sectionAttendance: "Your attendance",
+      sectionCompanions: "Your guests",
       thanks: "Thank you! We've received your RSVP. 🤍",
       optional: "optional",
       attendingQ: "Are you coming to the wedding?",

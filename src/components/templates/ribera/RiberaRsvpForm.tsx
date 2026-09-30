@@ -174,6 +174,24 @@ type Step =
   | { kind: "companionCount" }
   | { kind: "companionDetail"; companion: Companion; index: number };
 
+// The flow reads as 3 named sections rather than a flat "step X of Y":
+// contact info, then attendance (+ bus/dietary), then guests. A step
+// belongs to exactly one section, in the same order the sections are
+// shown, so the current step's section index also tells us which
+// sections are already done vs. still upcoming.
+function stepSection(step: Step): 0 | 1 | 2 {
+  switch (step.kind) {
+    case "contact":
+      return 0;
+    case "attending":
+    case "bus":
+    case "dietary":
+      return 1;
+    default:
+      return 2;
+  }
+}
+
 function stepErrorKeys(step: Step): string[] {
   switch (step.kind) {
     case "contact":
@@ -295,6 +313,12 @@ export default function RiberaRsvpForm({ locale, showBus = true }: { locale?: Lo
   const isFirstStep = stepIdx === 0;
   const isLastStep = stepIdx === steps.length - 1;
 
+  const sectionLabels = [dict.legend, dict.sectionAttendance, dict.sectionCompanions];
+  // Only the sections this guest's answers actually pass through (a "no"
+  // to attending drops the last two entirely) — deduped, in order.
+  const presentSections = Array.from(new Set(steps.map(stepSection)));
+  const currentSection = stepSection(currentStep);
+
   const errors: Errors = stepTried ? validate() : {};
   const hasStepErrors = stepErrorKeys(currentStep).some((k) => errors[k]);
 
@@ -328,6 +352,26 @@ export default function RiberaRsvpForm({ locale, showBus = true }: { locale?: Lo
 
   return (
     <form ref={formRef} className={styles.form} onSubmit={onSubmit} noValidate>
+      <div className={styles.stepSections} role="list">
+        {presentSections.map((section, i) => {
+          const done = section < currentSection;
+          const active = section === currentSection;
+          return (
+            <div
+              key={section}
+              role="listitem"
+              aria-current={active ? "step" : undefined}
+              className={`${styles.stepSection} ${done ? styles.stepSection_done : ""} ${active ? styles.stepSection_active : ""}`}
+            >
+              <div className={styles.stepSectionRow} aria-hidden="true">
+                <span className={styles.stepSectionDot}>{done ? <CheckIcon /> : i + 1}</span>
+              </div>
+              <span className={styles.stepSectionLabel}>{sectionLabels[section]}</span>
+            </div>
+          );
+        })}
+      </div>
+
       <div className={styles.stepProgress}>
         <p className={styles.stepProgressText}>
           {dict.stepOf.replace("{n}", String(stepIdx + 1)).replace("{total}", String(steps.length))}

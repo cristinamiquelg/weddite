@@ -432,7 +432,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         <span id="regalos" aria-hidden="true" />
       )}
 
-      <section id="rsvp" className={`${styles.bandStriped} ${styles.rsvpBand}`}>
+      <section id="rsvp" className={styles.rsvpBand}>
         <div data-reveal className={styles.rsvpCard}>
           <h2 className={styles.sectionTitle}>{dict.ribera.rsvp.title}</h2>
           {data.rsvpNote ? <p className={styles.rsvpIntro}>{data.rsvpNote}</p> : null}
