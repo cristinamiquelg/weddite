@@ -5,6 +5,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 export type SiteLocale = "es" | "en";
 const STORAGE_KEY = "wedite:site-locale";
 
+// Spanish browsers get Spanish; every other language gets English.
+function browserLocale(): SiteLocale {
+  const preferred = navigator.languages?.[0] ?? navigator.language ?? "";
+  return preferred.toLowerCase().split("-")[0] === "es" ? "es" : "en";
+}
+
 const SiteLocaleContext = createContext<{
   locale: SiteLocale;
   setLocale: (l: SiteLocale) => void;
@@ -14,16 +20,21 @@ export function SiteLocaleProvider({ children }: { children: React.ReactNode }) 
   const [locale, setLocaleState] = useState<SiteLocale>("es");
 
   useEffect(() => {
+    // A language the visitor picked themselves wins; otherwise follow the browser.
+    let next = browserLocale();
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored === "es" || stored === "en") {
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from localStorage after mount
-        setLocaleState(stored);
-      }
+      if (stored === "es" || stored === "en") next = stored;
     } catch {
-      // storage unavailable — stay on the default
+      // storage unavailable — fall back to the browser language
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from storage/navigator after mount
+    setLocaleState(next);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
 
   function setLocale(l: SiteLocale) {
     setLocaleState(l);
