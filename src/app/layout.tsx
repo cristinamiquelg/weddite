@@ -39,12 +39,17 @@ const scienceGothic = Science_Gothic({
 });
 
 export const metadata: Metadata = {
+  // Absolute base for the share image (src/app/opengraph-image.png) so links
+  // pasted in WhatsApp, Slack, etc. get a proper preview.
+  metadataBase: new URL("https://wedite.com"),
   title: "Wedite — Webs de boda que enamoran",
   description:
     "Elige un diseño de web de boda moderno, personalízalo con vuestra historia y hazlo vuestro en minutos. Sin llamadas, sin correos, todo a golpe de clic.",
   // Pre-launch: keep the whole app (including every couple's personal
   // wedding page under /preview) out of search results for now.
   robots: { index: false, follow: false },
+  openGraph: { siteName: "Wedite", type: "website", locale: "es_ES" },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
