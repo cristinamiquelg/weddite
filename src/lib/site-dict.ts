@@ -157,6 +157,8 @@ type SiteDict = {
       storyImageHint: string;
       storyImageChoose: string;
       storyImageRemove: string;
+      storyImageDrawing: string;
+      storyImageFallback: string;
       hashtag: string;
       hashtagHint: string;
     };
@@ -404,9 +406,11 @@ const es: SiteDict = {
       yourStoryHint: "Cómo os conocisteis, algún hito importante, por qué os casáis.",
       yourStoryPlaceholder: "Nos conocimos...",
       storyImage: "Foto (opcional)",
-      storyImageHint: "Una imagen para acompañar vuestra historia.",
+      storyImageHint: "Convertiremos vuestra foto en una ilustración a trazo para acompañar vuestra historia.",
       storyImageChoose: "Elegir imagen",
       storyImageRemove: "Quitar",
+      storyImageDrawing: "Dibujando vuestra ilustración… puede tardar hasta un minuto.",
+      storyImageFallback: "No hemos podido crear la ilustración, así que usaremos vuestra foto tal cual.",
       hashtag: "Hashtag de la boda",
       hashtagHint: "Para redes sociales",
     },
@@ -655,9 +659,11 @@ const en: SiteDict = {
       yourStoryHint: "How you met, a key milestone, why you're getting married.",
       yourStoryPlaceholder: "We met...",
       storyImage: "Photo (optional)",
-      storyImageHint: "An image to go alongside your story.",
+      storyImageHint: "We'll turn your photo into a line illustration to go alongside your story.",
       storyImageChoose: "Choose image",
       storyImageRemove: "Remove",
+      storyImageDrawing: "Drawing your illustration… this can take up to a minute.",
+      storyImageFallback: "We couldn't create the illustration, so we'll use your photo as it is.",
       hashtag: "Wedding hashtag",
       hashtagHint: "For social media",
     },

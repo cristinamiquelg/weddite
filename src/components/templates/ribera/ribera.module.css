@@ -454,6 +454,16 @@
   height: auto;
   filter: grayscale(1);
 }
+/* The generated coral line drawing (transparent background): shown as-is,
+   no duotone, and capped in width — a portrait drawing stretched to the
+   full card width would be enormous. */
+.root .storyIllustration {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin-inline: auto;
+}
 .storyText {
   max-width: 640px;
   text-align: center;

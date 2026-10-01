@@ -271,10 +271,15 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
             <h2 className={styles.sectionTitle}>{data.storyTitle || dict.ribera.storyTitleFallback}</h2>
             {data.storyImage ? (
               <div className={styles.storyRow}>
-                <div className={styles.storyImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={data.storyImage} alt="" className={styles.storyImage} />
-                </div>
+                {data.storyImageKind === "illustration" ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={data.storyImage} alt="" className={styles.storyIllustration} />
+                ) : (
+                  <div className={styles.storyImageWrap}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={data.storyImage} alt="" className={styles.storyImage} />
+                  </div>
+                )}
                 <div className={styles.storyTextCol}>
                   <p className={styles.storyText}>{data.story}</p>
                   {data.hashtag ? <p className={styles.storyHashtag}>{data.hashtag}</p> : null}

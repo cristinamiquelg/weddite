@@ -55,6 +55,8 @@ export type WeddingData = {
   story: string;
   /** Optional photo shown alongside the story text. Data URL from the wizard's file picker. */
   storyImage?: string;
+  /** "illustration" when `storyImage` is the coral line drawing generated from the couple's photo (shown as-is); otherwise it's a plain photo (shown with the navy duotone). */
+  storyImageKind?: "illustration";
   timeline: TimelineItem[];
   galleryCaptions: string[];
   rsvpNote: string;
