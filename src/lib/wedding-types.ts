@@ -104,6 +104,7 @@ export const riberaDemoWeddingData: WeddingData = {
   storyTitle: "Nuestra historia",
   story:
     "Nos conocimos en un viaje a la costa, discutiendo sobre cuál era el mejor mirador. Años después seguimos discutiendo, pero ya sin dudas: queremos pasar la vida juntos.",
+  storyImage: "/ribera/historia-demo.jpg",
   estateName: "Finca del Faro",
   estateLocation: "Cadaqués, Girona",
   phases: [
