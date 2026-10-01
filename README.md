@@ -41,3 +41,39 @@ Abre [http://localhost:3000](http://localhost:3000).
 npm run lint      # eslint
 npm run build     # build de producción
 ```
+
+## Entornos
+
+Hay dos entornos, cada uno con su rama y su dominio:
+
+| Entorno | Rama | Dominio |
+| --- | --- | --- |
+| Producción | `main` | `wedite.com` (y `www.wedite.com`) |
+| Staging | `staging` | `staging.wedite.com` |
+
+Además, cada pull request genera una URL de preview temporal de Vercel.
+
+Flujo de trabajo:
+
+1. Se trabaja en una rama de funcionalidad y se abre un PR hacia `staging`.
+2. Al fusionarlo, Vercel despliega `staging` y se prueba en `staging.wedite.com`.
+3. Cuando está validado, se abre un PR de `staging` hacia `main`; al fusionarlo
+   se despliega a producción.
+
+Nada llega a `main` sin haber pasado antes por `staging`.
+
+### Variables de entorno
+
+Cada entorno tiene las suyas en Vercel (Settings → Environment Variables):
+**Production** para `main` y **Preview** para `staging` (y los PRs). Usa claves
+distintas en cada uno, por ejemplo una `OPENAI_API_KEY` de staging con límite de
+gasto propio.
+
+| Variable | Para qué |
+| --- | --- |
+| `OPENAI_API_KEY` | Ilustración de "Nuestra historia" (`/api/story-illustration`) |
+| `OPENAI_IMAGE_MODEL` | Opcional: modelo de imagen (por defecto `gpt-image-1`) |
+| `RESEND_API_KEY` | Envío del formulario de contacto |
+
+Por ahora todo el sitio, producción incluida, es no indexable (`noindex` en el
+layout y `robots.txt` con `Disallow: /`); staging debe seguir siéndolo siempre.
