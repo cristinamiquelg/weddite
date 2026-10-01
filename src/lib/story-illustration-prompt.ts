@@ -1,163 +1,194 @@
 // Prompt sent to OpenAI's image-edit endpoint, together with the couple's
 // photo, to turn it into the line illustration shown in "Nuestra historia".
-export const STORY_ILLUSTRATION_PROMPT = `Create a minimalist hand-drawn line illustration based on the uploaded reference photograph.
+export const STORY_ILLUSTRATION_PROMPT = `Create a minimalist expressive brush-line illustration based on the uploaded photograph.
 
-The uploaded photograph is the SUBJECT REFERENCE. Reinterpret it as a loose, expressive editorial line drawing while preserving the subject's recognizable silhouette, proportions, pose, composition and most characteristic visual features.
+IMPORTANT: The uploaded photograph is ONLY a reference for the subject, composition, pose and recognizable shapes. Do NOT reproduce the photograph literally and do NOT try to draw all of its visible details.
 
-VISUAL LANGUAGE
+The final image must look like a spontaneous hand-drawn illustration made with a red/coral brush pen, NOT like a pencil sketch, engraving, charcoal drawing, ink wash, etching or detailed drawing.
 
-The illustration should have the visual language of an elegant spontaneous ink sketch, somewhere between fashion illustration, botanical drawing and loose architectural line art.
+STYLE
 
-Use ONLY a single warm coral-red / vermilion line color.
+Use a single warm coral-red / vermilion color.
 
-The drawing should look genuinely hand-drawn with a flexible brush or ink pen. The stroke must feel organic, spontaneous and slightly imperfect.
+The illustration should consist primarily of loose, confident brush strokes.
 
-Use clearly VARIABLE LINE WEIGHT throughout the illustration:
-- some strokes should be very thin and delicate
-- some strokes should become noticeably thicker
-- some strokes should become heavier where the hand would naturally apply pressure
-- allow subtle changes in pressure within the same line
+The strokes must feel:
+- spontaneous
+- fluid
+- organic
+- slightly imperfect
+- expressive
+- gestural
+- elegant
+- lightweight
 
-The strokes should have:
-- slight natural wobble
-- irregular edges
-- changes in pressure
-- occasional overlaps
-- small imperfections
-- occasional broken or incomplete lines
-- loose beginnings and endings
-- a few spontaneous secondary strokes
+Use strong variation in line weight. Some strokes are thin and delicate, while others are thicker and more expressive. Allow the thickness to change naturally within individual strokes.
 
-Do NOT make the contours perfectly smooth, geometric or uniform.
+The line should have the feeling of a real brush moving across paper.
 
-The illustration should feel like it was drawn quickly and confidently by hand, rather than traced digitally.
+IMPORTANT: the stroke should be CLEAN and OPEN, not textured.
 
-ABSTRACTION AND DETAIL
+Do NOT create pencil grain.
+Do NOT create sketchy pencil marks.
+Do NOT use hatching.
+Do NOT use cross-hatching.
+Do NOT use repeated parallel lines.
+Do NOT shade objects with many small strokes.
+Do NOT fill surfaces with lines.
+Do NOT create a detailed pencil drawing.
 
-Prioritize GESTURE, SILHOUETTE and CHARACTER over detail.
+The illustration should use a relatively SMALL NUMBER OF STROKES.
 
-Simplify the photograph substantially.
+ABSTRACTION
 
-Capture the overall shape and the few visual elements that make the subject immediately recognizable. Remove unnecessary details, textures, tiny objects, realistic surfaces and technical information.
+Simplify the photograph aggressively.
 
-The result should sit between a recognizable illustration and an expressive sketch.
+The goal is to capture the ESSENCE of the scene, not to reproduce its information.
 
-The viewer should immediately understand what the subject is, but the drawing should not attempt to reproduce every element of the photograph.
+Prioritize:
 
-When deciding whether to add a detail, prefer NOT adding it.
+1. Overall silhouette
+2. Main gesture and pose
+3. Important contours
+4. A few distinctive characteristics
+5. A very small number of environmental strokes
 
-"Less information, more character."
+Everything else should disappear.
 
-Use generous negative space.
+When a detail is not necessary to recognize the subject, OMIT IT.
 
-Allow some contours to remain open or only partially implied. Not every edge of the subject needs to be completely enclosed.
+When choosing between adding another line and leaving an area empty, LEAVE IT EMPTY.
 
-Do not over-explain the subject with lines.
+The final image should feel intentionally unfinished in places.
 
-LINE QUALITY
+PEOPLE
 
-The line should resemble a real brush stroke rather than a vector path.
+If people are present, preserve their overall body position, posture, proportions, hairstyle silhouette and relationship to one another.
 
-Avoid:
-- perfectly uniform stroke widths
-- perfectly smooth Bézier curves
-- rigid geometric shapes
-- technical drafting
-- excessive symmetry
-- excessive outlining
-- dense cross-hatching
-- realistic shading
-- gradients
-- solid fills
-- photorealistic rendering
-- cartoon-like thick outlines
+Do not draw realistic facial features.
 
-Instead, use expressive single strokes and small clusters of loose marks.
+Do not draw individual hairs.
 
-Some areas can be more defined while others should dissolve into a few suggestive strokes.
+Do not draw realistic skin.
 
-The hierarchy of detail should be:
-1. overall silhouette
-2. distinctive shapes
-3. important structural features
-4. a few expressive secondary details
-5. everything else omitted
+Do not reproduce every fold in their clothes.
+
+Represent clothing with only a few flowing contour strokes.
+
+The couple should be recognizable primarily through their silhouettes, pose and interaction.
+
+ENVIRONMENT
+
+Treat the environment extremely minimally.
+
+Do not reproduce every blade of grass, hill, tree, cloud or landscape contour.
+
+Represent the landscape using only a few long, loose, gestural strokes.
+
+The background should be mostly EMPTY.
+
+For distant hills, use one or two irregular horizontal strokes.
+
+For grass or ground, use only a few expressive marks near the bottom of the composition.
+
+Do not fill the background with repeated sketch marks.
 
 COMPOSITION
 
-Preserve the important composition of the uploaded photograph, but simplify it into a clean standalone illustration.
+Preserve the main composition of the photograph.
 
-Do not unnecessarily add objects that are not present in the photograph.
+Keep the couple as the clear visual focus.
 
-If the photograph contains a person, preserve their pose, body proportions, hairstyle and clothing silhouette, but simplify facial features and small clothing details.
+Allow large areas of empty space around them.
 
-If the photograph contains architecture, preserve its main volumes, rooflines, windows, doors and characteristic architectural features, but reduce decorative and structural detail.
+Do not invent additional objects.
 
-If the photograph contains landscape or vegetation, represent it with loose organic strokes rather than botanical precision.
+Do not add decorative elements that are not necessary.
 
-If the photograph contains an object or vehicle, preserve its characteristic silhouette and major recognizable elements while simplifying mechanical or technical details.
+Do not make the illustration visually dense.
 
-BACKGROUND
+LINE CHARACTER
 
-Use a transparent background if supported.
+The line must NOT look like a vector outline.
 
-If transparency is not available, use a completely plain background with no texture.
+It should have:
+- variable pressure
+- occasional thicker sections
+- occasional very thin sections
+- slightly irregular curves
+- loose endings
+- occasional interrupted contours
+- subtle overlaps
+- expressive changes of direction
 
-Do not add a frame, border, typography, labels or decorative background.
+However, keep the overall drawing SIMPLE and CONTROLLED.
 
-The illustration should work as an isolated graphic element.
+The imperfections should come from the brush movement, NOT from adding lots of extra sketch lines.
 
 COLOR
 
-Use a single warm coral-red / vermilion color for all visible strokes.
+Use ONLY one line color:
 
-No additional colors.
+warm coral red / vermilion.
 
-No black outlines.
+No orange.
+No yellow.
+No brown.
+No black.
+No secondary colors.
 
-No colored fills.
+BACKGROUND
 
-No gradients.
+Transparent background if supported.
 
-The background should remain transparent or completely plain.
+Otherwise use a completely plain white or very light background.
 
-OVERALL FEEL
+Do not reproduce the photographic sky, lighting, haze or photographic colors.
 
-The final result should feel:
+Do not use gradients.
 
-elegant
-artistic
-editorial
-organic
+Do not use shadows.
+
+Do not use solid color fills.
+
+Do not use realistic lighting.
+
+FINAL VISUAL TARGET
+
+The final result should resemble an elegant spontaneous red brush illustration made from a small number of expressive strokes.
+
+It should feel closer to a loose botanical or fashion illustration than to a pencil drawing.
+
+It should be:
 minimal
-spontaneous
-slightly raw
-handmade
-confident
 airy
+expressive
+organic
+elegant
+slightly imperfect
+abstract but recognizable
 
-It should NOT feel:
-
-technical
+It should NOT be:
 photorealistic
-overly polished
-geometric
-generic
-cartoonish
-overly detailed
-computer-generated
-like a coloring-book outline
+detailed
+pencil-like
+textured
+shaded
+hatched
+cross-hatched
+technical
+architectural
+cartoon-like
+or overly polished.
 
-MOST IMPORTANT RULE
+MOST IMPORTANT RULE:
 
-Prioritize gesture and silhouette over detail.
+LESS LINES.
 
-When in doubt, REMOVE a line rather than ADDING one.
+LESS DETAIL.
 
-The final illustration should look like an artist captured the essence of the photograph in a few expressive brush strokes, rather than carefully tracing the photograph.
+MORE GESTURE.
 
-SUBJECT-SPECIFIC INSTRUCTION
+When in doubt, remove the line.
 
-Transform the uploaded photograph into a line illustration of the subject shown in the photograph.
-
-Preserve the subject's most recognizable characteristics while applying the exact visual language described above.`;
+The photograph should be recognizable through the few strokes that remain, not through the number of strokes used.`;
