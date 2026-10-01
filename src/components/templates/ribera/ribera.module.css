@@ -82,7 +82,7 @@
 .root img { max-width: 100%; display: block; }
 .root section[id] { scroll-margin-top: var(--r-header-h); }
 
-/* The global ::selection rule in globals.css paints Weddite's own clay
+/* The global ::selection rule in globals.css paints Wedite's own clay
    brand color — that's the wizard/marketing site's palette, not this
    template's, so it must not leak into a guest-facing Ribera page. */
 .root ::selection {

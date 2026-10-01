@@ -496,7 +496,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         <p>
           {dict.ribera.footer.madeWith}{" "}
           <Link href="/" className="group inline-flex items-center gap-1" style={{ color: "var(--r-coral)" }}>
-            Weddite
+            Wedite
             <SparkleIcon className="h-3 w-3 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125" />
           </Link>
         </p>

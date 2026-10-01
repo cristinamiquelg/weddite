@@ -26,7 +26,7 @@ export default function TemplateDetailContent({ tpl }: { tpl: Template }) {
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
             <span className="ml-3 text-xs text-ink-soft">
-              weddite.com/preview/{tpl.slug}
+              wedite.com/preview/{tpl.slug}
             </span>
           </div>
           <iframe

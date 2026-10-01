@@ -5,7 +5,7 @@ description: Context and conventions for making changes to the "Ribera" wedding 
 
 # Ribera template
 
-Ribera is currently Weddite's only production template: an elegant,
+Ribera is currently Wedite's only production template: an elegant,
 navy/coral, multi-phase wedding site (preboda/boda/postboda) modeled 1:1 on
 a real invitation (github.com/cristinamiquelg/invitacion-lk).
 
@@ -48,11 +48,11 @@ a real invitation (github.com/cristinamiquelg/invitacion-lk).
   (Science Gothic, falls back to Oswald) for uppercase/eyebrow/labels.
 - Breakpoints: 599px, 899px, 1199px (mobile → tablet → desktop nav).
 
-**Never use Weddite's own Tailwind tokens (`clay`, `clay-dark`, `sage`,
+**Never use Wedite's own Tailwind tokens (`clay`, `clay-dark`, `sage`,
 `gold`, etc. from `src/app/globals.css`) inside Ribera.** Ribera is meant to
 be a fully self-contained, swappable design — those are the marketing
 site's/wizard's own brand colors. This also applies to things that cascade
-globally, like `::selection`: `globals.css` sets it site-wide in Weddite's
+globally, like `::selection`: `globals.css` sets it site-wide in Wedite's
 clay, so Ribera overrides it back to navy under `.root`.
 
 ## Known gotchas (learned the hard way this session)

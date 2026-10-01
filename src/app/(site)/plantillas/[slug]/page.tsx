@@ -16,7 +16,7 @@ export async function generateMetadata({
   const tpl = getTemplateBySlug(slug);
   if (!tpl) return {};
   return {
-    title: `${tpl.name} — Diseño de web de boda — Weddite`,
+    title: `${tpl.name} — Diseño de web de boda — Wedite`,
     description: tpl.description,
   };
 }

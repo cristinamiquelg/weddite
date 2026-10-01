@@ -101,7 +101,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
       <header className="flex items-center justify-between border-b border-line px-6 py-4">
         <div className="flex items-center gap-4">
           <Link href="/" className="font-display text-lg">
-            Weddite
+            Wedite
           </Link>
           <span className="hidden text-sm text-ink-soft sm:inline">
             {dict.wizard.personalizing(template.name)}

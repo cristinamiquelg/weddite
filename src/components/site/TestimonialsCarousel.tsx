@@ -9,7 +9,7 @@ type Testimonial = {
   detail: string;
 };
 
-// Invented reviews — Weddite doesn't have real customers yet.
+// Invented reviews — Wedite doesn't have real customers yet.
 const testimonialsByLocale: Record<"es" | "en", Testimonial[]> = {
   es: [
     {

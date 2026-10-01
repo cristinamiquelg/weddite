@@ -21,7 +21,7 @@ const content = {
         heading: "Quién trata vuestros datos",
         body: (
           <p>
-            Weddite es un proyecto en fase de prototipo. Los datos que se
+            Wedite es un proyecto en fase de prototipo. Los datos que se
             recogen a través de esta web los trata directamente su
             responsable, contactable en {mailLink}.
           </p>
@@ -45,7 +45,7 @@ const content = {
         heading: "La compra",
         body: (
           <p>
-            Weddite es todavía un prototipo: el proceso de pago que veis en
+            Wedite es todavía un prototipo: el proceso de pago que veis en
             el checkout es una simulación y no se realiza ningún cargo real
             ni se procesan datos de tarjeta reales, se use o no el botón de
             &ldquo;tarjeta de prueba&rdquo;.
@@ -99,7 +99,7 @@ const content = {
         heading: "Who processes your data",
         body: (
           <p>
-            Weddite is a project in prototype stage. The data collected
+            Wedite is a project in prototype stage. The data collected
             through this website is processed directly by its owner,
             reachable at {mailLink}.
           </p>
@@ -122,7 +122,7 @@ const content = {
         heading: "The purchase",
         body: (
           <p>
-            Weddite is still a prototype: the payment process you see at
+            Wedite is still a prototype: the payment process you see at
             checkout is a simulation, and no real charge is made and no
             real card data is processed, whether or not you use the
             &ldquo;fill in with a test card&rdquo; button.

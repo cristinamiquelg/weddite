@@ -10,7 +10,7 @@ type Shot = {
   label: string;
 };
 
-// Real screenshots of the templates Weddite actually ships today (Ribera)
+// Real screenshots of the templates Wedite actually ships today (Ribera)
 // — no invented sites. As the catalog grows, add more shots here and
 // they'll flow into the columns automatically.
 const shots: Shot[] = [

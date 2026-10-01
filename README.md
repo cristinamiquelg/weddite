@@ -1,4 +1,4 @@
-# Weddite
+# Wedite
 
 Un site para que futuros novios elijan una web de boda moderna de un catálogo,
 la vean en preview en directo, la personalicen con su información y la

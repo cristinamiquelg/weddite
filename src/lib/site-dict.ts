@@ -5,7 +5,7 @@ type SiteDict = {
   footer: {
     tagline: string;
     product: string;
-    weddite: string;
+    wedite: string;
     designs: string;
     howItWorks: string;
     contact: string;
@@ -24,7 +24,7 @@ type SiteDict = {
     problemHeading: string;
     otherProvidersLabel: string;
     painPoints: string[];
-    wedditeLabel: string;
+    wediteLabel: string;
     promisesHeadingPre: string;
     promisesHeadingItalic: string;
     promises: { title: string; body: string }[];
@@ -215,13 +215,13 @@ const es: SiteDict = {
   footer: {
     tagline: "Webs de boda modernas, listas en minutos. Sin llamadas, sin presupuestos por correo: todo a golpe de clic.",
     product: "Producto",
-    weddite: "Weddite",
+    wedite: "Wedite",
     designs: "Diseños",
     howItWorks: "Cómo funciona",
     contact: "Contacto",
     whoWeAre: "Quiénes somos",
     privacy: "Política de privacidad",
-    rights: (year) => `© ${year} Weddite. Todos los derechos reservados.`,
+    rights: (year) => `© ${year} Wedite. Todos los derechos reservados.`,
   },
   home: {
     eyebrow: "Webs para historias que merecen ser contadas",
@@ -239,8 +239,8 @@ const es: SiteDict = {
       "Presupuestos que llegan cuando ya te has olvidado de ellos.",
       "Webs pensadas para ordenador cuando tus invitados están en WhatsApp.",
     ],
-    wedditeLabel: "Weddite",
-    promisesHeadingPre: "Weddite crea las webs que",
+    wediteLabel: "Wedite",
+    promisesHeadingPre: "Wedite crea las webs que",
     promisesHeadingItalic: "deberían de ser.",
     promises: [
       { title: "Diseño cuidado", body: "Diseños editoriales, sin clichés de boda." },
@@ -267,8 +267,8 @@ const es: SiteDict = {
     contactSub: "Escribidnos y os respondemos en cuanto podamos.",
   },
   catalog: {
-    metaTitle: "Diseños de webs de boda — Weddite",
-    metaDescription: "Explora el catálogo de diseños de webs de boda de Weddite, con preview en directo y personalización al instante.",
+    metaTitle: "Diseños de webs de boda — Wedite",
+    metaDescription: "Explora el catálogo de diseños de webs de boda de Wedite, con preview en directo y personalización al instante.",
     h1: "Elegid vuestro estilo",
     sub: "Cada diseño se puede probar en directo antes de decidir nada. Cuando lo tengáis claro, lo personalizáis y lo hacéis vuestro sin salir del navegador.",
     viewPreview: "Ver preview",
@@ -297,20 +297,20 @@ const es: SiteDict = {
     },
   },
   quienesSomos: {
-    metaTitle: "Quiénes somos — Weddite",
-    metaDescription: "La historia detrás de Weddite: por qué existe, qué queremos cambiar y a quién le hacemos las webs de boda.",
+    metaTitle: "Quiénes somos — Wedite",
+    metaDescription: "La historia detrás de Wedite: por qué existe, qué queremos cambiar y a quién le hacemos las webs de boda.",
     label: "Quiénes somos",
     h1: "Nos casamos. Buscamos una web bonita. No la encontramos.",
     p1: "Encontramos muchas webs de boda. Algunas tenían corazones. Otras tenían tipografías imposibles. Casi todas necesitaban emails, llamadas o presupuestos para hacer cualquier cosa.",
     p2: "Y pensamos: esto debería ser bastante más fácil.",
-    p3: "Así nació Weddite.",
+    p3: "Así nació Wedite.",
     bullets: [
       "Diseños que nos gustaría enseñar.",
       "Personalización sin esperar a nadie.",
       "Una preview antes de pagar.",
       "Y una web que podéis tener lista en minutos.",
     ],
-    closingPre: "Hoy Weddite es un proyecto pequeño, hecho a mano, con un diseño propio —Ribera— y la idea de seguir añadiendo más. Si tenéis feedback, ideas o simplemente queréis contarnos cómo va la boda, nos encanta escuchar: podéis escribirnos desde el",
+    closingPre: "Hoy Wedite es un proyecto pequeño, hecho a mano, con un diseño propio —Ribera— y la idea de seguir añadiendo más. Si tenéis feedback, ideas o simplemente queréis contarnos cómo va la boda, nos encanta escuchar: podéis escribirnos desde el",
     closingLinkText: "formulario de contacto",
     closingPost: ".",
   },
@@ -468,13 +468,13 @@ const en: SiteDict = {
   footer: {
     tagline: "Modern wedding websites, ready in minutes. No calls, no email quotes: everything a click away.",
     product: "Product",
-    weddite: "Weddite",
+    wedite: "Wedite",
     designs: "Designs",
     howItWorks: "How it works",
     contact: "Contact",
     whoWeAre: "About us",
     privacy: "Privacy policy",
-    rights: (year) => `© ${year} Weddite. All rights reserved.`,
+    rights: (year) => `© ${year} Wedite. All rights reserved.`,
   },
   home: {
     eyebrow: "Websites for stories worth telling",
@@ -492,8 +492,8 @@ const en: SiteDict = {
       "Quotes that arrive after you've already forgotten about them.",
       "Websites built for desktop when your guests are on WhatsApp.",
     ],
-    wedditeLabel: "Weddite",
-    promisesHeadingPre: "Weddite builds the websites weddings",
+    wediteLabel: "Wedite",
+    promisesHeadingPre: "Wedite builds the websites weddings",
     promisesHeadingItalic: "deserve.",
     promises: [
       { title: "Considered design", body: "Editorial designs, no wedding clichés." },
@@ -520,8 +520,8 @@ const en: SiteDict = {
     contactSub: "Write to us and we'll get back to you as soon as we can.",
   },
   catalog: {
-    metaTitle: "Wedding website designs — Weddite",
-    metaDescription: "Explore Weddite's catalog of wedding website designs, with a live preview and instant personalization.",
+    metaTitle: "Wedding website designs — Wedite",
+    metaDescription: "Explore Wedite's catalog of wedding website designs, with a live preview and instant personalization.",
     h1: "Choose your style",
     sub: "Every design can be tried live before deciding anything. Once you're sure, you personalize it and make it yours without leaving the browser.",
     viewPreview: "View preview",
@@ -550,20 +550,20 @@ const en: SiteDict = {
     },
   },
   quienesSomos: {
-    metaTitle: "About us — Weddite",
-    metaDescription: "The story behind Weddite: why it exists, what we want to change, and who we build wedding websites for.",
+    metaTitle: "About us — Wedite",
+    metaDescription: "The story behind Wedite: why it exists, what we want to change, and who we build wedding websites for.",
     label: "About us",
     h1: "We got engaged. We looked for a beautiful website. We didn't find one.",
     p1: "We found plenty of wedding websites. Some had hearts on them. Others had impossible typefaces. Almost all of them needed emails, phone calls or quotes to do anything at all.",
     p2: "So we thought: this should be a lot easier.",
-    p3: "That's how Weddite was born.",
+    p3: "That's how Wedite was born.",
     bullets: [
       "Designs we'd actually want to show off.",
       "Personalization without waiting on anyone.",
       "A preview before you pay.",
       "And a website you can have ready in minutes.",
     ],
-    closingPre: "Today Weddite is a small, handmade project, with one design of our own —Ribera— and the plan to keep adding more. If you have feedback, ideas, or just want to tell us how the wedding planning is going, we'd love to hear from you: write to us from the",
+    closingPre: "Today Wedite is a small, handmade project, with one design of our own —Ribera— and the plan to keep adding more. If you have feedback, ideas, or just want to tell us how the wedding planning is going, we'd love to hear from you: write to us from the",
     closingLinkText: "contact form",
     closingPost: ".",
   },

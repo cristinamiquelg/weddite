@@ -46,7 +46,7 @@ export async function sendContactMessage(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Weddite <onboarding@resend.dev>",
+        from: "Wedite <onboarding@resend.dev>",
         to: [CONTACT_TO],
         reply_to: email,
         subject: subject(name),

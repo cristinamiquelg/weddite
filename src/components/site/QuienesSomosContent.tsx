@@ -25,7 +25,7 @@ export default function QuienesSomosContent() {
         </div>
         <Image
           src="/quienes-somos/retrato.webp"
-          alt="Cristina, founder of Weddite"
+          alt="Cristina, founder of Wedite"
           width={220}
           height={220}
           className="h-[180px] w-[180px] shrink-0 object-contain sm:h-[220px] sm:w-[220px]"

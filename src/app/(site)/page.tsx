@@ -168,7 +168,7 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col gap-5 border-t border-line bg-clay/5 p-8 sm:border-t-0 sm:border-l sm:p-10">
-              <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.wedditeLabel}</p>
+              <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.wediteLabel}</p>
               <ul className="flex flex-col gap-4">
                 {home.promises.map((p, i) => (
                   <li

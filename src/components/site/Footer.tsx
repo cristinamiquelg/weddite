@@ -29,7 +29,7 @@ export default function Footer() {
       ],
     },
     {
-      heading: dict.footer.weddite,
+      heading: dict.footer.wedite,
       links: [
         { label: dict.footer.whoWeAre, href: "/quienes-somos" },
         { label: dict.footer.privacy, href: "/privacidad" },
