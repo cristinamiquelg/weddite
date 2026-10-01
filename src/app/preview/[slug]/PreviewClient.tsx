@@ -47,11 +47,11 @@ export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
 
     function onMessage(event: MessageEvent) {
       const msg = event.data;
-      if (msg && msg.type === "weddite:update" && msg.slug === slug) {
+      if (msg && msg.type === "wedite:update" && msg.slug === slug) {
         setData(msg.data as WeddingData);
         if (typeof msg.scrollTo === "string") scheduleScroll(msg.scrollTo);
       }
-      if (msg && msg.type === "weddite:scrollTo" && typeof msg.sectionId === "string") {
+      if (msg && msg.type === "wedite:scrollTo" && typeof msg.sectionId === "string") {
         scheduleScroll(msg.sectionId);
       }
     }

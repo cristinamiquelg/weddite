@@ -79,7 +79,7 @@ clay, so Ribera overrides it back to navy under `.root`.
 
 ## Wizard ↔ preview wiring
 
-`CustomizeClient.tsx` posts `{type:"weddite:update", data, scrollTo}` to the
+`CustomizeClient.tsx` posts `{type:"wedite:update", data, scrollTo}` to the
 preview iframe on every data change, where `scrollTo` is the current
 `focusedSectionRef` — the step's default `sectionId`, or a
 `data-scroll-section="..."` override on the specific wrapper div around a

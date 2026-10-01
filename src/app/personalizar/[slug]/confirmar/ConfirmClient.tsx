@@ -34,7 +34,7 @@ export default function ConfirmClient({ template }: { template: Template }) {
     setSubmitting(true);
     window.setTimeout(() => {
       try {
-        window.localStorage.setItem(`weddite:purchased:${template.slug}`, "1");
+        window.localStorage.setItem(`wedite:purchased:${template.slug}`, "1");
       } catch {
         // storage unavailable — the confirmation still proceeds
       }

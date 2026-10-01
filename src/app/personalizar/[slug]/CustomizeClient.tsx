@@ -52,7 +52,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
 
   useEffect(() => {
     iframeRef.current?.contentWindow?.postMessage(
-      { type: "weddite:update", slug: template.slug, data, scrollTo: focusedSectionRef.current },
+      { type: "wedite:update", slug: template.slug, data, scrollTo: focusedSectionRef.current },
       window.location.origin,
     );
   }, [data, template.slug]);
@@ -62,7 +62,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
   function scrollToSection(id: string | null) {
     if (!id) return;
     iframeRef.current?.contentWindow?.postMessage(
-      { type: "weddite:scrollTo", sectionId: id },
+      { type: "wedite:scrollTo", sectionId: id },
       window.location.origin,
     );
   }

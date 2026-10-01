@@ -2,5 +2,5 @@
 // PreviewClient.tsx) so a fresh visit — a new tab, or the same tab after
 // it's closed — always starts the customization from scratch.
 export function draftStorageKey(slug: string) {
-  return `weddite:draft:${slug}`;
+  return `wedite:draft:${slug}`;
 }

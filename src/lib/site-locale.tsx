@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 export type SiteLocale = "es" | "en";
-const STORAGE_KEY = "weddite:site-locale";
+const STORAGE_KEY = "wedite:site-locale";
 
 const SiteLocaleContext = createContext<{
   locale: SiteLocale;
