@@ -1,43 +1,103 @@
+"use client";
+
 import Link from "next/link";
 import { templates } from "@/lib/templates";
 import HeroGrid from "@/components/site/HeroGrid";
 import TestimonialsCarousel from "@/components/site/TestimonialsCarousel";
+import ContactForm from "@/components/site/ContactForm";
 import SparkleIcon from "@/components/site/SparkleIcon";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
-const steps = [
-  {
-    n: "01",
-    title: "Elegís vuestra plantilla",
-    body: "Navegad el catálogo, mirad la preview en directo tal cual la verán vuestros invitados y quedaos con la que más os enamore.",
-  },
-  {
-    n: "02",
-    title: "La personalizáis al momento",
-    body: "Nombres, fecha, ubicación, vuestra historia, itinerario, fotos, RSVP y regalo. Vais viendo los cambios en vivo mientras escribís.",
-  },
-  {
-    n: "03",
-    title: "La contratáis con un clic",
-    body: "Sin llamadas, sin presupuestos por correo, sin esperas. Confirmáis y vuestra web queda lista para compartir con quien queráis.",
-  },
+const ctaScatter: { top: string; left: string; size: string; opacity: number; rotate: string }[] = [
+  { top: "12%", left: "8%", size: "2rem", opacity: 0.45, rotate: "-10deg" },
+  { top: "72%", left: "12%", size: "1.3rem", opacity: 0.3, rotate: "18deg" },
+  { top: "20%", left: "90%", size: "1.6rem", opacity: 0.35, rotate: "6deg" },
+  { top: "78%", left: "88%", size: "2.6rem", opacity: 0.4, rotate: "-8deg" },
+  { top: "50%", left: "4%", size: "1.1rem", opacity: 0.25, rotate: "12deg" },
+  { top: "45%", left: "95%", size: "1.4rem", opacity: 0.3, rotate: "-15deg" },
+  { top: "6%", left: "42%", size: "1.2rem", opacity: 0.28, rotate: "22deg" },
+  { top: "90%", left: "45%", size: "1.5rem", opacity: 0.32, rotate: "-20deg" },
+  { top: "30%", left: "22%", size: "0.9rem", opacity: 0.22, rotate: "8deg" },
+  { top: "62%", left: "78%", size: "1.1rem", opacity: 0.26, rotate: "-14deg" },
+  { top: "8%", left: "68%", size: "1.8rem", opacity: 0.38, rotate: "14deg" },
+  { top: "88%", left: "22%", size: "1.2rem", opacity: 0.28, rotate: "-6deg" },
+  { top: "38%", left: "8%", size: "1.6rem", opacity: 0.3, rotate: "-24deg" },
+  { top: "36%", left: "96%", size: "1.2rem", opacity: 0.25, rotate: "10deg" },
 ];
 
-const painPoints = [
-  "Plantillas con typefaces de los 2000 y gifs de corazones",
-  "Formularios interminables por email para pedir un simple cambio",
-  "Presupuestos a medida que tardan días en llegar",
-  "Webs que se rompen en el móvil, donde las va a ver todo el mundo",
-];
+// Small, language-neutral illustrations for the "Cómo funciona" steps —
+// abstract bars/panels rather than screenshots, so they read at a glance
+// without needing to stay in sync with the real product UI.
+function EditorMockup() {
+  return (
+    <div className="flex h-full gap-2">
+      <div className="flex w-2/5 flex-col gap-1.5 rounded-lg bg-paper p-2.5">
+        <div className="h-1.5 w-3/4 rounded-full bg-line" />
+        <div className="h-1.5 w-full rounded-full bg-line" />
+        <div className="h-1.5 w-2/3 rounded-full bg-line" />
+        <div className="mt-1 h-5 w-full rounded-md bg-clay/25" />
+      </div>
+      <div className="flex flex-1 flex-col gap-1.5 rounded-lg bg-paper p-2.5">
+        <div className="h-2 w-1/2 rounded-full bg-clay/50" />
+        <div className="mt-1 h-9 w-full rounded-md bg-sage-light" />
+        <div className="h-1.5 w-full rounded-full bg-line" />
+        <div className="h-1.5 w-4/5 rounded-full bg-line" />
+      </div>
+    </div>
+  );
+}
 
-const promises = [
-  "Diseño editorial, cuidado hasta el último detalle",
-  "Preview en directo antes de pagar un euro",
-  "Todo el proceso en minutos, sin intermediarios",
-  "100% responsive, pensada para leerse desde el grupo de WhatsApp",
-];
+function PublishMockup({ cta }: { cta: string }) {
+  return (
+    <div className="flex h-full flex-col justify-center gap-3">
+      <div className="flex items-center gap-2 rounded-full border border-line bg-paper px-3 py-2.5">
+        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-sage" />
+        <span className="truncate text-xs text-ink-soft">elenaymateo.love</span>
+        <svg viewBox="0 0 20 20" className="ml-auto h-3 w-3 shrink-0 text-ink-soft" fill="none" stroke="currentColor" strokeWidth="1.8">
+          <path d="M5 8l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+      <div className="rounded-full bg-ink px-3 py-2.5 text-center text-xs font-medium text-paper">
+        {cta}
+      </div>
+    </div>
+  );
+}
+
+function ResponsesMockup() {
+  const rows: ("yes" | "no")[] = ["yes", "yes", "no"];
+  return (
+    <div className="flex h-full flex-col justify-center gap-2 rounded-lg bg-paper p-2.5">
+      <div className="flex items-center gap-2 px-1">
+        <div className="h-1.5 w-8 rounded-full bg-ink-soft/40" />
+        <div className="h-1.5 flex-1 rounded-full bg-ink-soft/40" />
+        <div className="h-1.5 w-6 rounded-full bg-ink-soft/40" />
+      </div>
+      {rows.map((status, i) => (
+        <div key={i} className="flex items-center gap-2 rounded-md bg-paper-raised px-2 py-1.5">
+          <div className="h-1.5 w-10 rounded-full bg-line" />
+          <div className="h-1.5 flex-1 rounded-full bg-line" />
+          {status === "yes" ? (
+            <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0 text-sage" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 8.5l3 3 7-7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0 text-clay" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 4l8 8M12 4l-8 8" strokeLinecap="round" />
+            </svg>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function HomePage() {
   const featured = templates[0];
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale);
+  const { home } = dict;
 
   return (
     <>
@@ -45,31 +105,27 @@ export default function HomePage() {
         className="fade-in-load mx-auto max-w-5xl px-6 pb-20 pt-20 text-center sm:pt-28"
         style={{ animationDelay: "80ms" }}
       >
-        <p className="text-xs uppercase tracking-[0.3em] text-clay">
-          Webs de boda, sin lo cutre
-        </p>
-        <h1 className="mx-auto mt-6 max-w-3xl text-balance font-display text-4xl leading-tight sm:text-6xl">
-          La web de vuestra boda, bonita de verdad
+        <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.eyebrow}</p>
+        <h1 className="mx-auto mt-6 max-w-3xl text-balance font-display text-4xl leading-none sm:text-6xl">
+          {home.h1}
           <SparkleIcon className="ml-2 inline-block h-[0.6em] w-[0.6em] -translate-y-1 text-clay" />
         </h1>
-        <p className="mx-auto mt-6 max-w-xl text-balance text-lg text-ink-soft">
-          Elegid una plantilla moderna, personalizadla con vuestra historia y
-          contratadla en minutos. Todo a golpe de clic: sin llamadas, sin
-          correos interminables.
+        <p className="mx-auto mt-6 max-w-3xl text-balance text-lg text-ink-soft">
+          {home.subhead}
         </p>
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row sm:items-center sm:gap-4">
           <Link
             href="/plantillas"
-            className="rounded-full bg-ink px-7 py-3.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+            className="rounded-full bg-ink px-7 py-3.5 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90"
           >
-            Explorar plantillas
+            {home.ctaExplore}
           </Link>
           <Link
             href={`/preview/${featured.slug}`}
             target="_blank"
-            className="rounded-full border border-line px-7 py-3.5 text-sm font-medium text-ink transition-colors hover:border-ink"
+            className="rounded-full border border-line px-7 py-3.5 text-center text-sm font-medium text-ink transition-colors hover:border-ink"
           >
-            Ver un ejemplo en directo
+            {home.ctaExample}
           </Link>
         </div>
       </section>
@@ -79,55 +135,83 @@ export default function HomePage() {
       </section>
 
       <section className="border-t border-line bg-paper-raised">
-        <div className="mx-auto grid max-w-5xl gap-12 px-6 py-20 sm:grid-cols-2">
-          <div data-reveal>
-            <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">
-              El problema
-            </p>
-            <h2 className="mt-4 font-display text-3xl">
-              Las webs de boda suelen ser cutres
+        <div className="mx-auto max-w-5xl px-6 py-20">
+          <div data-reveal className="text-center">
+            <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">{home.problemLabel}</p>
+            <h2 className="mx-auto mt-4 max-w-2xl text-balance font-display text-3xl">
+              {home.problemHeading}
             </h2>
-            <ul className="mt-6 space-y-4">
-              {painPoints.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-ink-soft">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-line" />
-                  {p}
-                </li>
-              ))}
-            </ul>
           </div>
-          <div data-reveal style={{ transitionDelay: "120ms" }}>
-            <p className="text-xs uppercase tracking-[0.3em] text-clay">
-              Weddite
-            </p>
-            <h2 className="mt-4 font-display text-3xl">
-              Nosotros lo hacemos de otra forma
-            </h2>
-            <ul className="mt-6 space-y-4">
-              {promises.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-ink">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" />
-                  {p}
-                </li>
-              ))}
-            </ul>
+
+          <div
+            data-reveal
+            style={{ transitionDelay: "120ms" }}
+            className="relative mt-14 grid overflow-hidden rounded-2xl border border-line sm:grid-cols-2"
+          >
+            <div className="flex flex-col gap-5 p-8 sm:p-10">
+              <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">{home.otherProvidersLabel}</p>
+              <ul className="flex flex-col gap-4">
+                {home.painPoints.map((p, i) => (
+                  <li
+                    key={p}
+                    data-reveal
+                    style={{ transitionDelay: `${i * 90}ms` }}
+                    className="flex items-start gap-3 text-ink-soft"
+                  >
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-line text-[10px] text-ink-soft/70">
+                      ✕
+                    </span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-5 border-t border-line bg-clay/5 p-8 sm:border-t-0 sm:border-l sm:p-10">
+              <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.wediteLabel}</p>
+              <ul className="flex flex-col gap-4">
+                {home.promises.map((p, i) => (
+                  <li
+                    key={p.title}
+                    data-reveal
+                    style={{ transitionDelay: `${i * 90}ms` }}
+                    className="flex items-start gap-3 text-ink"
+                  >
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-clay text-[10px] font-bold text-paper">
+                      ✓
+                    </span>
+                    <span>
+                      <span className="font-medium text-ink">{p.title}</span>
+                      <span className="block text-sm text-ink-soft">{p.body}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+
+          <h2 className="mt-14 text-center font-display text-3xl">
+            {home.promisesHeadingPre} <em className="italic">{home.promisesHeadingItalic}</em>
+          </h2>
         </div>
       </section>
 
-      <section id="como-funciona" className="mx-auto max-w-5xl px-6 py-24">
+      <section id="como-funciona" className="mx-auto max-w-5xl scroll-mt-20 px-6 py-24">
         <div data-reveal>
           <p className="text-center text-xs uppercase tracking-[0.3em] text-clay">
-            Cómo funciona
+            {home.howItWorksLabel}
           </p>
           <h2 className="mx-auto mt-4 max-w-md text-center font-display text-3xl sm:text-4xl">
-            De la idea a vuestra web publicada, en un ratito
+            {home.howItWorksHeading}
           </h2>
         </div>
         <div className="mt-16 grid gap-10 sm:grid-cols-3">
-          {steps.map((step, i) => (
-            <div key={step.n} data-reveal style={{ transitionDelay: `${i * 120}ms` }}>
-              <span className="font-display text-4xl text-clay">{step.n}</span>
+          {home.steps.map((step, i) => (
+            <div key={step.title} data-reveal style={{ transitionDelay: `${i * 120}ms` }}>
+              <div className="h-32 rounded-xl border border-line bg-paper-raised p-3">
+                {i === 0 ? <EditorMockup /> : i === 1 ? <PublishMockup cta={home.mockupPublishCta} /> : <ResponsesMockup />}
+              </div>
+              <span className="mt-5 block font-display text-4xl text-clay">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="mt-4 font-display text-xl">{step.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft">
                 {step.body}
@@ -140,10 +224,10 @@ export default function HomePage() {
       <section className="border-t border-line bg-paper-raised">
         <div className="px-6 py-24" data-reveal>
           <p className="text-center text-xs uppercase tracking-[0.3em] text-clay">
-            Parejas reales
+            {home.testimonialsLabel}
           </p>
           <h2 className="mx-auto mt-4 max-w-md text-center font-display text-3xl sm:text-4xl">
-            Lo que dicen las parejas que ya se casaron
+            {home.testimonialsHeading}
           </h2>
           <div className="mt-16">
             <TestimonialsCarousel />
@@ -151,20 +235,53 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-t border-line bg-ink">
+      <section className="relative overflow-hidden border-t border-line bg-ink">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          {ctaScatter.map((s, i) => (
+            <SparkleIcon
+              key={i}
+              className="absolute text-clay"
+              style={{
+                top: s.top,
+                left: s.left,
+                width: s.size,
+                height: s.size,
+                opacity: s.opacity,
+                transform: `rotate(${s.rotate})`,
+                animationDelay: `${i * 0.35}s`,
+              }}
+            />
+          ))}
+        </div>
         <div
           data-reveal
-          className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-20 text-center text-paper"
+          className="relative mx-auto flex max-w-3xl flex-col items-center gap-8 px-6 py-28 text-center text-paper sm:py-32"
         >
-          <h2 className="max-w-lg text-balance font-display text-3xl sm:text-4xl">
-            Vuestra boda merece una web tan bonita como el día
+          <h2 className="text-balance font-display text-4xl leading-[1.1] sm:text-6xl">
+            {home.ctaFinalPre} <em className="italic text-clay">{home.ctaFinalItalic}</em>{" "}
+            {home.ctaFinalPost}
           </h2>
           <Link
             href="/plantillas"
-            className="rounded-full bg-paper px-7 py-3.5 text-sm font-medium text-ink transition-opacity hover:opacity-90"
+            className="rounded-full bg-paper px-9 py-4 text-base font-medium text-ink transition-opacity hover:opacity-90"
           >
-            Explorar plantillas
+            {home.ctaFinalButton}
           </Link>
+        </div>
+      </section>
+
+      <section id="contacto" className="scroll-mt-20 border-t border-line">
+        <div className="mx-auto max-w-2xl px-6 py-24">
+          <div data-reveal>
+            <p className="text-xs uppercase tracking-[0.3em] text-clay">{home.contactLabel}</p>
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl">
+              {home.contactHeading}
+            </h2>
+            <p className="mt-4 text-ink-soft">{home.contactSub}</p>
+          </div>
+          <div data-reveal style={{ transitionDelay: "100ms" }}>
+            <ContactForm />
+          </div>
         </div>
       </section>
     </>

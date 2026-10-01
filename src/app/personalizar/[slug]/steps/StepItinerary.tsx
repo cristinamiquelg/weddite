@@ -1,5 +1,14 @@
-import type { WeddingData, WeddingPhase, WeddingPlace } from "@/lib/wedding-types";
-import { TextInput } from "@/components/customize/fields";
+import type { PlaceIllustration, WeddingData, WeddingPhase, WeddingPlace } from "@/lib/wedding-types";
+import { Select, TextInput } from "@/components/customize/fields";
+
+const illustrationIds: PlaceIllustration[] = ["casa", "catedral", "cortijo", "restaurante"];
+const PHASE_NAME_MAX_LENGTH = 40;
+const PHASE_WHEN_MAX_LENGTH = 40;
+const PLACE_NAME_MAX_LENGTH = 50;
+const PLACE_ADDRESS_MAX_LENGTH = 80;
+const MAPS_URL_MAX_LENGTH = 300;
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
 export default function StepItinerary({
   data,
@@ -8,6 +17,9 @@ export default function StepItinerary({
   data: WeddingData;
   onChange: (patch: Partial<WeddingData>) => void;
 }) {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).wizard;
+
   function updatePhase(index: number, patch: Partial<WeddingPhase>) {
     onChange({
       phases: data.phases.map((p, i) => (i === index ? { ...p, ...patch } : p)),
@@ -46,23 +58,26 @@ export default function StepItinerary({
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-sm text-ink-soft">
-        Organizad el día en fases (pre-boda, boda, post-boda...) y añadid los
-        lugares de cada una.
-      </p>
+      <p className="text-sm text-ink-soft">{dict.stepItinerary.intro}</p>
       {data.phases.map((phase, pi) => (
-        <div key={pi} className="flex flex-col gap-4 rounded-lg border border-line p-4">
+        <div
+          key={pi}
+          data-scroll-section={`fase-${pi}`}
+          className="flex flex-col gap-4 rounded-lg border border-line p-4"
+        >
           <div className="flex items-center justify-between gap-3">
             <div className="grid flex-1 gap-3 sm:grid-cols-2">
               <TextInput
                 value={phase.name}
                 onChange={(e) => updatePhase(pi, { name: e.target.value })}
-                placeholder="La boda"
+                placeholder={dict.stepItinerary.phaseNamePlaceholder}
+                maxLength={PHASE_NAME_MAX_LENGTH}
               />
               <TextInput
                 value={phase.when}
                 onChange={(e) => updatePhase(pi, { when: e.target.value })}
-                placeholder="Sábado 11, 18:00"
+                placeholder={dict.stepItinerary.phaseWhenPlaceholder}
+                maxLength={PHASE_WHEN_MAX_LENGTH}
               />
             </div>
             <button
@@ -70,29 +85,60 @@ export default function StepItinerary({
               onClick={() => removePhase(pi)}
               className="rounded-lg border border-line px-3 py-2 text-sm text-ink-soft hover:border-clay hover:text-clay"
             >
-              Quitar fase
+              {dict.stepItinerary.removePhase}
             </button>
           </div>
 
           <div className="flex flex-col gap-3 pl-4">
             {phase.places.map((place, li) => (
-              <div key={li} className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+              <div key={li} className="flex flex-wrap gap-3 rounded-lg border border-line/60 p-3">
+                <Select
+                  value={place.illustration ?? ""}
+                  onChange={(e) =>
+                    updatePlace(pi, li, {
+                      illustration: e.target.value ? (e.target.value as PlaceIllustration) : undefined,
+                    })
+                  }
+                  aria-label={dict.stepItinerary.placeIllustrationAriaLabel}
+                  className="min-w-[140px]"
+                >
+                  <option value="">{dict.stepItinerary.placeIllustrationAriaLabel}</option>
+                  {illustrationIds.map((id) => (
+                    <option key={id} value={id}>
+                      {dict.stepItinerary.illustrationLabels[id]}
+                    </option>
+                  ))}
+                </Select>
                 <TextInput
                   value={place.name}
                   onChange={(e) => updatePlace(pi, li, { name: e.target.value })}
-                  placeholder="Ermita de Sant Baldiri"
+                  placeholder={dict.stepItinerary.placeNamePlaceholder}
+                  className="min-w-[140px] flex-1"
+                  maxLength={PLACE_NAME_MAX_LENGTH}
                 />
                 <TextInput
                   value={place.address}
                   onChange={(e) => updatePlace(pi, li, { address: e.target.value })}
-                  placeholder="Dirección"
+                  placeholder={dict.stepItinerary.placeAddressPlaceholder}
+                  className="min-w-[140px] flex-1"
+                  maxLength={PLACE_ADDRESS_MAX_LENGTH}
+                />
+                <TextInput
+                  value={place.mapsUrl ?? ""}
+                  onChange={(e) => updatePlace(pi, li, { mapsUrl: e.target.value })}
+                  placeholder={dict.stepItinerary.placeMapsUrlPlaceholder}
+                  aria-label={dict.stepItinerary.placeMapsUrlAriaLabel}
+                  type="url"
+                  inputMode="url"
+                  className="min-w-[200px] flex-[2]"
+                  maxLength={MAPS_URL_MAX_LENGTH}
                 />
                 <button
                   type="button"
                   onClick={() => removePlace(pi, li)}
-                  className="rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
+                  className="shrink-0 rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
                 >
-                  Quitar
+                  {dict.remove}
                 </button>
               </div>
             ))}
@@ -101,7 +147,7 @@ export default function StepItinerary({
               onClick={() => addPlace(pi)}
               className="self-start text-sm font-medium text-clay hover:underline"
             >
-              + Añadir lugar
+              {dict.stepItinerary.addPlace}
             </button>
           </div>
         </div>
@@ -111,7 +157,7 @@ export default function StepItinerary({
         onClick={addPhase}
         className="self-start text-sm font-medium text-clay hover:underline"
       >
-        + Añadir fase
+        {dict.stepItinerary.addPhase}
       </button>
     </div>
   );

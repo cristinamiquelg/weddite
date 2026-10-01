@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useRef, useState } from "react";
+import { getDict, type Locale } from "@/lib/i18n";
 import styles from "./ribera.module.css";
+
+type YesNo = "si" | "no" | null;
 
 function CheckIcon() {
   return (
@@ -19,69 +22,217 @@ function CrossIcon() {
   );
 }
 
-// Left/positive segment shows its check only once chosen; the negative
-// segment keeps its ⊗ mark at all times — matches the original design.
-function Seg({
+// Yes/no question rendered as a segmented control. Semantically it's a
+// radio group with a visible question, so screen readers announce the
+// question and the selected state, and arrow keys move between options.
+function YesNoQuestion({
+  question,
   value,
   onChange,
   yesLabel,
   noLabel,
+  error,
+  errorText,
 }: {
-  value: "si" | "no" | null;
+  question: string;
+  value: YesNo;
   onChange: (v: "si" | "no") => void;
   yesLabel: string;
   noLabel: string;
+  error?: boolean;
+  errorText?: string;
 }) {
+  const id = useId();
+  const options: { v: "si" | "no"; label: string; cls: string }[] = [
+    { v: "si", label: yesLabel, cls: styles.segOptFirst },
+    { v: "no", label: noLabel, cls: styles.segOptLast },
+  ];
+
+  function onKeyDown(e: React.KeyboardEvent<HTMLButtonElement>) {
+    if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+      e.preventDefault();
+      const next = value === "si" ? "no" : "si";
+      onChange(next);
+      const group = e.currentTarget.parentElement;
+      group?.querySelector<HTMLButtonElement>(`[data-v="${next}"]`)?.focus();
+    }
+  }
+
   return (
-    <div className={styles.seg}>
-      <button
-        type="button"
-        onClick={() => onChange("si")}
-        className={`${styles.segOptFirst} ${value === "si" ? styles.segOptActive : ""}`}
+    <div className={styles.question}>
+      <p id={`${id}-q`} className={styles.questionLabel}>
+        {question}
+      </p>
+      <div
+        role="radiogroup"
+        aria-labelledby={`${id}-q`}
+        aria-invalid={error || undefined}
+        aria-describedby={error ? `${id}-err` : undefined}
+        className={`${styles.seg} ${error ? styles.segError : ""}`}
+        data-invalid={error ? "true" : undefined}
       >
-        {value === "si" ? <CheckIcon /> : null}
-        {yesLabel}
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange("no")}
-        className={`${styles.segOptLast} ${value === "no" ? styles.segOptActive : ""}`}
-      >
-        <CrossIcon />
-        {noLabel}
-      </button>
+        {options.map((o) => {
+          const checked = value === o.v;
+          return (
+            <button
+              key={o.v}
+              type="button"
+              role="radio"
+              aria-checked={checked}
+              tabIndex={checked || (value === null && o.v === "si") ? 0 : -1}
+              data-v={o.v}
+              onClick={() => onChange(o.v)}
+              onKeyDown={onKeyDown}
+              className={`${o.cls} ${checked ? styles.segOptActive : ""}`}
+            >
+              {o.v === "si" ? checked ? <CheckIcon /> : null : <CrossIcon />}
+              {o.label}
+            </button>
+          );
+        })}
+      </div>
+      {error ? (
+        <p id={`${id}-err`} className={styles.fieldError}>
+          {errorText}
+        </p>
+      ) : null}
     </div>
   );
 }
 
-function TextField({ label, type = "text" }: { label: string; type?: string }) {
+function TextField({
+  label,
+  name,
+  value,
+  onChange,
+  type = "text",
+  autoComplete,
+  required,
+  optionalText,
+  error,
+  invalid,
+  describedBy,
+  inputMode,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  autoComplete?: string;
+  required?: boolean;
+  optionalText?: string;
+  error?: string;
+  /** Marks the field invalid when the message lives elsewhere (shared error). */
+  invalid?: boolean;
+  describedBy?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+}) {
+  const id = useId();
   return (
-    <label className={styles.field}>
-      <input type={type} placeholder=" " />
-      <span className={styles.fieldLabel}>{label}</span>
-    </label>
+    <div className={styles.field}>
+      <label htmlFor={id} className={styles.fieldLabel}>
+        {label}
+        {required ? <span aria-hidden="true"> *</span> : null}
+        {optionalText ? <span className={styles.fieldOptional}> ({optionalText})</span> : null}
+      </label>
+      <input
+        id={id}
+        name={name}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
+        required={required}
+        aria-invalid={error || invalid ? true : undefined}
+        aria-describedby={error ? `${id}-err` : describedBy}
+        data-invalid={error || invalid ? "true" : undefined}
+      />
+      {error ? (
+        <p id={`${id}-err`} className={styles.fieldError}>
+          {error}
+        </p>
+      ) : null}
+    </div>
   );
 }
 
-function StackField({ label }: { label: string }) {
-  return (
-    <label className={styles.fieldStack}>
-      <input type="text" placeholder=" " />
-      <span className={styles.fieldStackLabel}>{label}</span>
-    </label>
-  );
+type Companion = { id: number; firstName: string; lastName: string; kid: boolean; bus: YesNo; dietary: string };
+type Errors = Record<string, string>;
+
+// The form is a full-page, one-question-per-screen flow. Steps are derived
+// from the current answers every render (not stored), so branching — e.g.
+// skipping the bus/companion steps when the guest isn't attending — falls
+// out naturally instead of needing manual step-list bookkeeping.
+type Step =
+  | { kind: "contact" }
+  | { kind: "attending" }
+  | { kind: "bus" }
+  | { kind: "dietary" }
+  | { kind: "companionQuestion" }
+  | { kind: "companionCount" }
+  | { kind: "companionDetail"; companion: Companion; index: number };
+
+// The flow reads as 3 named sections rather than a flat "step X of Y":
+// contact info, then attendance (+ bus/dietary), then guests. A step
+// belongs to exactly one section, in the same order the sections are
+// shown, so the current step's section index also tells us which
+// sections are already done vs. still upcoming.
+function stepSection(step: Step): 0 | 1 | 2 {
+  switch (step.kind) {
+    case "contact":
+      return 0;
+    case "attending":
+    case "bus":
+    case "dietary":
+      return 1;
+    default:
+      return 2;
+  }
 }
 
-type Companion = { id: number; bus: "si" | "no" | null };
+function stepErrorKeys(step: Step): string[] {
+  switch (step.kind) {
+    case "contact":
+      return ["firstName", "lastName", "contact", "email"];
+    case "attending":
+      return ["asiste"];
+    case "companionDetail":
+      return [`c${step.companion.id}-firstName`];
+    default:
+      return [];
+  }
+}
 
-export default function RiberaRsvpForm() {
-  const [asiste, setAsiste] = useState<"si" | "no" | null>(null);
-  const [bus, setBus] = useState<"si" | "no" | null>(null);
-  const [acompanante, setAcompanante] = useState<"si" | "no" | null>(null);
-  const [count, setCount] = useState(1);
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export default function RiberaRsvpForm({ locale, showBus = true }: { locale?: Locale; showBus?: boolean }) {
+  const dict = getDict(locale).ribera.form;
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [asiste, setAsiste] = useState<YesNo>(null);
+  const [bus, setBus] = useState<YesNo>(null);
+  const [dietary, setDietary] = useState("");
+  const [acompanante, setAcompanante] = useState<YesNo>(null);
   const [companions, setCompanions] = useState<Companion[]>([]);
   const [nextId, setNextId] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+  // Errors for the current step only show after that step's first failed
+  // "Siguiente" attempt, then recompute live so the message disappears as
+  // soon as the guest fixes the field.
+  const [stepTried, setStepTried] = useState(false);
+
+  const attending = asiste === "si";
+
+  function newCompanion(id: number): Companion {
+    return { id, firstName: "", lastName: "", kid: false, bus: null, dietary: "" };
+  }
 
   function setBringsCompanions(v: "si" | "no") {
     setAcompanante(v);
@@ -89,129 +240,361 @@ export default function RiberaRsvpForm() {
       setCompanions([]);
       return;
     }
-    const next: Companion[] = [];
-    let id = nextId;
-    for (let i = 0; i < count; i++) next.push({ id: id++, bus: null });
-    setNextId(id);
-    setCompanions(next);
+    if (companions.length === 0) {
+      setCompanions([newCompanion(nextId)]);
+      setNextId(nextId + 1);
+    }
   }
 
   function setCompanionCount(n: number) {
-    setCount(n);
-    setCompanions((prev) => {
-      if (n <= prev.length) return prev.slice(0, n);
-      const extra: Companion[] = [];
-      let id = nextId;
-      for (let i = prev.length; i < n; i++) extra.push({ id: id++, bus: null });
-      setNextId(id);
-      return [...prev, ...extra];
-    });
+    if (n <= companions.length) {
+      setCompanions(companions.slice(0, n));
+      return;
+    }
+    const extra: Companion[] = [];
+    let id = nextId;
+    for (let i = companions.length; i < n; i++) extra.push(newCompanion(id++));
+    setNextId(id);
+    setCompanions([...companions, ...extra]);
+  }
+
+  function updateCompanion(id: number, patch: Partial<Companion>) {
+    setCompanions((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)));
   }
 
   function removeCompanion(id: number) {
-    setCompanions((prev) => {
-      const next = prev.filter((c) => c.id !== id);
-      setCount(Math.max(1, next.length));
-      return next;
-    });
+    const next = companions.filter((c) => c.id !== id);
+    setCompanions(next);
+    if (next.length === 0) setAcompanante("no");
+  }
+
+  function validate(): Errors {
+    const e: Errors = {};
+    if (!firstName.trim()) e.firstName = dict.errRequired;
+    if (!lastName.trim()) e.lastName = dict.errRequired;
+    if (!phone.trim() && !email.trim()) e.contact = dict.errContact;
+    if (email.trim() && !EMAIL_RE.test(email.trim())) e.email = dict.errEmail;
+    if (!asiste) e.asiste = dict.errRequired;
+    if (attending) {
+      companions.forEach((c) => {
+        if (!c.firstName.trim()) e[`c${c.id}-firstName`] = dict.errRequired;
+      });
+    }
+    return e;
   }
 
   if (submitted) {
+    const total = 1 + companions.length;
     return (
-      <div className={styles.formThanks}>
-        <p className={styles.formThanksText}>¡Gracias! Hemos recibido tu confirmación. 🤍</p>
+      <div className={styles.formThanks} role="status">
+        <p className={styles.formThanksText}>{dict.thanks}</p>
+        <p className={styles.formThanksSummary}>
+          {attending ? dict.summaryAttending.replace("{n}", String(total)) : dict.summaryNotAttending}
+        </p>
+        <button type="button" className={styles.btnOutline} onClick={() => setSubmitted(false)}>
+          {dict.edit}
+        </button>
       </div>
     );
   }
 
+  const steps: Step[] = [{ kind: "contact" }, { kind: "attending" }];
+  if (attending) {
+    if (showBus) steps.push({ kind: "bus" });
+    steps.push({ kind: "dietary" });
+    steps.push({ kind: "companionQuestion" });
+    if (acompanante === "si") {
+      steps.push({ kind: "companionCount" });
+      companions.forEach((c, i) => steps.push({ kind: "companionDetail", companion: c, index: i }));
+    }
+  }
+  const stepIdx = Math.min(stepIndex, steps.length - 1);
+  const currentStep = steps[stepIdx];
+  const isFirstStep = stepIdx === 0;
+  const isLastStep = stepIdx === steps.length - 1;
+
+  const sectionLabels = [dict.legend, dict.sectionAttendance, dict.sectionCompanions];
+  // Only the sections this guest's answers actually pass through (a "no"
+  // to attending drops the last two entirely) — deduped, in order.
+  const presentSections = Array.from(new Set(steps.map(stepSection)));
+  const currentSection = stepSection(currentStep);
+
+  const errors: Errors = stepTried ? validate() : {};
+  const hasStepErrors = stepErrorKeys(currentStep).some((k) => errors[k]);
+
+  function goBack() {
+    setStepIndex(Math.max(0, stepIdx - 1));
+    setStepTried(false);
+  }
+
+  function onSubmit(ev: React.FormEvent<HTMLFormElement>) {
+    ev.preventDefault();
+    const e = validate();
+    const stepHasError = stepErrorKeys(currentStep).some((k) => e[k]);
+    if (stepHasError) {
+      setStepTried(true);
+      // Move focus to the invalid control so keyboard and screen-reader
+      // users land right where the problem is.
+      requestAnimationFrame(() => {
+        formRef.current?.querySelector<HTMLElement>('[data-invalid="true"]')?.focus();
+      });
+      return;
+    }
+    if (isLastStep) {
+      // The template has no backend yet: the real site should POST the
+      // payload here and only switch to the thanks state on success.
+      setSubmitted(true);
+      return;
+    }
+    setStepIndex(stepIdx + 1);
+    setStepTried(false);
+  }
+
   return (
-    <form
-      className={styles.form}
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSubmitted(true);
-      }}
-    >
-      <p className={styles.formLegend}>Tu información</p>
-
-      <div className={styles.formRow}>
-        <TextField label="Nombre" />
-        <TextField label="Apellidos" />
+    <form ref={formRef} className={styles.form} onSubmit={onSubmit} noValidate>
+      <div className={styles.stepSections} role="list">
+        {presentSections.map((section, i) => {
+          const done = section < currentSection;
+          const active = section === currentSection;
+          return (
+            <div
+              key={section}
+              role="listitem"
+              aria-current={active ? "step" : undefined}
+              className={`${styles.stepSection} ${done ? styles.stepSection_done : ""} ${active ? styles.stepSection_active : ""}`}
+            >
+              <div className={styles.stepSectionRow} aria-hidden="true">
+                <span className={styles.stepSectionDot}>{done ? <CheckIcon /> : i + 1}</span>
+              </div>
+              <span className={styles.stepSectionLabel}>{sectionLabels[section]}</span>
+            </div>
+          );
+        })}
       </div>
-      <div className={styles.formRow}>
-        <TextField label="Teléfono" type="tel" />
-        <TextField label="E-mail" type="email" />
-      </div>
 
-      <Seg value={asiste} onChange={setAsiste} yesLabel="Voy a la boda" noLabel="No voy a la boda" />
-      <Seg value={bus} onChange={setBus} yesLabel="Iré en el bus" noLabel="No necesitaré" />
-
-      <StackField label="¿Tienes alguna intolerancia alimenticia o dieta?" />
-
-      <Seg
-        value={acompanante}
-        onChange={setBringsCompanions}
-        yesLabel="Llevo acompañante"
-        noLabel="Voy solo/a"
-      />
-
-      {acompanante === "si" ? (
-        <div className={styles.companionsControl}>
-          <label className={styles.companionsControlQ} htmlFor="ribera-companions-count">
-            ¿Cuántos acompañantes llevas?
-          </label>
-          <select
-            id="ribera-companions-count"
-            value={count}
-            onChange={(e) => setCompanionCount(Number(e.target.value))}
-            className={styles.select}
-          >
-            {[1, 2, 3, 4, 5].map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
+      <div className={styles.stepProgress}>
+        <p className={styles.stepProgressText}>
+          {dict.stepOf.replace("{n}", String(stepIdx + 1)).replace("{total}", String(steps.length))}
+        </p>
+        <div className={styles.stepProgressBar} aria-hidden="true">
+          <div
+            className={styles.stepProgressFill}
+            style={{ width: `${((stepIdx + 1) / steps.length) * 100}%` }}
+          />
         </div>
+      </div>
+
+      {hasStepErrors ? (
+        <p className={styles.formErrorSummary} role="alert">
+          {dict.errSummary}
+        </p>
       ) : null}
 
-      {companions.map((c, i) => (
-        <div key={c.id} className={styles.companion}>
-          <hr className={styles.divider} />
-          <div className={styles.companionHead}>
-            <p className={styles.formLegend}>Información de acompañante {i + 1}</p>
-            <button
-              type="button"
-              onClick={() => removeCompanion(c.id)}
-              aria-label="Quitar acompañante"
-              className={styles.companionRemove}
-            >
-              <CrossIcon />
-            </button>
-          </div>
-          <div className={styles.formRow}>
-            <TextField label="Nombre" />
-            <TextField label="Apellidos" />
-          </div>
-          <div className={styles.formRow}>
-            <TextField label="Teléfono" type="tel" />
-            <TextField label="E-mail" type="email" />
-          </div>
-          <Seg
-            value={c.bus}
-            onChange={(v) =>
-              setCompanions((prev) => prev.map((p) => (p.id === c.id ? { ...p, bus: v } : p)))
-            }
-            yesLabel="Irá en el bus"
-            noLabel="No necesitará"
-          />
-          <StackField label="¿Tiene alguna intolerancia alimenticia o dieta?" />
-        </div>
-      ))}
+      <div className={styles.stepBody}>
+        {currentStep.kind === "contact" ? (
+          <fieldset className={styles.fieldset}>
+            <legend className={styles.formLegend}>{dict.legend}</legend>
+            <div className={styles.formRow}>
+              <TextField
+                label={dict.firstName}
+                name="firstName"
+                value={firstName}
+                onChange={setFirstName}
+                autoComplete="given-name"
+                required
+                error={errors.firstName}
+              />
+              <TextField
+                label={dict.lastName}
+                name="lastName"
+                value={lastName}
+                onChange={setLastName}
+                autoComplete="family-name"
+                required
+                error={errors.lastName}
+              />
+            </div>
+            <p id="ribera-contact-hint" className={errors.contact ? styles.fieldError : styles.fieldHint}>
+              {errors.contact ?? dict.contactHint}
+            </p>
+            <div className={styles.formRow}>
+              <TextField
+                label={dict.phone}
+                name="phone"
+                type="tel"
+                inputMode="tel"
+                value={phone}
+                onChange={setPhone}
+                autoComplete="tel"
+                invalid={Boolean(errors.contact)}
+                describedBy="ribera-contact-hint"
+              />
+              <TextField
+                label={dict.email}
+                name="email"
+                type="email"
+                inputMode="email"
+                value={email}
+                onChange={setEmail}
+                autoComplete="email"
+                error={errors.email}
+                invalid={Boolean(errors.contact)}
+                describedBy="ribera-contact-hint"
+              />
+            </div>
+          </fieldset>
+        ) : null}
 
-      <button type="submit" className={styles.formSubmit}>
-        Enviar confirmación
-      </button>
+        {currentStep.kind === "attending" ? (
+          <YesNoQuestion
+            question={dict.attendingQ}
+            value={asiste}
+            onChange={setAsiste}
+            yesLabel={dict.attendingYes}
+            noLabel={dict.attendingNo}
+            error={Boolean(errors.asiste)}
+            errorText={errors.asiste}
+          />
+        ) : null}
+
+        {currentStep.kind === "bus" ? (
+          <YesNoQuestion
+            question={dict.busQ}
+            value={bus}
+            onChange={setBus}
+            yesLabel={dict.busYes}
+            noLabel={dict.busNo}
+          />
+        ) : null}
+
+        {currentStep.kind === "dietary" ? (
+          <TextField
+            label={dict.dietary}
+            name="dietary"
+            value={dietary}
+            onChange={setDietary}
+            optionalText={dict.optional}
+          />
+        ) : null}
+
+        {currentStep.kind === "companionQuestion" ? (
+          <YesNoQuestion
+            question={dict.companionQ}
+            value={acompanante}
+            onChange={setBringsCompanions}
+            yesLabel={dict.companionYes}
+            noLabel={dict.companionNo}
+          />
+        ) : null}
+
+        {currentStep.kind === "companionCount" ? (
+          <div className={styles.companionsControl}>
+            <p id="ribera-companions-count-label" className={styles.questionLabel}>
+              {dict.howManyCompanions}
+            </p>
+            <div className={styles.stepper} role="group" aria-labelledby="ribera-companions-count-label">
+              <button
+                type="button"
+                onClick={() => setCompanionCount(companions.length - 1)}
+                disabled={companions.length <= 1}
+                aria-label={dict.decreaseCompanions}
+                className={styles.stepperBtn}
+              >
+                −
+              </button>
+              <span className={styles.stepperValue} aria-live="polite">
+                {companions.length}
+              </span>
+              <button
+                type="button"
+                onClick={() => setCompanionCount(companions.length + 1)}
+                disabled={companions.length >= 6}
+                aria-label={dict.increaseCompanions}
+                className={styles.stepperBtn}
+              >
+                +
+              </button>
+            </div>
+          </div>
+        ) : null}
+
+        {currentStep.kind === "companionDetail" ? (
+          <div
+            role="group"
+            aria-labelledby={`ribera-companion-${currentStep.companion.id}`}
+            className={styles.companion}
+          >
+            <div className={styles.companionHead}>
+              <p id={`ribera-companion-${currentStep.companion.id}`} className={styles.formLegend}>
+                {dict.companionInfo} {currentStep.index + 1}
+              </p>
+              <button
+                type="button"
+                onClick={() => removeCompanion(currentStep.companion.id)}
+                aria-label={`${dict.removeCompanion} ${currentStep.index + 1}`}
+                className={styles.companionRemove}
+              >
+                <CrossIcon />
+              </button>
+            </div>
+            <div className={styles.formRow}>
+              <TextField
+                label={dict.firstName}
+                name={`companion-${currentStep.index}-firstName`}
+                value={currentStep.companion.firstName}
+                onChange={(v) => updateCompanion(currentStep.companion.id, { firstName: v })}
+                required
+                error={errors[`c${currentStep.companion.id}-firstName`]}
+              />
+              <TextField
+                label={dict.lastName}
+                name={`companion-${currentStep.index}-lastName`}
+                value={currentStep.companion.lastName}
+                onChange={(v) => updateCompanion(currentStep.companion.id, { lastName: v })}
+              />
+            </div>
+            <label className={styles.checkbox}>
+              <input
+                type="checkbox"
+                checked={currentStep.companion.kid}
+                onChange={(e) => updateCompanion(currentStep.companion.id, { kid: e.target.checked })}
+              />
+              <span>{dict.kidsMenu}</span>
+            </label>
+            {showBus ? (
+              <YesNoQuestion
+                question={dict.busQ}
+                value={currentStep.companion.bus}
+                onChange={(v) => updateCompanion(currentStep.companion.id, { bus: v })}
+                yesLabel={dict.busYes}
+                noLabel={dict.busNo}
+              />
+            ) : null}
+            <TextField
+              label={dict.dietary}
+              name={`companion-${currentStep.index}-dietary`}
+              value={currentStep.companion.dietary}
+              onChange={(v) => updateCompanion(currentStep.companion.id, { dietary: v })}
+              optionalText={dict.optional}
+            />
+          </div>
+        ) : null}
+      </div>
+
+      <div className={styles.stepNav}>
+        <button
+          type="button"
+          onClick={goBack}
+          disabled={isFirstStep}
+          tabIndex={isFirstStep ? -1 : 0}
+          className={`${styles.btnOutline} ${isFirstStep ? styles.stepNavBackHidden : ""}`}
+        >
+          {dict.back}
+        </button>
+        <button type="submit" className={styles.formSubmit}>
+          {isLastStep ? dict.submit : dict.next}
+        </button>
+      </div>
     </form>
   );
 }

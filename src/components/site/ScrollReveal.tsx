@@ -28,7 +28,11 @@ export default function ScrollReveal() {
           }
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" },
+      // threshold near 0 so this fires as soon as an element starts
+      // entering the viewport — a percentage-of-target threshold (e.g. 0.12)
+      // breaks for very tall sections, which need a large absolute scroll
+      // distance before that fraction of their own height is visible.
+      { threshold: 0.01, rootMargin: "0px 0px -5% 0px" },
     );
 
     function observeNew(root: ParentNode) {

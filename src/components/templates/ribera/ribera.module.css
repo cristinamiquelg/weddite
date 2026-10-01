@@ -17,27 +17,38 @@
   --r-navy: #0e1453;
   --r-navy-2: #2d3588;
   --r-navy-deep: #10184f;
-  --r-coral: #dd3e3e;
+  --r-coral: #dd3e3e;          /* decorative: borders, logo (≥24px) */
+  --r-coral-text: #b92f2f;     /* coral for small text: 5.1:1 on cream (AA) */
 
-  --r-serif: "Libre Baskerville", Georgia, "Times New Roman", serif;
-  --r-gothic: "Science Gothic", "Oswald", "Arial Narrow", sans-serif;
+  /* next/font exposes hashed family names through these variables; the
+     literal "Libre Baskerville" name never matched, so the template was
+     silently rendering in Georgia. */
+  --r-serif: var(--font-libre-baskerville), "Libre Baskerville", Georgia, "Times New Roman", serif;
+  --r-gothic: var(--font-science-gothic), var(--font-oswald), "Arial Narrow", sans-serif;
+
+  --r-header-h: 84px;          /* sticky header height, used for anchor offsets */
 
   --r-stripe-navy: repeating-linear-gradient(
     90deg, rgba(14, 20, 83, 0.3) 0 1px, transparent 1px 12px);
   --r-stripe-light: repeating-linear-gradient(
     90deg, rgba(239, 236, 227, 0.1) 0 1px, transparent 1px 12px);
 
-  /* ---- type scale (compact desktop base) ---- */
-  --r-fs-display: 22px;
+  /* ---- type scale ----
+     Body copy sits in the 14–16px range and small/label text at 12px —
+     the desktop default (this un-prefixed tier) used to be the largest
+     size in the scale, which read as oversized; narrower breakpoints
+     below only rescale the display/heading sizes now, not body text. */
+  --r-fs-display: 26px;
+  --r-fs-place: 18px;
   --r-fs-h2: 20px;
   --r-fs-script: 18px;
-  --r-fs-eyebrow: 14px;
-  --r-fs-lead: 14px;
-  --r-fs-phase: 16px;
-  --r-fs-num: 42px;
-  --r-fs-body: 14px;
-  --r-fs-small: 12px;
-  --r-fs-micro: 10px;
+  --r-fs-eyebrow: 13px;
+  --r-fs-lead: 16px;
+  --r-fs-phase: 15px;
+  --r-fs-num: 40px;
+  --r-fs-body: 16px;
+  --r-fs-small: 14px;
+  --r-fs-micro: 12px;
 
   --r-track-display: 0.16em;
 
@@ -59,16 +70,61 @@
   --r-maxw: 1080px;
   --r-w-hero-panel: 820px;
   --r-w-gift: 700px;
-  --r-w-rsvp: 600px;
+  --r-w-rsvp: 720px;
 
   background: var(--r-cream);
   color: var(--r-navy);
   font-family: var(--r-serif);
   font-size: var(--r-fs-body);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .root img { max-width: 100%; display: block; }
+.root section[id] { scroll-margin-top: var(--r-header-h); }
+
+/* The global ::selection rule in globals.css paints Wedite's own clay
+   brand color — that's the wizard/marketing site's palette, not this
+   template's, so it must not leak into a guest-facing Ribera page. */
+.root ::selection {
+  background: var(--r-navy);
+  color: var(--r-cream);
+}
+
+/* Visible, consistent focus ring for keyboard users (WCAG 2.4.7 / 2.4.13).
+   Navy, not coral — coral reads as an error state (see the actual
+   aria-invalid style below), and a focus ring isn't one. */
+.root :is(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--r-navy);
+  outline-offset: 3px;
+}
+
+/* Custom scrollbar for pages that render this template (e.g. the
+   /preview/ribera document loaded inside an <iframe>): the scrolling
+   element is html/body, outside .root, so custom properties can't
+   cascade up — colors are repeated here instead of read from .root. */
+:global(html):has(.root),
+:global(body):has(.root) {
+  scrollbar-width: thin;
+  scrollbar-color: #2d3588 #efece3;
+}
+:global(html):has(.root)::-webkit-scrollbar,
+:global(body):has(.root)::-webkit-scrollbar {
+  width: 12px;
+}
+:global(html):has(.root)::-webkit-scrollbar-track,
+:global(body):has(.root)::-webkit-scrollbar-track {
+  background: #efece3;
+}
+:global(html):has(.root)::-webkit-scrollbar-thumb,
+:global(body):has(.root)::-webkit-scrollbar-thumb {
+  background-color: #2d3588;
+  border-radius: 8px;
+  border: 3px solid #efece3;
+}
+:global(html):has(.root)::-webkit-scrollbar-thumb:hover,
+:global(body):has(.root)::-webkit-scrollbar-thumb:hover {
+  background-color: #0e1453;
+}
 
 /* ---------- shared type helpers ---------- */
 .eyebrow {
@@ -103,9 +159,11 @@
   font-family: var(--r-serif);
   font-size: var(--r-fs-body);
   text-decoration: none;
-  padding: 0.9em 1.4em;
+  min-height: 48px;
+  padding: 0.75em 1.4em;
   border: 1px solid var(--r-navy);
   cursor: pointer;
+  text-align: center;
   transition: background-color 0.18s ease, color 0.18s ease;
 }
 .btnSolid { composes: btn; background: var(--r-navy); color: var(--r-cream); }
@@ -118,32 +176,128 @@
    ============================================================ */
 .header {
   display: grid;
+  /* Equal-fraction side columns (not auto) so the logo's middle column is
+     centered on the header's true midpoint — the hamburger button and the
+     RSVP button have different widths, and "auto 1fr auto" would center
+     the logo within the space left over between them instead. */
   grid-template-columns: 1fr auto 1fr;
+  grid-template-areas: "menu logo cta";
   align-items: center;
-  gap: 24px;
-  padding: 28px var(--r-sp-header-x);
+  gap: 4px 16px;
+  padding: 8px var(--r-sp-header-x);
   background: var(--r-cream);
+  border-bottom: 1px solid rgba(14, 20, 83, 0.12);
   position: sticky;
   top: 0;
   z-index: 10;
 }
-.nav { display: none; flex-wrap: wrap; gap: 28px; }
-.nav a { color: var(--r-navy); text-decoration: none; font-size: var(--r-fs-body); }
-.nav a:hover { text-decoration: underline; }
+/* Below 1200px, the full nav is replaced by the hamburger + mobileMenu
+   below — a scrollable nav row ate too much of a phone screen while
+   sticky, and wrapped onto 2–3 lines otherwise. Mobile keeps the same
+   3-zone layout as desktop (left / center / right), just swapping the
+   nav links for the hamburger button. */
+.nav { display: none; }
 .logo {
-  justify-self: start;
+  grid-area: logo;
+  justify-self: center;
   font-size: calc(var(--r-fs-display) + 6px);
   color: var(--r-coral);
   text-decoration: none;
   letter-spacing: 0.02em;
 }
-.navCta { justify-self: end; padding: 0.7em 1em; font-size: var(--r-fs-small); }
+.headerActions { grid-area: cta; justify-self: end; display: flex; align-items: center; gap: 10px; }
+.headerLocaleSwitch { display: none; }
+.navCta {
+  min-height: 44px;
+  padding: 0.5em 1.1em;
+  font-size: var(--r-fs-small);
+}
+.menuBtn {
+  grid-area: menu;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--r-navy);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--r-navy);
+  cursor: pointer;
+  flex: none;
+}
+.menuIcon { width: 18px; height: 18px; }
+
+/* Positioned against .header (position: sticky is a valid containing
+   block for absolute descendants), so it opens as a full-viewport panel
+   right below the header row without needing to duplicate the header or
+   juggle z-index against the hamburger button. */
+.mobileMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px var(--r-sp-header-x);
+  background: var(--r-cream);
+  border-top: 1px solid rgba(14, 20, 83, 0.12);
+  overflow-y: auto;
+}
+.mobileNav { display: flex; flex-direction: column; }
+.mobileNav a {
+  color: var(--r-navy);
+  text-decoration: none;
+  font-size: var(--r-fs-lead);
+  padding: 14px 4px;          /* 44px+ tap target */
+  border-bottom: 1px solid rgba(14, 20, 83, 0.08);
+}
+.mobileNav a:last-child { border-bottom: 0; }
+.mobileNav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.mobileMenu .localeSwitch { align-self: flex-start; }
+
+/* Straight-line style: plain text separated by a hairline divider, active
+   language marked with an underline rather than a filled pill. */
+.localeSwitch { display: inline-flex; align-items: center; }
+.localeBtn {
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--r-navy);
+  font-family: var(--r-gothic);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--r-fs-micro);
+  padding: 4px 9px;
+  opacity: 0.55;
+  cursor: pointer;
+}
+.localeBtn:not(:first-child) { border-left: 1px solid var(--r-navy); }
+.localeBtn:hover { opacity: 0.85; }
+.localeBtnActive { opacity: 1; border-bottom-color: var(--r-navy); }
 
 @media (min-width: 1200px) {
-  .header { gap: 24px; }
-  .nav { display: flex; }
-  .logo { justify-self: center; }
-  .navCta { padding: 0.9em 1.4em; font-size: var(--r-fs-body); }
+  .header {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: "nav logo cta";
+    gap: 24px;
+    padding: 14px var(--r-sp-header-x);
+  }
+  .nav {
+    grid-area: nav;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav a { color: var(--r-navy); text-decoration: none; font-size: var(--r-fs-small); padding: 8px 0; }
+  .nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .headerLocaleSwitch { display: inline-flex; }
+  .navCta { padding: 0.6em 1.3em; font-size: var(--r-fs-small); min-height: 40px; }
+  .menuBtn, .mobileMenu { display: none; }
 }
 
 /* ============================================================
@@ -172,10 +326,38 @@
   text-transform: uppercase;
   letter-spacing: var(--r-track-display);
   font-size: var(--r-fs-display);
+  line-height: 1.25;
+  text-wrap: balance;
   margin: 0;
 }
-.heroDate { display: flex; align-items: center; justify-content: center; gap: clamp(16px, 3vw, 32px); }
+.heroPlace {
+  composes: heroNames;
+  font-size: var(--r-fs-place);
+}
+.heroHashtag {
+  font-family: var(--r-gothic);
+  color: var(--r-coral-text);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: var(--r-fs-small);
+  margin: -8px 0 0;
+}
+.heroDate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 32px);
+  margin: 0;
+}
+.heroDatePart {
+  font-family: var(--r-gothic);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: calc(var(--r-fs-eyebrow) + 3px);
+  font-weight: 500;
+}
 .heroBouquet { width: var(--r-illus-bouquet); height: auto; }
+.heroCta { padding-block: 0.75em; }
 
 /* ============================================================
    Countdown
@@ -195,7 +377,14 @@
   gap: 40px;
   padding: 0 clamp(16px, 6vw, 96px);
 }
-.countdownTitle { font-style: italic; font-size: var(--r-fs-h2); margin: 0; }
+.countdownTitle { font-style: italic; font-weight: 400; font-size: var(--r-fs-h2); margin: 0; }
+.countdownMessage {
+  margin: 10px 0 0;
+  max-width: 380px;
+  font-size: var(--r-fs-body);
+  line-height: 1.5;
+  opacity: 0.9;
+}
 .countdownUnits { display: flex; gap: clamp(24px, 4vw, 56px); }
 .unit { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .unitNum { font-family: var(--r-serif); font-size: var(--r-fs-num); line-height: 1; font-variant-numeric: tabular-nums; }
@@ -204,11 +393,10 @@
   text-transform: uppercase;
   letter-spacing: 0.13em;
   font-size: var(--r-fs-micro);
-  opacity: 0.85;
 }
 
 @media (max-width: 899px) {
-  .countdownInner { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .countdownInner { flex-direction: column; align-items: center; text-align: center; gap: 24px; }
 }
 
 /* ============================================================
@@ -228,6 +416,105 @@
   gap: var(--r-sp-stack);
 }
 
+/* ---------- Vuestra historia ---------- */
+.storyRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+}
+.storyTextCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+/* Full-width, edge-to-edge photo strip, left-aligned, proportions intact —
+   no crop box, no rounding, no border. The navy tone comes from a blend
+   overlay rather than a filter hue-rotate guess, so it lands on the exact
+   couple-selected hex instead of an approximation. */
+.storyImageWrap {
+  position: relative;
+  flex: none;
+  width: 100%;
+  overflow: hidden;
+}
+.storyImageWrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--r-navy);
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+.storyImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1);
+}
+/* The generated coral line drawing (transparent background): shown as-is,
+   no duotone, and capped in width — a portrait drawing stretched to the
+   full card width would be enormous. */
+.root .storyIllustration {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin-inline: auto;
+}
+.storyText {
+  max-width: 640px;
+  text-align: center;
+  font-size: var(--r-fs-lead);
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-line;
+}
+.storyHashtag {
+  font-family: var(--r-gothic);
+  color: var(--r-coral-text);
+  letter-spacing: 0.02em;
+  font-size: var(--r-fs-small);
+  margin: 0;
+}
+
+/* ---------- Contacto ---------- */
+.contactSection {
+  background: var(--r-cream);
+  padding: var(--r-sp-section) 24px;
+  display: flex;
+  justify-content: center;
+}
+.contactInner {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+.contactPeople {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+@media (min-width: 600px) {
+  .contactPeople { flex-direction: row; justify-content: center; gap: 48px; flex-wrap: wrap; }
+}
+.contactPerson { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.contactLinks { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; }
+.contactLink {
+  color: var(--r-coral-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: var(--r-fs-small);
+}
+.contactLink:hover { color: var(--r-navy); }
+
 /* ---------- Itinerario ---------- */
 .itinerary {
   width: 100%;
@@ -241,7 +528,10 @@
 .phaseWhen { font-family: var(--r-gothic); letter-spacing: 0.1em; font-size: var(--r-fs-body); margin: 0; }
 .place { display: flex; flex-direction: column; align-items: center; gap: 24px; }
 .placeEmpty { align-self: stretch; display: none; }
-.placeImg { width: 100%; max-width: var(--r-illus-place); height: auto; }
+/* Prefixed with .root so it outranks the generic ".root img { max-width: 100% }"
+   rule above; without it the venue illustrations ignored their size cap and
+   grew to the full card width (≈730px on tablet). */
+.root .placeImg { width: 100%; max-width: var(--r-illus-place); height: auto; }
 .placeName {
   font-style: italic;
   font-weight: 400;
@@ -250,14 +540,22 @@
   text-align: center;
 }
 .placeAddr { margin: -8px 0 0; max-width: 300px; text-align: center; }
+.phase { padding-top: 8px; border-top: 1px solid rgba(14, 20, 83, 0.15); }
+.phase:first-child { border-top: 0; padding-top: 0; }
 
 @media (min-width: 900px) {
   .itinerary { grid-template-columns: 1fr 1fr; }
   .phase { grid-column: 1 / -1; }
 }
+/* Tablet: a phase with a single venue used to leave an empty half-row.
+   Let that venue span both columns so it sits centred under its phase. */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .phase + .place:has(+ .placeEmpty),
+  .phase + .place:last-child { grid-column: 1 / -1; }
+}
 @media (min-width: 1200px) {
   .itinerary { grid-template-columns: minmax(150px, 240px) 1fr 1fr; }
-  .phase { grid-column: auto; }
+  .phase { grid-column: auto; border-top: 0; padding-top: 0; }
   .placeEmpty { display: block; }
 }
 
@@ -279,6 +577,7 @@
 }
 .detailImg { height: var(--r-illus-detail); width: auto; max-width: 100%; object-fit: contain; }
 .detailName { font-style: italic; font-weight: 400; font-size: var(--r-fs-script); margin: 0; }
+.detailText { margin: -12px 0 0; text-align: center; font-size: var(--r-fs-small); line-height: 1.5; }
 .detailBtn { margin-top: -8px; }
 
 @media (min-width: 900px) {
@@ -303,38 +602,75 @@
   border: 1px solid var(--r-coral);
   color: var(--r-cream);
   text-align: center;
-  padding: clamp(32px, 7vw, 96px) clamp(20px, 11vw, 144px);
+  padding: clamp(32px, 7vw, 96px) clamp(16px, 8vw, 120px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: clamp(20px, 3vw, 32px);
 }
 .giftAccount { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.giftIbanRow { display: flex; align-items: center; gap: 10px; }
 .giftIban {
   font-family: var(--r-gothic);
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   font-size: var(--r-fs-body);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  user-select: all;         /* one tap selects the whole IBAN as a fallback */
   margin: 0;
 }
 
 /* ============================================================
-   RSVP form
+   RSVP form — a true full-screen, step-by-step flow rather than a
+   card boxed inside a colored band: the section itself fills the
+   viewport edge to edge, so it reads as its own dedicated screen
+   instead of "a card sitting on the page".
    ============================================================ */
+.rsvpBand {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px var(--r-sp-hero-x);
+}
 .rsvpCard {
-  background: var(--r-cream);
+  width: 100%;
   max-width: var(--r-w-rsvp);
   margin: 0 auto;
-  padding: clamp(28px, 5vw, 72px) clamp(18px, 5vw, 64px);
+  padding: clamp(28px, 5vw, 72px) 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
 }
-.rsvpIntro { text-align: center; font-weight: 700; font-size: var(--r-fs-small); max-width: 540px; margin: 0; }
-.rsvpDeadline { font-weight: 700; color: var(--r-coral); font-size: var(--r-fs-small); margin: 0; }
+.rsvpIntro { text-align: center; font-size: var(--r-fs-small); max-width: 540px; margin: 0; }
+.rsvpDeadline {
+  font-weight: 700;
+  color: var(--r-coral-text);
+  font-size: var(--r-fs-body);
+  margin: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--r-coral);
+  border-radius: 100px;
+}
 
-.form { width: 100%; display: flex; flex-direction: column; gap: 36px; margin-top: 40px; font-family: var(--r-serif); }
+.form { width: 100%; display: flex; flex-direction: column; gap: 32px; margin-top: 16px; font-family: var(--r-serif); }
+.fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+.question { display: flex; flex-direction: column; gap: 10px; }
+.questionLabel { font-family: var(--r-serif); font-weight: 700; font-size: var(--r-fs-small); margin: 0; }
+.fieldHint { font-size: var(--r-fs-micro); margin: -6px 0 0; opacity: 0.85; }
+.fieldError { font-size: var(--r-fs-micro); color: var(--r-coral-text); font-weight: 700; margin: 6px 0 0; }
+.fieldHint + .formRow, .fieldError + .formRow { margin-top: -4px; }
+.formErrorSummary {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--r-coral-text);
+  border-left-width: 4px;
+  color: var(--r-coral-text);
+  font-weight: 700;
+  font-size: var(--r-fs-small);
+}
 .formLegend {
   font-family: var(--r-serif);
   font-weight: 700;
@@ -350,70 +686,53 @@
   .formRow { flex-direction: row; gap: clamp(16px, 3vw, 32px); }
 }
 
-/* outlined text field (Material-style, static notched label) */
-.field { position: relative; display: block; }
-.field input {
-  width: 100%;
-  font-family: var(--r-serif);
-  font-size: var(--r-fs-body);
-  color: var(--r-navy);
-  background: var(--r-cream);
-  border: 1px solid var(--r-navy);
-  border-radius: 4px;
-  padding: 13px;
-  outline: none;
-}
-.field input:focus { border-color: var(--r-coral); }
+/* Text field: label always visible above the input. The old notched
+   10px label was hard to read and disappeared into the border. Inputs
+   are ≥16px so iOS Safari doesn't auto-zoom on focus. */
+.field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .fieldLabel {
-  position: absolute;
-  top: 0;
-  left: 12px;
-  transform: translateY(-50%);
-  background: var(--r-cream);
-  padding: 0 4px;
-  font-family: var(--r-serif);
+  font-family: var(--r-gothic);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   font-size: var(--r-fs-micro);
   color: var(--r-navy);
+  opacity: 0.65;
 }
-.field input:focus + .fieldLabel { color: var(--r-coral); }
-
-/* long-label fields: label sits above instead of notched on the border */
-.fieldStack { display: flex; flex-direction: column; gap: 6px; }
-.fieldStackLabel {
-  order: -1;
-  font-family: var(--r-serif);
-  font-size: var(--r-fs-small);
-  color: var(--r-navy);
-}
-.fieldStack input {
+.fieldOptional { font-style: italic; opacity: 0.8; text-transform: none; letter-spacing: normal; }
+/* Straight-line style: an underline instead of a boxed field, matching
+   the rest of the template's ruled/striped motifs. */
+.field input {
   width: 100%;
+  min-height: 40px;
   font-family: var(--r-serif);
-  font-size: var(--r-fs-body);
+  font-size: max(16px, var(--r-fs-body));
   color: var(--r-navy);
-  background: var(--r-cream);
-  border: 1px solid var(--r-navy);
-  border-radius: 4px;
-  padding: 13px;
-  outline: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--r-navy);
+  border-radius: 0;
+  padding: 6px 2px;
 }
-.fieldStack input:focus { border-color: var(--r-coral); }
+.field input:focus { border-bottom-width: 2px; padding-bottom: 5px; }
+.field input[aria-invalid="true"] { border-bottom-color: var(--r-coral-text); }
 
-/* segmented button */
-.seg { display: flex; align-self: flex-start; max-width: 100%; }
+/* segmented button — square edges, single shared border like a tab bar */
+.seg { display: flex; align-self: stretch; max-width: 100%; border: 1px solid var(--r-navy); }
+.segError { outline: 2px solid var(--r-coral-text); outline-offset: 3px; }
 .segOpt {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 44px;
-  padding: 10px 6px;
+  min-height: 52px;
+  padding: 10px 12px;
   font-family: var(--r-serif);
   font-weight: 400;
-  font-size: 13px;
+  font-size: var(--r-fs-small);
   letter-spacing: 0.01em;
   color: var(--r-navy);
   background: transparent;
-  border: 1px solid var(--r-navy);
+  border: 0;
   cursor: pointer;
   white-space: normal;
   text-align: center;
@@ -421,48 +740,128 @@
   flex: 1;
   min-width: 0;
 }
-.segOptFirst { composes: segOpt; border-radius: 100px 0 0 100px; border-right-width: 0; }
-.segOptLast { composes: segOpt; border-radius: 0 100px 100px 0; }
+.segOptFirst { composes: segOpt; border-right: 1px solid var(--r-navy); }
+.segOptLast { composes: segOpt; }
 .segOptActive { background: var(--r-navy); color: var(--r-cream); }
 .segIco { width: 15px; height: 15px; flex: none; fill: currentColor; }
 
 @media (min-width: 600px) {
-  .seg { display: inline-flex; width: auto; }
-  .segOpt { white-space: nowrap; padding: 10px 16px; font-size: var(--r-fs-small); flex: none; }
+  .seg { display: inline-flex; width: auto; align-self: flex-start; }
+  .segOpt { white-space: nowrap; padding: 10px 20px; flex: none; min-height: 48px; }
   .segIco { width: 18px; height: 18px; }
 }
 
 /* companions */
-.companionsControl { display: flex; flex-direction: column; gap: 16px; margin-top: -12px; }
-.companionsControlQ { font-family: var(--r-serif); font-weight: 700; font-size: var(--r-fs-small); }
-.select {
+.companionsControl { display: flex; flex-direction: column; gap: 10px; margin-top: -12px; }
+.stepper { display: inline-flex; align-items: center; gap: 20px; }
+.stepperBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
   font-family: var(--r-serif);
-  font-size: var(--r-fs-body);
+  font-size: 20px;
+  line-height: 1;
   color: var(--r-navy);
-  background: var(--r-cream);
+  background: transparent;
   border: 1px solid var(--r-navy);
-  border-radius: 4px;
-  padding: 12px 14px;
-  max-width: 275px;
-  outline: none;
-  margin-left: 12px;
+  cursor: pointer;
 }
-.select:focus { border-color: var(--r-coral); }
+.stepperBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+.stepperValue {
+  min-width: 1.5em;
+  text-align: center;
+  font-family: var(--r-serif);
+  font-size: var(--r-fs-lead);
+  color: var(--r-navy);
+}
 
-.companion { display: flex; flex-direction: column; gap: 28px; margin-top: 16px; }
+.companion { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
 .companionHead { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .companionRemove {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
   background: transparent;
   border: 0;
   cursor: pointer;
-  color: var(--r-coral);
-  padding: 4px;
+  color: var(--r-coral-text);
   line-height: 0;
 }
-.companionRemove svg { width: 20px; height: 20px; }
-.divider { width: 100%; height: 1px; border: 0; background: var(--r-navy); margin: 20px 0 4px; }
+.companionRemove svg { width: 22px; height: 22px; }
+.checkbox { display: flex; align-items: center; gap: 12px; font-size: var(--r-fs-small); cursor: pointer; min-height: 44px; }
+.checkbox input { width: 22px; height: 22px; accent-color: var(--r-navy); flex: none; }
 
-.formSubmit { composes: btnSolid; align-self: flex-start; margin-top: 20px; }
+/* ---------- step-by-step flow ---------- */
+/* The 3 named sections (Tu información / Tu asistencia / Tus acompañantes)
+   the flow's steps are grouped into — only the sections actually present
+   for this guest's answers are shown (a "no" to attending drops the last
+   two). Connected by a hairline; the active section is solid navy, a done
+   one is filled with a check, an upcoming one stays dim. */
+.stepSections { display: flex; align-items: flex-start; width: 100%; }
+.stepSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  opacity: 0.4;
+}
+.stepSection_active, .stepSection_done { opacity: 1; }
+.stepSectionRow { display: flex; align-items: center; width: 100%; }
+.stepSectionRow::before, .stepSectionRow::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(14, 20, 83, 0.25);
+}
+.stepSection:first-child .stepSectionRow::before,
+.stepSection:last-child .stepSectionRow::after {
+  visibility: hidden;
+}
+.stepSectionDot {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--r-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--r-gothic);
+  font-size: var(--r-fs-micro);
+}
+.stepSection_active .stepSectionDot, .stepSection_done .stepSectionDot {
+  background: var(--r-navy);
+  color: var(--r-cream);
+}
+.stepSectionDot svg { width: 13px; height: 13px; fill: var(--r-cream); }
+.stepSectionLabel {
+  font-family: var(--r-gothic);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--r-fs-micro);
+}
+
+.stepProgress { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.stepProgressText {
+  font-family: var(--r-gothic);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--r-fs-micro);
+  opacity: 0.65;
+  margin: 0;
+}
+.stepProgressBar { width: 100%; height: 1px; background: rgba(14, 20, 83, 0.18); }
+.stepProgressFill { height: 100%; background: var(--r-navy); transition: width 0.25s ease; }
+.stepBody { width: 100%; display: flex; flex-direction: column; justify-content: center; gap: 20px; min-height: 220px; }
+.stepNav { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 8px; }
+.stepNavBackHidden { visibility: hidden; }
+
+.formSubmit { composes: btn btnSolid; min-height: 52px; margin-left: auto; }
 .formThanks {
   width: 100%;
   border: 1px solid var(--r-navy);
@@ -470,31 +869,53 @@
   background: var(--r-cream);
   padding: 32px 24px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
-.formThanksText { font-family: var(--r-serif); font-style: italic; color: var(--r-navy); margin: 0; }
+.formThanksText { font-family: var(--r-serif); font-style: italic; font-size: var(--r-fs-lead); color: var(--r-navy); margin: 0; }
+.formThanksSummary { margin: 0; font-size: var(--r-fs-small); }
 
 /* ============================================================
    Regalos — copy button
    ============================================================ */
 .copyBtn {
-  font-family: var(--r-gothic);
-  font-size: var(--r-fs-small);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
   color: var(--r-cream);
   background: transparent;
   border: 1px solid var(--r-cream);
-  padding: 0.6em 1.2em;
+  border-radius: 100px;
+  padding: 0;
   cursor: pointer;
   transition: background-color 0.18s ease, color 0.18s ease;
 }
+.copyBtn svg { width: 16px; height: 16px; }
 .copyBtn:hover { background: var(--r-cream); color: var(--r-navy); }
 
 /* ============================================================
    Footer
    ============================================================ */
-.footer { background: var(--r-cream); padding: 28px var(--r-sp-header-x); }
+.footer {
+  background: var(--r-navy);
+  color: var(--r-cream);
+  padding: 28px var(--r-sp-header-x);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
 .footer p { margin: 0; font-size: var(--r-fs-small); }
+.footerHashtag {
+  font-family: var(--r-gothic);
+  color: var(--r-coral);
+  letter-spacing: 0.02em;
+}
 
 /* ============================================================
    Breakpoints — re-tune the type/spacing scale per display.
@@ -508,10 +929,11 @@
 
 @media (max-width: 1199px) {
   .root {
-    --r-fs-display: 20px;
-    --r-fs-h2: 18px;
+    --r-fs-display: 24px;
+    --r-fs-place: 17px;
+    --r-fs-h2: 19px;
     --r-fs-script: 17px;
-    --r-fs-num: 38px;
+    --r-fs-num: 36px;
     --r-track-display: 0.14em;
 
     --r-sp-section: 52px;
@@ -529,12 +951,12 @@
 
 @media (max-width: 899px) {
   .root {
-    --r-fs-display: 19px;
-    --r-fs-h2: 17px;
+    --r-fs-display: 22px;
+    --r-fs-h2: 18px;
     --r-fs-script: 16px;
-    --r-fs-eyebrow: 13px;
-    --r-fs-phase: 15px;
-    --r-fs-num: 34px;
+    --r-fs-eyebrow: 12px;
+    --r-fs-phase: 14px;
+    --r-fs-num: 32px;
 
     --r-sp-section: 44px;
     --r-sp-card-x: 22px;
@@ -545,19 +967,42 @@
     --r-illus-place: 200px;
     --r-illus-detail: 150px;
   }
+  /* A hairline border read as almost nothing between stacked phases on a
+     phone; a solid (if still thin) line plus more breathing room makes the
+     seam between phases unmistakable without turning it into a slab. */
+  .phase {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--r-navy);
+  }
+  .phase:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
 }
 
 @media (max-width: 599px) {
   .root {
-    --r-fs-display: 18px;
-    --r-fs-h2: 16px;
+    --r-fs-display: 20px;
+    --r-fs-place: 16px;
+    --r-fs-h2: 17px;
     --r-fs-script: 15px;
-    --r-fs-num: 32px;
-    --r-track-display: 0.1em;
+    --r-fs-num: 30px;
+    --r-track-display: 0.08em;
 
     --r-sp-section: 40px;
-    --r-sp-card-x: 16px;
+    --r-sp-card-x: 18px;
     --r-sp-stack: 30px;
+    --r-sp-header-x: 16px;
+    --r-illus-place: 170px;
+    --r-illus-detail: 130px;
+    --r-illus-bouquet: 64px;
   }
-  .heroPanel { padding: 28px 16px; }
+  .heroPanel { padding: 32px 16px; }
+  /* Thinner outer frame on bands so the cream card gets the width. */
+  .band { padding: 12px; }
+  .giftSection { padding-inline: 12px; }
+  .gift { padding: 8px; }
+  .giftMat { padding: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .copyBtn { transition: none; }
 }

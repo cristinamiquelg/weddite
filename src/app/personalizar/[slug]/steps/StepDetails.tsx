@@ -1,11 +1,11 @@
 import type { DetailCard, DetailCardIcon, WeddingData } from "@/lib/wedding-types";
-import { TextInput } from "@/components/customize/fields";
+import { Select, TextArea, TextInput } from "@/components/customize/fields";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 
-const ICON_LABELS: Record<DetailCardIcon, string> = {
-  dresscode: "Dresscode",
-  bus: "Autobuses",
-  hotel: "Hoteles",
-};
+const TITLE_MAX_LENGTH = 50;
+const URL_MAX_LENGTH = 300;
+const CTA_MAX_LENGTH = 30;
 
 export default function StepDetails({
   data,
@@ -14,6 +14,10 @@ export default function StepDetails({
   data: WeddingData;
   onChange: (patch: Partial<WeddingData>) => void;
 }) {
+  const { locale } = useSiteLocale();
+  const dict = getSiteDict(locale).wizard;
+  const iconLabels: Record<DetailCardIcon, string> = dict.stepDetails.iconLabels;
+
   function updateCard(index: number, patch: Partial<DetailCard>) {
     onChange({
       detailCards: data.detailCards.map((c, i) => (i === index ? { ...c, ...patch } : c)),
@@ -22,7 +26,7 @@ export default function StepDetails({
 
   function addCard() {
     onChange({
-      detailCards: [...data.detailCards, { icon: "dresscode", title: "", ctaLabel: "" }],
+      detailCards: [...data.detailCards, { icon: "dresscode", title: "", description: "", ctaLabel: "", url: "" }],
     });
   }
 
@@ -32,39 +36,65 @@ export default function StepDetails({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-ink-soft">
-        Añadid tarjetas informativas para vuestros invitados: dresscode,
-        autobuses, hoteles recomendados...
-      </p>
+      <p className="text-sm text-ink-soft">{dict.stepDetails.intro}</p>
       {data.detailCards.map((card, i) => (
-        <div key={i} className="grid gap-3 rounded-lg border border-line p-4 sm:grid-cols-[140px_1fr_1fr_auto]">
-          <select
+        <div
+          key={i}
+          data-scroll-section={`detalle-${i}`}
+          className="flex flex-wrap gap-3 rounded-lg border border-line p-4"
+        >
+          <Select
             value={card.icon}
             onChange={(e) => updateCard(i, { icon: e.target.value as DetailCardIcon })}
-            className="rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-sm text-ink outline-none focus:border-clay"
+            className="min-w-[140px]"
           >
-            {(Object.keys(ICON_LABELS) as DetailCardIcon[]).map((icon) => (
+            {(Object.keys(iconLabels) as DetailCardIcon[]).map((icon) => (
               <option key={icon} value={icon}>
-                {ICON_LABELS[icon]}
+                {iconLabels[icon]}
               </option>
             ))}
-          </select>
+          </Select>
           <TextInput
             value={card.title}
             onChange={(e) => updateCard(i, { title: e.target.value })}
-            placeholder="Dresscode"
+            placeholder={dict.stepDetails.titlePlaceholder}
+            aria-label={dict.stepDetails.titleAriaLabel}
+            className="min-w-[140px] flex-1"
+            maxLength={TITLE_MAX_LENGTH}
+          />
+          <TextArea
+            value={card.description ?? ""}
+            onChange={(e) => updateCard(i, { description: e.target.value })}
+            placeholder={dict.stepDetails.descriptionPlaceholder}
+            aria-label={dict.stepDetails.descriptionAriaLabel}
+            rows={2}
+            maxLength={160}
+            className="w-full"
+          />
+          <TextInput
+            value={card.url ?? ""}
+            onChange={(e) => updateCard(i, { url: e.target.value })}
+            placeholder={dict.stepDetails.urlPlaceholder}
+            aria-label={dict.stepDetails.urlAriaLabel}
+            type="url"
+            inputMode="url"
+            className="min-w-[220px] flex-[2]"
+            maxLength={URL_MAX_LENGTH}
           />
           <TextInput
             value={card.ctaLabel}
             onChange={(e) => updateCard(i, { ctaLabel: e.target.value })}
-            placeholder="Inspiración"
+            placeholder={dict.stepDetails.ctaPlaceholder}
+            aria-label={dict.stepDetails.ctaAriaLabel}
+            className="min-w-[140px] flex-1"
+            maxLength={CTA_MAX_LENGTH}
           />
           <button
             type="button"
             onClick={() => removeCard(i)}
-            className="rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
+            className="shrink-0 rounded-lg border border-line px-3 text-sm text-ink-soft hover:border-clay hover:text-clay"
           >
-            Quitar
+            {dict.remove}
           </button>
         </div>
       ))}
@@ -73,7 +103,7 @@ export default function StepDetails({
         onClick={addCard}
         className="self-start text-sm font-medium text-clay hover:underline"
       >
-        + Añadir tarjeta
+        {dict.stepDetails.addCard}
       </button>
     </div>
   );

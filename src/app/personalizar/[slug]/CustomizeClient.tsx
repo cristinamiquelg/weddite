@@ -5,62 +5,92 @@ import { useEffect, useRef, useState } from "react";
 import type { Template } from "@/lib/templates";
 import type { WeddingData } from "@/lib/wedding-types";
 import { useWeddingDraft } from "@/lib/use-wedding-draft";
-import StepCouple from "./steps/StepCouple";
+import { useSiteLocale } from "@/lib/site-locale";
+import { getSiteDict } from "@/lib/site-dict";
 import StepStory from "./steps/StepStory";
-import StepDay from "./steps/StepDay";
-import StepGallery from "./steps/StepGallery";
 import StepRsvpGift from "./steps/StepRsvpGift";
-import StepStyle from "./steps/StepStyle";
 import StepRiberaCouple from "./steps/StepRiberaCouple";
 import StepItinerary from "./steps/StepItinerary";
 import StepDetails from "./steps/StepDetails";
+import StepLanguage from "./steps/StepLanguage";
 
 type StepDef = {
   key: string;
-  label: string;
+  // The template section this step's fields land in, so the preview can
+  // scroll there when the couple opens the step — null for steps (like
+  // the language picker) that don't map to one spot on the page.
+  sectionId: string | null;
   Component: (props: {
     data: WeddingData;
     onChange: (patch: Partial<WeddingData>) => void;
   }) => React.ReactElement;
 };
 
-const auroraSteps: StepDef[] = [
-  { key: "couple", label: "Pareja y fecha", Component: StepCouple },
-  { key: "story", label: "Vuestra historia", Component: StepStory },
-  { key: "day", label: "El gran día", Component: StepDay },
-  { key: "gallery", label: "Galería", Component: StepGallery },
-  { key: "rsvp", label: "RSVP y regalo", Component: StepRsvpGift },
-  { key: "style", label: "Estilo", Component: StepStyle },
+const steps: StepDef[] = [
+  { key: "language", sectionId: null, Component: StepLanguage },
+  { key: "couple", sectionId: "top", Component: StepRiberaCouple },
+  { key: "story", sectionId: "historia", Component: StepStory },
+  { key: "itinerary", sectionId: "itinerario", Component: StepItinerary },
+  { key: "details", sectionId: "detalles", Component: StepDetails },
+  { key: "rsvp", sectionId: "rsvp", Component: StepRsvpGift },
 ];
-
-const riberaSteps: StepDef[] = [
-  { key: "couple", label: "Pareja y fecha", Component: StepRiberaCouple },
-  { key: "story", label: "Vuestra historia", Component: StepStory },
-  { key: "itinerary", label: "Itinerario y lugares", Component: StepItinerary },
-  { key: "details", label: "Detalles", Component: StepDetails },
-  { key: "rsvp", label: "RSVP y regalo", Component: StepRsvpGift },
-];
-
-function stepsForTemplate(slug: string): StepDef[] {
-  return slug === "ribera" ? riberaSteps : auroraSteps;
-}
 
 export default function CustomizeClient({ template }: { template: Template }) {
   const { data, setData, loaded } = useWeddingDraft(template.slug);
-  const steps = stepsForTemplate(template.slug);
+  const { locale, setLocale } = useSiteLocale();
+  const dict = getSiteDict(locale);
   const [stepIndex, setStepIndex] = useState(0);
   const [mobileTab, setMobileTab] = useState<"form" | "preview">("form");
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  // The section/item id the preview should be following right now — kept
+  // in a ref (not state) since updating it shouldn't itself trigger a
+  // render. A freshly added phase/card/contact doesn't have an id to
+  // scroll to until its first bit of content actually renders, so this
+  // rides along with every data update too, not just the initial focus:
+  // once the target exists, the very next keystroke's re-render reveals it.
+  const focusedSectionRef = useRef<string | null>(null);
 
   useEffect(() => {
     iframeRef.current?.contentWindow?.postMessage(
-      { type: "weddite:update", slug: template.slug, data },
+      { type: "wedite:update", slug: template.slug, data, scrollTo: focusedSectionRef.current },
       window.location.origin,
     );
   }, [data, template.slug]);
 
+  const sectionId = steps[stepIndex].sectionId;
+
+  function scrollToSection(id: string | null) {
+    if (!id) return;
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "wedite:scrollTo", sectionId: id },
+      window.location.origin,
+    );
+  }
+
+  // Scroll as soon as the step opens, even before the couple clicks into a field.
+  useEffect(() => {
+    focusedSectionRef.current = sectionId;
+    scrollToSection(sectionId);
+  }, [sectionId]);
+
   function patch(p: Partial<WeddingData>) {
     setData((prev) => ({ ...prev, ...p }));
+  }
+
+  // A field can live in a step whose sectionId doesn't match where it
+  // actually renders (e.g. a detail card's fields, or a specific itinerary
+  // phase, or the hashtag alongside the couple's names) — such fields
+  // carry a data-scroll-section override, naming the exact item's own id
+  // when it has one, that wins over the step's default.
+  function focusedSectionId(target: EventTarget | null): string | null {
+    const el = target instanceof HTMLElement ? target.closest<HTMLElement>("[data-scroll-section]") : null;
+    return el?.dataset.scrollSection ?? sectionId;
+  }
+
+  function onFieldFocus(e: React.FocusEvent) {
+    const id = focusedSectionId(e.target);
+    focusedSectionRef.current = id;
+    scrollToSection(id);
   }
 
   const Step = steps[stepIndex].Component;
@@ -71,15 +101,39 @@ export default function CustomizeClient({ template }: { template: Template }) {
       <header className="flex items-center justify-between border-b border-line px-6 py-4">
         <div className="flex items-center gap-4">
           <Link href="/" className="font-display text-lg">
-            Weddite
+            Wedite
           </Link>
           <span className="hidden text-sm text-ink-soft sm:inline">
-            Personalizando · {template.name}
+            {dict.wizard.personalizing(template.name)}
           </span>
         </div>
-        <p className="text-xs text-ink-soft">
-          {loaded ? "Guardado automáticamente" : "Cargando..."}
-        </p>
+        <div className="flex items-center gap-4">
+          <p className="hidden text-xs text-ink-soft sm:block">
+            {loaded ? dict.wizard.savingAuto : dict.wizard.loading}
+          </p>
+          <div className="inline-flex items-center gap-0.5 rounded-full border border-line p-0.5 text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setLocale("es")}
+              aria-pressed={locale === "es"}
+              className={`rounded-full px-2.5 py-1 transition-colors ${
+                locale === "es" ? "bg-ink text-paper" : "text-ink-soft hover:bg-line/60 hover:text-ink"
+              }`}
+            >
+              ES
+            </button>
+            <button
+              type="button"
+              onClick={() => setLocale("en")}
+              aria-pressed={locale === "en"}
+              className={`rounded-full px-2.5 py-1 transition-colors ${
+                locale === "en" ? "bg-ink text-paper" : "text-ink-soft hover:bg-line/60 hover:text-ink"
+              }`}
+            >
+              EN
+            </button>
+          </div>
+        </div>
       </header>
 
       <div className="flex items-center gap-2 border-b border-line px-6 py-3 lg:hidden">
@@ -90,7 +144,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
             mobileTab === "form" ? "bg-ink text-paper" : "text-ink-soft"
           }`}
         >
-          Editar
+          {dict.wizard.editTab}
         </button>
         <button
           type="button"
@@ -99,7 +153,7 @@ export default function CustomizeClient({ template }: { template: Template }) {
             mobileTab === "preview" ? "bg-ink text-paper" : "text-ink-soft"
           }`}
         >
-          Vista previa
+          {dict.wizard.previewTab}
         </button>
       </div>
 
@@ -121,42 +175,48 @@ export default function CustomizeClient({ template }: { template: Template }) {
                       : "border-line text-ink-soft hover:border-ink-soft"
                   }`}
                 >
-                  {i + 1}. {s.label}
+                  {i + 1}. {dict.wizard.stepLabels[s.key as keyof typeof dict.wizard.stepLabels]}
                 </button>
               </li>
             ))}
           </ol>
 
           <div className="mx-auto w-full max-w-xl flex-1">
-            <h1 className="font-display text-2xl">{steps[stepIndex].label}</h1>
-            <div className="mt-6">
+            <h1 className="font-display text-2xl">
+              {dict.wizard.stepLabels[steps[stepIndex].key as keyof typeof dict.wizard.stepLabels]}
+            </h1>
+            {/* onFocus (React delegates it, so it fires for any descendant
+                field) re-sends the scroll on every click/tab into a field —
+                not just once when the step first opens — since a step like
+                "Detalles" can have several cards spread further down. */}
+            <div className="mt-6" onFocus={onFieldFocus}>
               <Step data={data} onChange={patch} />
             </div>
           </div>
 
-          <div className="mx-auto mt-10 flex w-full max-w-xl justify-between">
+          <div className="mx-auto mt-10 flex w-full max-w-xl flex-col-reverse gap-3 sm:flex-row sm:justify-between">
             <button
               type="button"
               disabled={stepIndex === 0}
               onClick={() => setStepIndex((i) => Math.max(0, i - 1))}
-              className="rounded-full border border-line px-6 py-3 text-sm font-medium text-ink disabled:opacity-40"
+              className="w-full rounded-full border border-line px-6 py-3 text-center text-sm font-medium text-ink disabled:opacity-40 sm:w-auto"
             >
-              Atrás
+              {dict.wizard.back}
             </button>
             {isLast ? (
               <Link
                 href={`/personalizar/${template.slug}/confirmar`}
-                className="rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+                className="w-full rounded-full bg-ink px-6 py-3 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90 sm:w-auto"
               >
-                Revisar y contratar
+                {dict.wizard.reviewAndBuy}
               </Link>
             ) : (
               <button
                 type="button"
                 onClick={() => setStepIndex((i) => Math.min(steps.length - 1, i + 1))}
-                className="rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+                className="w-full rounded-full bg-ink px-6 py-3 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90 sm:w-auto"
               >
-                Siguiente
+                {dict.wizard.next}
               </button>
             )}
           </div>
@@ -171,12 +231,12 @@ export default function CustomizeClient({ template }: { template: Template }) {
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
             <span className="h-2.5 w-2.5 rounded-full bg-line" />
-            <span className="ml-3 text-xs text-ink-soft">Vista previa en directo</span>
+            <span className="ml-3 text-xs text-ink-soft">{dict.wizard.livePreview}</span>
           </div>
           <iframe
             ref={iframeRef}
-            src={`/preview/${template.slug}`}
-            title="Vista previa en directo de vuestra web de boda"
+            src={`/preview/${template.slug}?draft=1`}
+            title={dict.wizard.iframeTitle}
             className="flex-1"
           />
         </div>

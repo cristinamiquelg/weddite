@@ -33,30 +33,20 @@ body {
   color: var(--color-ink);
 }
 
+/* Tailwind's preflight resets buttons to `cursor: default` (matching native
+   browser behavior) instead of the `cursor: pointer` people expect from a
+   clickable control. Restore it site-wide for anything actually clickable. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+[type="submit"]:not(:disabled),
+label:has(> input[type="checkbox"]),
+label:has(> input[type="radio"]) {
+  cursor: pointer;
+}
+
 ::selection {
   background: var(--color-clay);
   color: var(--color-paper);
-}
-
-@keyframes marquee-up {
-  to {
-    transform: translateY(-50%);
-  }
-}
-
-@keyframes marquee-down {
-  from {
-    transform: translateY(-50%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-col {
-    animation-play-state: paused !important;
-  }
 }
 
 /* Scroll-reveal: gated behind html.reveal-ready (added by the ScrollReveal
@@ -67,11 +57,20 @@ body {
   html.reveal-ready [data-reveal] {
     opacity: 0;
     transform: translateY(22px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1), transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
   }
   html.reveal-ready [data-reveal].is-visible {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Printing (or exporting to PDF) never scrolls, so an element the
+   IntersectionObserver hasn't reached yet would otherwise print blank. */
+@media print {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
@@ -93,7 +92,7 @@ body {
 }
 @media (prefers-reduced-motion: no-preference) {
   .fade-in-load {
-    animation: fade-in-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: fade-in-up 1.15s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 }
 

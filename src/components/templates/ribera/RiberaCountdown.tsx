@@ -1,24 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getDict, type Locale } from "@/lib/i18n";
 import styles from "./ribera.module.css";
 
 function getRemaining(target: string) {
-  const diff = new Date(target).getTime() - Date.now();
+  // "2027-09-11" alone is parsed as UTC midnight; anchor it to local time
+  // so the countdown matches the guest's calendar day.
+  const at = /^\d{4}-\d{2}-\d{2}$/.test(target) ? `${target}T00:00:00` : target;
+  const diff = new Date(at).getTime() - Date.now();
   const clamped = Math.max(diff, 0);
   return {
     days: Math.floor(clamped / (1000 * 60 * 60 * 24)),
     hours: Math.floor((clamped / (1000 * 60 * 60)) % 24),
     minutes: Math.floor((clamped / (1000 * 60)) % 60),
+    seconds: Math.floor((clamped / 1000) % 60),
     isPast: diff <= 0,
   };
 }
 
 // Ribera-specific countdown: same ticking logic as the shared Countdown
 // component, but with the exact big-serif-number look of the L&J
-// invitation (days/hours/minutes only, no seconds).
-export default function RiberaCountdown({ date }: { date: string }) {
+// invitation.
+export default function RiberaCountdown({ date, locale }: { date: string; locale?: Locale }) {
   const [remaining, setRemaining] = useState<ReturnType<typeof getRemaining> | null>(null);
+  const dict = getDict(locale);
 
   useEffect(() => {
     if (!date) return;
@@ -31,19 +37,20 @@ export default function RiberaCountdown({ date }: { date: string }) {
   if (!date || !remaining) return null;
 
   if (remaining.isPast) {
-    return <p className={styles.eyebrow}>¡Ya lo celebramos!</p>;
+    return <p className={styles.eyebrow}>{dict.countdown.alreadyCelebrated}</p>;
   }
 
   // Days is the headline number, left unpadded (e.g. "524", not "0524");
-  // hours/minutes pad to 2 digits, matching the original invitation.
+  // hours/minutes/seconds pad to 2 digits, matching the original invitation.
   const units: [string, string][] = [
-    [String(remaining.days), "días"],
-    [String(remaining.hours).padStart(2, "0"), "horas"],
-    [String(remaining.minutes).padStart(2, "0"), "minutos"],
+    [String(remaining.days), dict.countdown.days],
+    [String(remaining.hours).padStart(2, "0"), dict.countdown.hours],
+    [String(remaining.minutes).padStart(2, "0"), dict.countdown.minutes],
+    [String(remaining.seconds).padStart(2, "0"), dict.countdown.seconds],
   ];
 
   return (
-    <div className={styles.countdownUnits}>
+    <div className={styles.countdownUnits} role="timer" aria-live="off">
       {units.map(([value, label]) => (
         <div key={label} className={styles.unit}>
           <span className={styles.unitNum}>{value}</span>
