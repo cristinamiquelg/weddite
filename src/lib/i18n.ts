@@ -28,7 +28,7 @@ type Dict = {
       bus: { title: string; cta: string };
       hotel: { title: string; cta: string };
     };
-    rsvp: { title: string };
+    rsvp: { title: string; cta: string; backToSite: string };
     contact: { title: string };
     footer: { madeWith: string };
     form: {
@@ -111,7 +111,7 @@ const es: Dict = {
       bus: { title: "Autobuses", cta: "Cómo llegar" },
       hotel: { title: "Hoteles", cta: "Más información" },
     },
-    rsvp: { title: "¿Nos acompañáis?" },
+    rsvp: { title: "¿Nos acompañáis?", cta: "Confirmar asistencia", backToSite: "Volver a la web" },
     contact: { title: "¿Alguna duda?" },
     footer: { madeWith: "Hecho con" },
     form: {
@@ -194,7 +194,7 @@ const en: Dict = {
       bus: { title: "Shuttle buses", cta: "Get directions" },
       hotel: { title: "Hotels", cta: "More info" },
     },
-    rsvp: { title: "Will you join us?" },
+    rsvp: { title: "Will you join us?", cta: "Confirm attendance", backToSite: "Back to the site" },
     contact: { title: "Got a question?" },
     footer: { madeWith: "Made with" },
     form: {

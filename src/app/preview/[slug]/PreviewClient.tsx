@@ -14,7 +14,8 @@ export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
   // before buying", "view your site") should reflect a saved draft, so a
   // couple's own in-progress edits never leak into someone else's browsing
   // of the same design.
-  const isDraft = useSearchParams().get("draft") === "1";
+  const params = useSearchParams();
+  const isDraft = params.get("draft") === "1";
 
   useEffect(() => {
     if (!isDraft) return;
@@ -62,5 +63,8 @@ export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
     };
   }, [slug, isDraft]);
 
-  return renderTemplate(slug, data);
+  return renderTemplate(slug, data, {
+    rsvpHref: `/preview/${slug}/rsvp${isDraft ? "?draft=1" : ""}`,
+    initialLocale: params.get("lang") ?? undefined,
+  });
 }

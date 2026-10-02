@@ -1,0 +1,81 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import SparkleIcon from "@/components/site/SparkleIcon";
+import type { WeddingData } from "@/lib/wedding-types";
+import { getDict, locales as localeOptions, type Locale } from "@/lib/i18n";
+import RiberaRsvpForm from "./RiberaRsvpForm";
+import styles from "./ribera.module.css";
+
+// The RSVP flow as its own page, separate from the template's home: the
+// home only links here. Same tokens/fonts (everything hangs off `.root`),
+// but a minimal header so the guest's whole attention is on the form.
+export default function RiberaRsvpPage({
+  data,
+  backHref,
+  initialLocale,
+}: {
+  data: WeddingData;
+  backHref: string;
+  initialLocale?: string;
+}) {
+  const [locale, setLocale] = useState<Locale>(() =>
+    data.locales.find((l) => l === initialLocale) ?? data.locales[0] ?? "es",
+  );
+  const dict = getDict(locale);
+  // A language the couple has since turned off falls back to what's left.
+  const activeLocale = data.locales.includes(locale) ? locale : (data.locales[0] ?? "es");
+
+  const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
+  const initials = `${(data.partnerA || "L")[0].toUpperCase()}&${(data.partnerB || "J")[0].toUpperCase()}`;
+  const hasBus = data.detailCards.some((c) => c.icon === "bus");
+  const hrefWithLang = `${backHref}${backHref.includes("?") ? "&" : "?"}lang=${activeLocale}`;
+
+  return (
+    <div className={styles.root}>
+      <header className={styles.rsvpPageHeader}>
+        <a href={hrefWithLang} className={styles.rsvpBack}>
+          <span aria-hidden="true">←</span> {dict.ribera.rsvp.backToSite}
+        </a>
+        <a href={hrefWithLang} className={styles.logo} aria-label={names}>
+          {initials}
+        </a>
+        <div className={styles.rsvpPageLocale}>
+          {data.locales.length > 1 ? (
+            <span className={styles.localeSwitch}>
+              {data.locales.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setLocale(id)}
+                  className={`${styles.localeBtn} ${activeLocale === id ? styles.localeBtnActive : ""}`}
+                >
+                  {localeOptions.find((l) => l.id === id)?.id ?? id}
+                </button>
+              ))}
+            </span>
+          ) : null}
+        </div>
+      </header>
+
+      <main className={styles.rsvpPageMain}>
+        <div className={styles.rsvpCard}>
+          <h1 className={styles.sectionTitle}>{dict.ribera.rsvp.title}</h1>
+          {data.rsvpNote ? <p className={styles.rsvpIntro}>{data.rsvpNote}</p> : null}
+          <RiberaRsvpForm locale={activeLocale} showBus={hasBus} />
+        </div>
+      </main>
+
+      <footer className={styles.footer}>
+        <p>
+          {dict.ribera.footer.madeWith}{" "}
+          <Link href="/" className="group inline-flex items-center gap-1" style={{ color: "var(--r-coral)" }}>
+            Wedite
+            <SparkleIcon className="h-3 w-3 transition-transform duration-300 group-hover:rotate-90 group-hover:scale-125" />
+          </Link>
+        </p>
+      </footer>
+    </div>
+  );
+}
