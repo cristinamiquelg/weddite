@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Select } from "./fields";
 
 // A calendar popover styled like the rest of the wizard. The browser's own
@@ -101,6 +101,8 @@ export default function DatePicker({
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const [placeAbove, setPlaceAbove] = useState(false);
   const popoverId = useId();
   const today = todayISO();
 
@@ -121,6 +123,25 @@ export default function DatePicker({
     setOpen(false);
     if (returnFocus) triggerRef.current?.focus();
   }
+
+  // Decide where the popover goes before it paints: below the field by
+  // default, above it when the space below is too short (a low window or a
+  // field near the bottom of the wizard); if neither side fits, scroll the
+  // popover into view so the time selectors are never cut off.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const pop = popoverRef.current;
+    const trigger = triggerRef.current;
+    if (!pop || !trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    const needed = pop.offsetHeight + 12;
+    const below = window.innerHeight - rect.bottom;
+    const above = rect.top;
+    const flip = needed > below && above >= needed;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- measured placement, must be applied before paint
+    setPlaceAbove(flip);
+    if (!flip && needed > below) pop.scrollIntoView({ block: "nearest" });
+  }, [open]);
 
   // Close on outside click.
   useEffect(() => {
@@ -212,12 +233,15 @@ export default function DatePicker({
 
       {open ? (
         <div
+          ref={popoverRef}
           id={popoverId}
           role="dialog"
           aria-label={ariaLabel}
-          className="absolute left-0 top-full z-30 mt-2 w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-line bg-paper-raised p-4 shadow-[0_24px_50px_-24px_rgba(33,29,26,0.35)]"
+          className={`absolute left-0 z-30 w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-line bg-paper-raised p-3.5 shadow-[0_24px_50px_-24px_rgba(33,29,26,0.35)] ${
+            placeAbove ? "bottom-full mb-2" : "top-full mt-2"
+          }`}
         >
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-2 flex items-center justify-between">
             <p className="text-sm font-medium text-ink" aria-live="polite">
               {monthLabel}
             </p>
@@ -242,7 +266,7 @@ export default function DatePicker({
             </div>
           </div>
 
-          <div className="grid grid-cols-7 gap-y-1 text-center" role="grid">
+          <div className="grid min-h-[13.25rem] grid-cols-7 content-start gap-y-1 text-center" role="grid">
             {weekdays.map((w, i) => (
               <span key={i} className="pb-1 text-[11px] font-medium uppercase tracking-wide text-ink-soft" aria-hidden="true">
                 {w}
@@ -270,7 +294,7 @@ export default function DatePicker({
                   }}
                   onKeyDown={(e) => onDayKeyDown(e, iso)}
                   className={[
-                    "mx-auto flex h-9 w-9 items-center justify-center rounded-full text-sm outline-none transition-colors",
+                    "mx-auto flex h-8 w-8 items-center justify-center rounded-full text-sm outline-none transition-colors",
                     "focus-visible:ring-2 focus-visible:ring-clay/60",
                     disabled
                       ? "cursor-default text-ink-soft/35"
@@ -287,7 +311,7 @@ export default function DatePicker({
           </div>
 
           {withTime ? (
-            <div className="mt-4 flex items-end gap-3 border-t border-line pt-4">
+            <div className="mt-3 flex items-end gap-3 border-t border-line pt-3">
               <label className="flex flex-1 flex-col gap-1 text-xs text-ink-soft">
                 {hourLabel}
                 <Select
