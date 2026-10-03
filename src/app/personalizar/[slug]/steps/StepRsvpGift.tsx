@@ -40,21 +40,6 @@ export default function StepRsvpGift({
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <p className="text-sm font-semibold text-ink">{dict.rsvpSectionTitle}</p>
-        <div className="mt-3 flex flex-col gap-5">
-          <Field label={dict.noteForGuests} hint={maxChars(RSVP_NOTE_MAX_LENGTH)}>
-            <TextArea
-              rows={3}
-              value={data.rsvpNote}
-              onChange={(e) => onChange({ rsvpNote: e.target.value })}
-              placeholder={dict.notePlaceholder}
-              maxLength={RSVP_NOTE_MAX_LENGTH}
-            />
-          </Field>
-        </div>
-      </div>
-
       {/* Gift fields render in the "Regalos" section, not "RSVP" — flagged
           so the preview scrolls to where they actually show up. */}
       <div data-scroll-section="regalos">
@@ -146,6 +131,22 @@ export default function StepRsvpGift({
               {dict.addContactPerson}
             </button>
           ) : null}
+        </div>
+      </div>
+
+      {/* Last in the step, as the closing note; it renders in the "RSVP" band. */}
+      <div data-scroll-section="rsvp">
+        <p className="text-sm font-semibold text-ink">{dict.rsvpSectionTitle}</p>
+        <div className="mt-3 flex flex-col gap-5">
+          <Field label={dict.noteForGuests} hint={maxChars(RSVP_NOTE_MAX_LENGTH)}>
+            <TextArea
+              rows={3}
+              value={data.rsvpNote}
+              onChange={(e) => onChange({ rsvpNote: e.target.value })}
+              placeholder={dict.notePlaceholder}
+              maxLength={RSVP_NOTE_MAX_LENGTH}
+            />
+          </Field>
         </div>
       </div>
     </div>

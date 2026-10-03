@@ -121,7 +121,7 @@ export default function RiberaTemplate({
   const hasStory = Boolean(data.story);
   const hasItinerary = data.phases.length > 0;
   const hasDetails = data.detailCards.length > 0;
-  const hasGift = Boolean(data.giftMessage || data.giftAccount);
+  const hasGift = Boolean(data.giftMessage || data.giftHolderName || data.giftAccount);
   const hasContact = data.organizerContacts.some((c) => c.name || c.phone || c.email);
 
   const NAV_LINKS = [
@@ -277,7 +277,7 @@ export default function RiberaTemplate({
       </section>
 
       {hasStory ? (
-        <section className={styles.bandStriped} id="historia">
+        <section className={`${styles.bandStriped} ${styles.storyBand}`} id="historia">
           <div data-reveal className={styles.card}>
             <h2 className={styles.sectionTitle}>{data.storyTitle || dict.ribera.storyTitleFallback}</h2>
             {data.storyImage ? (
@@ -431,13 +431,15 @@ export default function RiberaTemplate({
                 {data.giftMessage ? (
                   <p className={styles.leadText}>{data.giftMessage}</p>
                 ) : null}
-                {data.giftAccount ? (
+                {data.giftHolderName || data.giftAccount ? (
                   <div className={styles.giftAccount}>
                     {data.giftHolderName ? <p className={styles.leadText}>{data.giftHolderName}</p> : null}
-                    <div className={styles.giftIbanRow}>
-                      <p className={styles.giftIban}>{data.giftAccount}</p>
-                      <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} locale={locale} icon />
-                    </div>
+                    {data.giftAccount ? (
+                      <div className={styles.giftIbanRow}>
+                        <p className={styles.giftIban}>{data.giftAccount}</p>
+                        <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} locale={locale} icon />
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
               </div>

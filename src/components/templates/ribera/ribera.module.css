@@ -532,8 +532,8 @@
   align-items: start;
 }
 .phase { align-self: center; text-align: center; text-transform: uppercase; grid-column: 1 / -1; }
-.phaseName { font-family: var(--r-serif); font-weight: 700; font-size: var(--r-fs-phase); margin: 0 0 8px; }
-.phaseWhen { font-family: var(--r-gothic); letter-spacing: 0.1em; font-size: var(--r-fs-body); margin: 0; }
+.phaseName { font-family: var(--r-serif); font-weight: 700; font-size: calc(var(--r-fs-phase) + 5px); margin: 0 0 10px; }
+.phaseWhen { font-family: var(--r-gothic); letter-spacing: 0.12em; font-size: var(--r-fs-micro); margin: 0; }
 .place { display: flex; flex-direction: column; align-items: center; gap: 24px; }
 .placeEmpty { align-self: stretch; display: none; }
 /* Prefixed with .root so it outranks the generic ".root img { max-width: 100% }"
@@ -1036,6 +1036,8 @@
   .heroPanel { padding: 32px 16px; }
   /* Thinner outer frame on bands so the cream card gets the width. */
   .band { padding: 12px; }
+  /* More navy above and below the story card on a phone. */
+  .storyBand { padding-block: 56px; }
   .giftSection { padding-inline: 12px; }
   .gift { padding: 8px; }
   .giftMat { padding: 6px; }
