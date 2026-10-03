@@ -404,7 +404,7 @@
 @media (max-width: 599px) {
   /* More air above and below on a phone, so the message and the numbers
      don't feel squeezed against the band edges. */
-  .countdown { padding-block: 72px; }
+  .countdown { padding-block: 108px; }
 }
 
 /* ============================================================
