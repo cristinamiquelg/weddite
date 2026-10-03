@@ -112,12 +112,12 @@ export const riberaDemoWeddingData: WeddingData = {
   phases: [
     {
       name: "La pre-boda",
-      when: "Viernes 10, 19:00",
+      when: "2027-09-10T19:00",
       places: [{ name: "Casa del Pescador", address: "Carrer Nou, 8, Cadaqués" }],
     },
     {
       name: "La boda",
-      when: "Sábado 11, 18:00",
+      when: "2027-09-11T18:00",
       places: [
         { name: "Ermita de Sant Baldiri", address: "Camí de l'Ermita, s/n, Cadaqués" },
         { name: "Finca del Faro", address: "Carretera del Far, km 2, Cadaqués" },
@@ -125,14 +125,14 @@ export const riberaDemoWeddingData: WeddingData = {
     },
     {
       name: "La post-boda",
-      when: "Domingo 12, 13:00",
+      when: "2027-09-12T13:00",
       places: [{ name: "Restaurante Es Balandre", address: "Riba Nemesi Llorens, 2, Cadaqués" }],
     },
   ],
   detailCards: [
     {
       icon: "dresscode",
-      title: "Dress code",
+      title: "Código de vestimenta",
       description: "Formal de verano. La ermita tiene suelo de piedra: mejor tacón ancho.",
       ctaLabel: "Ver inspiración",
       url: "https://www.pinterest.es/search/pins/?q=boda%20verano%20formal",

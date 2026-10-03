@@ -84,6 +84,10 @@ export default function ConfirmClient({ template }: { template: Template }) {
           <Link
             href={`/preview/${template.slug}?draft=1`}
             target="_blank"
+            // Not noopener: the new tab has to inherit this tab's sessionStorage,
+            // which is where the configured draft lives; without it the tab
+            // opens the generic demo instead of the couple's own site.
+            rel="opener"
             className="mt-4 flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-center text-sm font-medium text-ink transition-colors hover:border-ink"
           >
             <svg viewBox="0 0 20 20" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth="1.6">

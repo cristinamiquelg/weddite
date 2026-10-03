@@ -31,7 +31,7 @@ export const templates: Template[] = [
     features: [
       "Cuenta atrás en directo",
       "Itinerario por fases (pre-boda, boda, post-boda) con varios lugares",
-      "Tarjetas de detalles (dresscode, autobuses, hoteles)",
+      "Tarjetas de detalles (código de vestimenta, autobuses, hoteles)",
       "RSVP con acompañantes ilimitados",
       "Sección de regalo con marco ilustrado",
       "100% adaptada a móvil",

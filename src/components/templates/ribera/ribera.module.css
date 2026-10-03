@@ -80,7 +80,10 @@
 }
 
 .root img { max-width: 100%; display: block; }
-.root section[id] { scroll-margin-top: var(--r-header-h); }
+/* Every anchor, not just sections: the wizard scrolls the preview to a
+   specific phase / detail card / contact, and without this offset the sticky
+   header sits right on top of the target. */
+.root [id] { scroll-margin-top: calc(var(--r-header-h) + 16px); }
 
 /* The global ::selection rule in globals.css paints Wedite's own clay
    brand color — that's the wizard/marketing site's palette, not this
@@ -365,7 +368,7 @@
 .countdown {
   background: var(--r-navy);
   color: var(--r-cream);
-  padding: var(--r-sp-section) 24px;
+  padding: calc(var(--r-sp-section) + 28px) 24px;
 }
 .countdownInner {
   max-width: var(--r-maxw);
@@ -396,7 +399,14 @@
 }
 
 @media (max-width: 899px) {
-  .countdownInner { flex-direction: column; align-items: center; text-align: center; gap: 24px; }
+  .countdownInner { flex-direction: column; align-items: center; text-align: center; gap: 40px; }
+  /* The stacked layout (phones, and the narrow preview pane in the wizard)
+     gets extra air above and below so the message and the numbers don't
+     feel squeezed against the band edges. */
+  .countdown { padding-block: 96px; }
+}
+@media (max-width: 599px) {
+  .countdown { padding-block: 140px; }
 }
 
 /* ============================================================
@@ -524,8 +534,8 @@
   align-items: start;
 }
 .phase { align-self: center; text-align: center; text-transform: uppercase; grid-column: 1 / -1; }
-.phaseName { font-family: var(--r-serif); font-weight: 700; font-size: var(--r-fs-phase); margin: 0 0 8px; }
-.phaseWhen { font-family: var(--r-gothic); letter-spacing: 0.1em; font-size: var(--r-fs-body); margin: 0; }
+.phaseName { font-family: var(--r-serif); font-weight: 700; font-size: calc(var(--r-fs-phase) + 5px); margin: 0 0 10px; }
+.phaseWhen { font-family: var(--r-gothic); letter-spacing: 0.12em; font-size: var(--r-fs-micro); margin: 0; }
 .place { display: flex; flex-direction: column; align-items: center; gap: 24px; }
 .placeEmpty { align-self: stretch; display: none; }
 /* Prefixed with .root so it outranks the generic ".root img { max-width: 100% }"
@@ -622,17 +632,15 @@
 }
 
 /* ============================================================
-   RSVP form — a true full-screen, step-by-step flow rather than a
-   card boxed inside a colored band: the section itself fills the
-   viewport edge to edge, so it reads as its own dedicated screen
-   instead of "a card sitting on the page".
+   RSVP — the home only carries a short invitation + button (.rsvpBand);
+   the form itself lives on its own page (.rsvpPageMain), a true
+   full-screen, step-by-step flow with nothing else competing for it.
    ============================================================ */
 .rsvpBand {
-  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px var(--r-sp-hero-x);
+  padding: var(--r-sp-section) var(--r-sp-hero-x);
 }
 .rsvpCard {
   width: 100%;
@@ -643,6 +651,38 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
+}
+.rsvpPageHeader {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 4px 16px;
+  padding: 8px var(--r-sp-header-x);
+  background: var(--r-cream);
+  border-bottom: 1px solid rgba(14, 20, 83, 0.12);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.rsvpPageHeader .logo { grid-area: auto; }
+.rsvpBack {
+  justify-self: start;
+  color: var(--r-navy);
+  text-decoration: none;
+  font-size: var(--r-fs-small);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.rsvpBack:hover { text-decoration: underline; }
+.rsvpPageLocale { justify-self: end; display: flex; align-items: center; }
+.rsvpPageMain {
+  min-height: calc(100dvh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px var(--r-sp-hero-x);
 }
 .rsvpIntro { text-align: center; font-size: var(--r-fs-small); max-width: 540px; margin: 0; }
 .rsvpDeadline {
@@ -998,6 +1038,8 @@
   .heroPanel { padding: 32px 16px; }
   /* Thinner outer frame on bands so the cream card gets the width. */
   .band { padding: 12px; }
+  /* More navy above and below the story card on a phone. */
+  .storyBand { padding-block: 56px; }
   .giftSection { padding-inline: 12px; }
   .gift { padding: 8px; }
   .giftMat { padding: 6px; }

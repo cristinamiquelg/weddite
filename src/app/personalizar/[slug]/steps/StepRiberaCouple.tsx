@@ -1,15 +1,12 @@
 import type { WeddingData } from "@/lib/wedding-types";
 import { Field, TextArea, TextInput } from "@/components/customize/fields";
+import DatePicker, { todayISO } from "@/components/customize/DatePicker";
 import { useSiteLocale } from "@/lib/site-locale";
 import { getSiteDict } from "@/lib/site-dict";
 
 const NAME_MAX_LENGTH = 40;
 const PLACE_MAX_LENGTH = 60;
 const WELCOME_MAX_LENGTH = 160;
-
-function todayISO() {
-  return new Date().toISOString().slice(0, 10);
-}
 
 export default function StepRiberaCouple({
   data,
@@ -52,30 +49,22 @@ export default function StepRiberaCouple({
           />
         </Field>
       </div>
-      <Field
-        label={dict.stepCouple.weddingDate}
-        required
-        requiredLabel={dict.required}
-        hint={dict.stepCouple.weddingDateHint}
-      >
-        <TextInput
-          type="date"
+      <Field label={dict.stepCouple.weddingDate} required requiredLabel={dict.required} asDiv>
+        <DatePicker
           value={data.date}
           min={minDate}
-          onChange={(e) => {
-            const v = e.target.value;
-            // Belt and suspenders: the min attribute blocks the native
-            // picker, but a typed/pasted value could still slip a past
-            // date through in browsers that don't enforce it.
-            if (v && v < minDate) return;
-            onChange({ date: v });
-          }}
+          locale={locale}
+          placeholder={dict.stepCouple.datePlaceholder}
+          prevMonthLabel={dict.stepCouple.prevMonth}
+          nextMonthLabel={dict.stepCouple.nextMonth}
+          ariaLabel={dict.stepCouple.weddingDate}
+          onChange={(date) => onChange({ date })}
         />
       </Field>
       <div className="grid gap-5 sm:grid-cols-2">
         <Field
           label={dict.stepCouple.estateName}
-          hint={`${dict.stepCouple.estateNameHint} — ${dict.maxChars(PLACE_MAX_LENGTH)}`}
+          hint={dict.maxChars(PLACE_MAX_LENGTH)}
         >
           <TextInput
             value={data.estateName}

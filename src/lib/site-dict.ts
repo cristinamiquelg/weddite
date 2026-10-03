@@ -141,11 +141,12 @@ type SiteDict = {
       yourName: string;
       partnerName: string;
       weddingDate: string;
-      weddingDateHint: string;
+      datePlaceholder: string;
+      prevMonth: string;
+      nextMonth: string;
       welcomeMessage: string;
       welcomeMessagePlaceholder: string;
       estateName: string;
-      estateNameHint: string;
       location: string;
     };
     stepStory: {
@@ -185,6 +186,9 @@ type SiteDict = {
       intro: string;
       phaseNamePlaceholder: string;
       phaseWhenPlaceholder: string;
+      timeHour: string;
+      timeMinute: string;
+      pickerDone: string;
       removePhase: string;
       placeNamePlaceholder: string;
       placeAddressPlaceholder: string;
@@ -296,7 +300,7 @@ const es: SiteDict = {
       features: [
         "Cuenta atrás en directo",
         "Itinerario por fases (pre-boda, boda, post-boda) con varios lugares",
-        "Tarjetas de detalles (dresscode, autobuses, hoteles)",
+        "Tarjetas de detalles (código de vestimenta, autobuses, hoteles)",
         "RSVP con acompañantes ilimitados",
         "Sección de regalo con marco ilustrado",
         "100% adaptada a móvil",
@@ -399,11 +403,12 @@ const es: SiteDict = {
       yourName: "Vuestro nombre",
       partnerName: "Nombre de tu pareja",
       weddingDate: "Fecha de la boda",
-      weddingDateHint: "Tiene que ser una fecha futura",
+      datePlaceholder: "Elegir fecha",
+      prevMonth: "Mes anterior",
+      nextMonth: "Mes siguiente",
       welcomeMessage: "Mensaje de bienvenida",
       welcomeMessagePlaceholder: "Lo primero que leerán vuestros invitados al entrar en la web.",
       estateName: "Finca / lugar principal",
-      estateNameHint: "El que aparece en la portada",
       location: "Ubicación",
     },
     stepStory: {
@@ -419,7 +424,7 @@ const es: SiteDict = {
       storyImageDrawing: "Dibujando vuestra ilustración… puede tardar hasta un minuto.",
       storyImageFallback: "No hemos podido crear la ilustración, así que usaremos vuestra foto tal cual.",
       hashtag: "Hashtag de la boda",
-      hashtagHint: "Para redes sociales",
+      hashtagHint: "Sin espacios, para redes sociales",
     },
     stepRsvpGift: {
       rsvpSectionTitle: "Confirmación de asistencia",
@@ -442,7 +447,10 @@ const es: SiteDict = {
     stepItinerary: {
       intro: "Organizad el día en fases (pre-boda, boda, post-boda...) y añadid los lugares de cada una.",
       phaseNamePlaceholder: "La boda",
-      phaseWhenPlaceholder: "Sábado 11, 18:00",
+      phaseWhenPlaceholder: "Elegir fecha y hora",
+      timeHour: "Hora",
+      timeMinute: "Minutos",
+      pickerDone: "Listo",
       removePhase: "Quitar fase",
       placeNamePlaceholder: "Ermita de Sant Baldiri",
       placeAddressPlaceholder: "Dirección",
@@ -454,9 +462,9 @@ const es: SiteDict = {
       addPhase: "+ Añadir fase",
     },
     stepDetails: {
-      intro: "Añadid tarjetas informativas para vuestros invitados: dresscode, autobuses, hoteles recomendados...",
-      iconLabels: { dresscode: "Dress code", bus: "Autobuses", hotel: "Hoteles" },
-      titlePlaceholder: "Título (p. ej. Dress code)",
+      intro: "Añadid tarjetas informativas para vuestros invitados: código de vestimenta, autobuses, hoteles recomendados...",
+      iconLabels: { dresscode: "Código de vestimenta", bus: "Autobuses", hotel: "Hoteles" },
+      titlePlaceholder: "Título (p. ej. Código de vestimenta)",
       titleAriaLabel: "Título de la tarjeta",
       descriptionPlaceholder:
         "Lo esencial en 1–2 frases (p. ej. Formal de verano, evitad tacón fino: la ermita tiene suelo de piedra)",
@@ -658,11 +666,12 @@ const en: SiteDict = {
       yourName: "Your name",
       partnerName: "Your partner's name",
       weddingDate: "Wedding date",
-      weddingDateHint: "Must be a date in the future",
+      datePlaceholder: "Choose a date",
+      prevMonth: "Previous month",
+      nextMonth: "Next month",
       welcomeMessage: "Welcome message",
       welcomeMessagePlaceholder: "The first thing your guests will read when they open the site.",
       estateName: "Venue / main location",
-      estateNameHint: "The one shown on the homepage",
       location: "Location",
     },
     stepStory: {
@@ -678,7 +687,7 @@ const en: SiteDict = {
       storyImageDrawing: "Drawing your illustration… this can take up to a minute.",
       storyImageFallback: "We couldn't create the illustration, so we'll use your photo as it is.",
       hashtag: "Wedding hashtag",
-      hashtagHint: "For social media",
+      hashtagHint: "No spaces, for social media",
     },
     stepRsvpGift: {
       rsvpSectionTitle: "RSVP",
@@ -701,7 +710,10 @@ const en: SiteDict = {
     stepItinerary: {
       intro: "Organize the day into phases (pre-wedding, wedding, after-party...) and add the venues for each one.",
       phaseNamePlaceholder: "The wedding",
-      phaseWhenPlaceholder: "Saturday 11th, 6:00pm",
+      phaseWhenPlaceholder: "Choose date and time",
+      timeHour: "Hour",
+      timeMinute: "Minutes",
+      pickerDone: "Done",
       removePhase: "Remove phase",
       placeNamePlaceholder: "St. Baldiri's Chapel",
       placeAddressPlaceholder: "Address",

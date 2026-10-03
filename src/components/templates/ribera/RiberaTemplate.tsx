@@ -4,11 +4,11 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
 import type { PlaceIllustration, WeddingData, WeddingPlace } from "@/lib/wedding-types";
-import { formatLongDate, mapsUrl } from "@/lib/format";
+import { formatLongDate, formatPhaseWhen, mapsUrl } from "@/lib/format";
 import { getDict, locales as localeOptions } from "@/lib/i18n";
 import RiberaCountdown from "./RiberaCountdown";
-import RiberaRsvpForm from "./RiberaRsvpForm";
 import RiberaCopyButton from "./RiberaCopyButton";
+import { coupleInitials } from "./initials";
 import styles from "./ribera.module.css";
 
 // Real line-art illustrations from the L&J invitation this template is
@@ -76,8 +76,17 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-export default function RiberaTemplate({ data }: { data: WeddingData }) {
-  const [locale, setLocale] = useState(data.locales[0] ?? "es");
+export default function RiberaTemplate({
+  data,
+  rsvpHref,
+  initialLocale,
+}: {
+  data: WeddingData;
+  rsvpHref?: string;
+  /** Language to open in (e.g. coming back from the RSVP page); defaults to the first enabled. */
+  initialLocale?: string;
+}) {
+  const [locale, setLocale] = useState(data.locales.find((l) => l === initialLocale) ?? data.locales[0] ?? "es");
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Keep the preview's displayed language in sync with the wizard's
@@ -100,18 +109,20 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
     }
   }, [data.locales, locale]);
   const dict = getDict(locale);
+  // The RSVP form lives on its own page; carry the guest's current language
+  // over so the form opens in the language they were reading.
+  const rsvpLink = rsvpHref ? `${rsvpHref}${rsvpHref.includes("?") ? "&" : "?"}lang=${locale}` : "#rsvp";
   const showLocaleSwitcher = data.locales.length > 1;
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
-  const initials = `${(data.partnerA || "L")[0].toUpperCase()}&${(data.partnerB || "J")[0].toUpperCase()}`;
+  const initials = coupleInitials(data.partnerA, data.partnerB);
   const { day, month, year } = heroDateParts(data.date);
 
   const hasEstate = Boolean(data.estateName || data.estateLocation);
   const hasStory = Boolean(data.story);
   const hasItinerary = data.phases.length > 0;
   const hasDetails = data.detailCards.length > 0;
-  const hasGift = Boolean(data.giftMessage || data.giftAccount);
+  const hasGift = Boolean(data.giftMessage || data.giftHolderName || data.giftAccount);
   const hasContact = data.organizerContacts.some((c) => c.name || c.phone || c.email);
-  const hasBus = data.detailCards.some((c) => c.icon === "bus");
 
   const NAV_LINKS = [
     { href: "#cuando", label: dict.ribera.nav.cuando },
@@ -195,7 +206,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
 
         <div className={styles.headerActions}>
           <span className={styles.headerLocaleSwitch}>{localeSwitch}</span>
-          <a href="#rsvp" className={`${styles.btnSolid} ${styles.navCta}`}>
+          <a href={rsvpLink} className={`${styles.btnSolid} ${styles.navCta}`}>
             {dict.ribera.nav.confirm}
           </a>
         </div>
@@ -266,7 +277,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
       </section>
 
       {hasStory ? (
-        <section className={styles.bandStriped} id="historia">
+        <section className={`${styles.bandStriped} ${styles.storyBand}`} id="historia">
           <div data-reveal className={styles.card}>
             <h2 className={styles.sectionTitle}>{data.storyTitle || dict.ribera.storyTitleFallback}</h2>
             {data.storyImage ? (
@@ -319,7 +330,7 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                       {phase.name ? <p className={styles.phaseName}>{phase.name}</p> : null}
                       {phase.when ? (
                         <p className={styles.phaseWhen}>
-                          {phase.when}
+                          {formatPhaseWhen(phase.when, locale)}
                         </p>
                       ) : null}
                     </div>
@@ -420,13 +431,15 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
                 {data.giftMessage ? (
                   <p className={styles.leadText}>{data.giftMessage}</p>
                 ) : null}
-                {data.giftAccount ? (
+                {data.giftHolderName || data.giftAccount ? (
                   <div className={styles.giftAccount}>
                     {data.giftHolderName ? <p className={styles.leadText}>{data.giftHolderName}</p> : null}
-                    <div className={styles.giftIbanRow}>
-                      <p className={styles.giftIban}>{data.giftAccount}</p>
-                      <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} locale={locale} icon />
-                    </div>
+                    {data.giftAccount ? (
+                      <div className={styles.giftIbanRow}>
+                        <p className={styles.giftIban}>{data.giftAccount}</p>
+                        <RiberaCopyButton value={data.giftAccount} className={styles.copyBtn} locale={locale} icon />
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
               </div>
@@ -441,7 +454,9 @@ export default function RiberaTemplate({ data }: { data: WeddingData }) {
         <div data-reveal className={styles.rsvpCard}>
           <h2 className={styles.sectionTitle}>{dict.ribera.rsvp.title}</h2>
           {data.rsvpNote ? <p className={styles.rsvpIntro}>{data.rsvpNote}</p> : null}
-          <RiberaRsvpForm locale={locale} showBus={hasBus} />
+          <a href={rsvpLink} className={styles.btnSolid}>
+            {dict.ribera.rsvp.cta}
+          </a>
         </div>
       </section>
 

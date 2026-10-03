@@ -12,14 +12,21 @@ a real invitation (github.com/cristinamiquelg/invitacion-lk).
 ## File map
 
 - `src/components/templates/ribera/RiberaTemplate.tsx` — the guest-facing
-  page. All sections (hero, countdown, historia, itinerario, detalles,
-  regalos, rsvp, contacto, footer) live here.
+  home page. All sections (hero, countdown, historia, itinerario, detalles,
+  regalos, rsvp, contacto, footer) live here. The `#rsvp` section is only a
+  short invitation + button: the form is NOT part of the home.
 - `src/components/templates/ribera/ribera.module.css` — every style, scoped
   under `.root` (a CSS Module — classnames are hashed, so there's no
   collision risk with Tailwind or the rest of the app).
+- `src/components/templates/ribera/RiberaRsvpPage.tsx` — the standalone
+  RSVP page (minimal header with back link, language switch, the form).
+  Routed at `/preview/[slug]/rsvp` (`src/app/preview/[slug]/rsvp/`), which
+  follows the same demo/`?draft=1` data rules as `PreviewClient`. The home
+  links to it via `rsvpHref`; `?lang=` carries the guest's language both ways.
 - `src/components/templates/ribera/RiberaRsvpForm.tsx` — the RSVP flow: a
   full-screen, one-question-per-step wizard grouped into 3 named sections
-  (Tu información / Tu asistencia / Tus acompañantes).
+  (Tu información / Tu asistencia / Tus acompañantes). Rendered only by
+  `RiberaRsvpPage`.
 - `RiberaCountdown.tsx`, `RiberaCopyButton.tsx` — small supporting pieces.
 - `src/app/personalizar/[slug]/steps/Step*.tsx` — the couple-facing wizard
   that edits `WeddingData` (StepRiberaCouple, StepStory, StepItinerary,
@@ -62,6 +69,20 @@ clay, so Ribera overrides it back to navy under `.root`.
   `scrollIntoView()` on it is a silent no-op. Put ids on real, rendered
   elements; a bare (non-hidden) `<span>` is fine as a fallback when there's
   no other element to anchor to.
+- **Scroll targets need an offset.** The header is sticky, so anything the
+  wizard scrolls the preview to (phase, detail card, contact) would land
+  *under* it. `.root [id]` carries `scroll-margin-top`; keep it when adding
+  anchors.
+- **Phase times are ISO date-times** (`2027-09-11T18:00`, picked with
+  `components/customize/DatePicker.tsx` in `withTime` mode) and are formatted
+  per language by `formatPhaseWhen` in `lib/format.ts`; legacy free text is
+  shown as is.
+- **The monogram never invents initials**: with no names yet it is a bare
+  `&` (`ribera/initials.ts`).
+- **The story illustration** is generated from the couple's photo plus a
+  style sheet of the template's own SVG illustrations
+  (`lib/story-style-reference.ts`, regenerate it if those illustrations
+  change) — that second input image is what keeps it consistent with them.
 - **The mobile header grid must stay symmetric.** `grid-template-columns`
   needs equal-fraction side columns (`1fr auto 1fr`), not `auto 1fr auto` —
   otherwise the hamburger button and the (wider) RSVP button pull the

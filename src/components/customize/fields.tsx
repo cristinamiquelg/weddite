@@ -3,16 +3,20 @@ export function Field({
   hint,
   required = false,
   requiredLabel = "Obligatorio",
+  asDiv = false,
   children,
 }: {
   label: string;
   hint?: string;
   required?: boolean;
   requiredLabel?: string;
+  /** Render a <div> instead of a <label>, for controls that aren't a single native input (e.g. the date picker's popover). */
+  asDiv?: boolean;
   children: React.ReactNode;
 }) {
+  const Wrapper = asDiv ? "div" : "label";
   return (
-    <label className="flex flex-col gap-1.5">
+    <Wrapper className="flex flex-col gap-1.5">
       <span className="flex items-center gap-2 text-sm font-medium text-ink">
         {label}
         {required ? (
@@ -23,7 +27,7 @@ export function Field({
       </span>
       {children}
       {hint ? <span className="text-xs text-ink-soft">{hint}</span> : null}
-    </label>
+    </Wrapper>
   );
 }
 

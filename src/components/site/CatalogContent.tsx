@@ -32,12 +32,15 @@ export default function CatalogContent() {
                 tabIndex={-1}
                 className="absolute inset-0 z-0"
               />
-              <div className="pointer-events-none relative h-64 overflow-hidden border-b border-line bg-paper">
+              {/* The card shows only the template's hero: the iframe is exactly as tall
+                  as the hero (749px at 1400px wide) and the box is that height
+                  at the scale in use, so nothing below it (the countdown) peeks in. */}
+              <div className="pointer-events-none relative h-[262px] overflow-hidden border-b border-line bg-paper sm:h-[225px]">
                 <iframe
                   src={`/preview/${tpl.slug}`}
                   title={`Preview — ${tpl.name}`}
                   tabIndex={-1}
-                  className="pointer-events-none absolute left-1/2 top-0 h-[1100px] w-[1400px] origin-top -translate-x-1/2 scale-[0.35] sm:scale-[0.3]"
+                  className="pointer-events-none absolute left-1/2 top-0 h-[749px] w-[1400px] origin-top -translate-x-1/2 scale-[0.35] sm:scale-[0.3]"
                 />
               </div>
               <div className="flex flex-1 flex-col p-6">
