@@ -4,10 +4,11 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
 import type { PlaceIllustration, WeddingData, WeddingPlace } from "@/lib/wedding-types";
-import { formatLongDate, mapsUrl } from "@/lib/format";
+import { formatLongDate, formatPhaseWhen, mapsUrl } from "@/lib/format";
 import { getDict, locales as localeOptions } from "@/lib/i18n";
 import RiberaCountdown from "./RiberaCountdown";
 import RiberaCopyButton from "./RiberaCopyButton";
+import { coupleInitials } from "./initials";
 import styles from "./ribera.module.css";
 
 // Real line-art illustrations from the L&J invitation this template is
@@ -113,7 +114,7 @@ export default function RiberaTemplate({
   const rsvpLink = rsvpHref ? `${rsvpHref}${rsvpHref.includes("?") ? "&" : "?"}lang=${locale}` : "#rsvp";
   const showLocaleSwitcher = data.locales.length > 1;
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
-  const initials = `${(data.partnerA || "L")[0].toUpperCase()}&${(data.partnerB || "J")[0].toUpperCase()}`;
+  const initials = coupleInitials(data.partnerA, data.partnerB);
   const { day, month, year } = heroDateParts(data.date);
 
   const hasEstate = Boolean(data.estateName || data.estateLocation);
@@ -329,7 +330,7 @@ export default function RiberaTemplate({
                       {phase.name ? <p className={styles.phaseName}>{phase.name}</p> : null}
                       {phase.when ? (
                         <p className={styles.phaseWhen}>
-                          {phase.when}
+                          {formatPhaseWhen(phase.when, locale)}
                         </p>
                       ) : null}
                     </div>

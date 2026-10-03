@@ -48,6 +48,10 @@ export default function GraciasContent({
           <Link
             href={`/preview/${slug}?draft=1`}
             target="_blank"
+            // Not noopener: the new tab has to inherit this tab's sessionStorage,
+            // which is where the configured draft lives; without it the tab
+            // opens the generic demo instead of the couple's own site.
+            rel="opener"
             className="rounded-full bg-ink px-7 py-3.5 text-center text-sm font-medium text-paper transition-opacity hover:opacity-90"
           >
             {dict.viewSite}

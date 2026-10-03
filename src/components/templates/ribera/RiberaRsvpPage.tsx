@@ -6,6 +6,7 @@ import SparkleIcon from "@/components/site/SparkleIcon";
 import type { WeddingData } from "@/lib/wedding-types";
 import { getDict, locales as localeOptions, type Locale } from "@/lib/i18n";
 import RiberaRsvpForm from "./RiberaRsvpForm";
+import { coupleInitials } from "./initials";
 import styles from "./ribera.module.css";
 
 // The RSVP flow as its own page, separate from the template's home: the
@@ -28,7 +29,7 @@ export default function RiberaRsvpPage({
   const activeLocale = data.locales.includes(locale) ? locale : (data.locales[0] ?? "es");
 
   const names = `${data.partnerA || "Vuestro nombre"} & ${data.partnerB || "Vuestra pareja"}`;
-  const initials = `${(data.partnerA || "L")[0].toUpperCase()}&${(data.partnerB || "J")[0].toUpperCase()}`;
+  const initials = coupleInitials(data.partnerA, data.partnerB);
   const hasBus = data.detailCards.some((c) => c.icon === "bus");
   const hrefWithLang = `${backHref}${backHref.includes("?") ? "&" : "?"}lang=${activeLocale}`;
 

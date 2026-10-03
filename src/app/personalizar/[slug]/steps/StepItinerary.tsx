@@ -1,9 +1,9 @@
 import type { PlaceIllustration, WeddingData, WeddingPhase, WeddingPlace } from "@/lib/wedding-types";
 import { Select, TextInput } from "@/components/customize/fields";
+import DatePicker, { todayISO } from "@/components/customize/DatePicker";
 
 const illustrationIds: PlaceIllustration[] = ["casa", "catedral", "cortijo", "restaurante"];
 const PHASE_NAME_MAX_LENGTH = 40;
-const PHASE_WHEN_MAX_LENGTH = 40;
 const PLACE_NAME_MAX_LENGTH = 50;
 const PLACE_ADDRESS_MAX_LENGTH = 80;
 const MAPS_URL_MAX_LENGTH = 300;
@@ -73,11 +73,20 @@ export default function StepItinerary({
                 placeholder={dict.stepItinerary.phaseNamePlaceholder}
                 maxLength={PHASE_NAME_MAX_LENGTH}
               />
-              <TextInput
+              <DatePicker
+                withTime
                 value={phase.when}
-                onChange={(e) => updatePhase(pi, { when: e.target.value })}
+                min={todayISO()}
+                defaultMonth={data.date || undefined}
+                locale={locale}
                 placeholder={dict.stepItinerary.phaseWhenPlaceholder}
-                maxLength={PHASE_WHEN_MAX_LENGTH}
+                prevMonthLabel={dict.stepCouple.prevMonth}
+                nextMonthLabel={dict.stepCouple.nextMonth}
+                hourLabel={dict.stepItinerary.timeHour}
+                minuteLabel={dict.stepItinerary.timeMinute}
+                doneLabel={dict.stepItinerary.pickerDone}
+                ariaLabel={dict.stepItinerary.phaseWhenPlaceholder}
+                onChange={(when) => updatePhase(pi, { when })}
               />
             </div>
             <button
