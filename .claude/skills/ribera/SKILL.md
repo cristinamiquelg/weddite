@@ -12,14 +12,21 @@ a real invitation (github.com/cristinamiquelg/invitacion-lk).
 ## File map
 
 - `src/components/templates/ribera/RiberaTemplate.tsx` — the guest-facing
-  page. All sections (hero, countdown, historia, itinerario, detalles,
-  regalos, rsvp, contacto, footer) live here.
+  home page. All sections (hero, countdown, historia, itinerario, detalles,
+  regalos, rsvp, contacto, footer) live here. The `#rsvp` section is only a
+  short invitation + button: the form is NOT part of the home.
 - `src/components/templates/ribera/ribera.module.css` — every style, scoped
   under `.root` (a CSS Module — classnames are hashed, so there's no
   collision risk with Tailwind or the rest of the app).
+- `src/components/templates/ribera/RiberaRsvpPage.tsx` — the standalone
+  RSVP page (minimal header with back link, language switch, the form).
+  Routed at `/preview/[slug]/rsvp` (`src/app/preview/[slug]/rsvp/`), which
+  follows the same demo/`?draft=1` data rules as `PreviewClient`. The home
+  links to it via `rsvpHref`; `?lang=` carries the guest's language both ways.
 - `src/components/templates/ribera/RiberaRsvpForm.tsx` — the RSVP flow: a
   full-screen, one-question-per-step wizard grouped into 3 named sections
-  (Tu información / Tu asistencia / Tus acompañantes).
+  (Tu información / Tu asistencia / Tus acompañantes). Rendered only by
+  `RiberaRsvpPage`.
 - `RiberaCountdown.tsx`, `RiberaCopyButton.tsx` — small supporting pieces.
 - `src/app/personalizar/[slug]/steps/Step*.tsx` — the couple-facing wizard
   that edits `WeddingData` (StepRiberaCouple, StepStory, StepItinerary,
