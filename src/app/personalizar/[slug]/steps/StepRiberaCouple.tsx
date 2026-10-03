@@ -64,7 +64,7 @@ export default function StepRiberaCouple({
       <div className="grid gap-5 sm:grid-cols-2">
         <Field
           label={dict.stepCouple.estateName}
-          hint={`${dict.stepCouple.estateNameHint} — ${dict.maxChars(PLACE_MAX_LENGTH)}`}
+          hint={dict.maxChars(PLACE_MAX_LENGTH)}
         >
           <TextInput
             value={data.estateName}

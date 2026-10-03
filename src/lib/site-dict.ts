@@ -147,7 +147,6 @@ type SiteDict = {
       welcomeMessage: string;
       welcomeMessagePlaceholder: string;
       estateName: string;
-      estateNameHint: string;
       location: string;
     };
     stepStory: {
@@ -410,7 +409,6 @@ const es: SiteDict = {
       welcomeMessage: "Mensaje de bienvenida",
       welcomeMessagePlaceholder: "Lo primero que leerán vuestros invitados al entrar en la web.",
       estateName: "Finca / lugar principal",
-      estateNameHint: "El que aparece en la portada",
       location: "Ubicación",
     },
     stepStory: {
@@ -674,7 +672,6 @@ const en: SiteDict = {
       welcomeMessage: "Welcome message",
       welcomeMessagePlaceholder: "The first thing your guests will read when they open the site.",
       estateName: "Venue / main location",
-      estateNameHint: "The one shown on the homepage",
       location: "Location",
     },
     stepStory: {
