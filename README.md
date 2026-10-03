@@ -76,6 +76,8 @@ gasto propio.
 | `RESEND_API_KEY` | Envío del formulario de contacto |
 | `SUPABASE_URL` | URL del proyecto de Supabase de ese entorno |
 | `SUPABASE_SERVICE_ROLE_KEY` | Clave **secreta** de Supabase (solo servidor; nunca en el cliente ni en el repositorio) |
+| `DASHBOARD_PATH_TOKEN` | Parte secreta de la URL del panel de analítica (`/ops/<token>`); mínimo 24 caracteres aleatorios |
+| `DASHBOARD_PASSWORD` | Contraseña del panel de analítica |
 
 ### Base de datos (Supabase)
 
@@ -94,6 +96,17 @@ Un proyecto de Supabase por entorno, ambos en Irlanda (`eu-west-1`) por el RGPD:
 - Sin cuentas por ahora: una pareja gestiona su web con un enlace de edición
   secreto enviado por email (en base de datos solo se guarda su hash).
 - Los cobros (`payments`, `stripe_events`) llegan con la integración de Stripe.
+
+### Analítica y panel privado
+
+Medición propia, sin cookies ni terceros: el navegador envía eventos
+(`page_view`, `wizard_step`, `checkout_submit`) a `/api/track`, que los guarda en
+la tabla `events` con un id aleatorio de pestaña (`sessionStorage`); no se guarda
+IP ni navegador. El panel está en `/ops/<DASHBOARD_PATH_TOKEN>` (un token
+incorrecto da un 404 normal), pide `DASHBOARD_PASSWORD`, limita los intentos
+fallidos, lleva `noindex` y no aparece en `robots.txt`. Desde el propio panel se
+puede excluir el navegador propio de las métricas. Para añadir un evento, súmalo
+a `EVENT_NAMES` en `src/lib/analytics.ts` y llámalo con `trackEvent`.
 
 Por ahora todo el sitio, producción incluida, es no indexable (`noindex` en el
 layout y `robots.txt` con `Disallow: /`); staging debe seguir siéndolo siempre.
