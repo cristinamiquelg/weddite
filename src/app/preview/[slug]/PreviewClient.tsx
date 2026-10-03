@@ -3,30 +3,34 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { WeddingData } from "@/lib/wedding-types";
-import { getDemoWeddingData } from "@/lib/wedding-types";
+import { emptyWeddingData, getDemoWeddingData } from "@/lib/wedding-types";
 import { draftStorageKey } from "@/lib/draft-storage";
 import { renderTemplate, type TemplateSlug } from "@/components/templates/registry";
 
 export default function PreviewClient({ slug }: { slug: TemplateSlug }) {
-  const [data, setData] = useState<WeddingData>(() => getDemoWeddingData());
+  // A draft view starts from the empty template, never the demo: optional
+  // fields a couple left blank (e.g. the story photo) are simply absent from
+  // their saved draft, and merging onto the demo would fill them with the
+  // demo's content.
+  const params = useSearchParams();
+  const isDraft = params.get("draft") === "1";
+  const [data, setData] = useState<WeddingData>(() => (isDraft ? emptyWeddingData : getDemoWeddingData()));
   // Marketing previews (catalog cards, "ver preview" links) always show the
   // curated demo — only ?draft=1 (the wizard's own live iframe, "review
   // before buying", "view your site") should reflect a saved draft, so a
   // couple's own in-progress edits never leak into someone else's browsing
   // of the same design.
-  const params = useSearchParams();
-  const isDraft = params.get("draft") === "1";
 
   useEffect(() => {
     if (!isDraft) return;
 
     try {
       const raw = window.sessionStorage.getItem(draftStorageKey(slug));
-      // Merge onto the template's own defaults, not just the raw parsed
+      // Merge onto the empty template's defaults, not just the raw parsed
       // draft: an older draft saved before a field existed (e.g. `locales`)
       // would otherwise leave that field `undefined` and crash the template.
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from sessionStorage after mount
-      if (raw) setData({ ...getDemoWeddingData(), ...JSON.parse(raw) });
+      if (raw) setData({ ...emptyWeddingData, ...JSON.parse(raw) });
     } catch {
       // ignore malformed/unavailable storage
     }
