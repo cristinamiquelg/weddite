@@ -395,7 +395,7 @@ const es: SiteDict = {
     remove: "Quitar",
     maxChars: (n) => `Máx. ${n} caracteres`,
     stepLanguage: {
-      intro: "Elegid en qué idiomas estará disponible vuestra web. Podéis elegir más de uno: si la boda es bilingüe, vuestros invitados podrán cambiar de idioma con un selector en la propia web. Esto afecta a los textos fijos (menú, botones, RSVP...); lo que escribáis vosotros (historia, mensajes...) se mostrará tal cual lo escribáis.",
+      intro: "Elegid en qué idiomas estará disponible vuestra web. Podéis elegir más de uno: si la boda es bilingüe, vuestros invitados podrán cambiar de idioma con un selector en la propia web.",
       included: "Incluido",
       summary: (langs) => `Vuestra web mostrará un selector de idioma para que cada invitado elija entre: ${langs}.`,
     },
@@ -658,7 +658,7 @@ const en: SiteDict = {
     remove: "Remove",
     maxChars: (n) => `Max. ${n} characters`,
     stepLanguage: {
-      intro: "Choose which languages your website will be available in. You can pick more than one: if the wedding is bilingual, your guests will be able to switch language with a selector on the site itself. This affects the fixed text (menu, buttons, RSVP...); whatever you write yourselves (story, messages...) will show up exactly as you wrote it.",
+      intro: "Choose which languages your website will be available in. You can pick more than one: if the wedding is bilingual, your guests will be able to switch language with a selector on the site itself.",
       included: "Included",
       summary: (langs) => `Your website will show a language selector so each guest can choose between: ${langs}.`,
     },
