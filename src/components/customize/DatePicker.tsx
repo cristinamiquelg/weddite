@@ -207,10 +207,12 @@ export default function DatePicker({
     }
   }
 
+  // The date-time field is half-width, so it uses the short month ("22 oct 2026 · 18:00")
+  // to stay on one line; the date-only field has room for the long form.
   const dateText = selected
-    ? new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", year: "numeric" }).format(
-        new Date(selected.y, selected.m, selected.d),
-      )
+    ? new Intl.DateTimeFormat(locale, { day: "numeric", month: withTime ? "short" : "long", year: "numeric" })
+        .format(new Date(selected.y, selected.m, selected.d))
+        .replace(/\./g, "")
     : null;
   const display = dateText && withTime ? `${dateText} · ${time}` : dateText;
   const [hh, mm] = time.split(":");
@@ -227,7 +229,7 @@ export default function DatePicker({
         onClick={() => (open ? close(false) : openPicker())}
         className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-left text-sm outline-none transition-colors focus:border-clay"
       >
-        <span className={display ? "text-ink" : "text-ink-soft/70"}>{display ?? placeholder}</span>
+        <span className={`truncate whitespace-nowrap ${display ? "text-ink" : "text-ink-soft/70"}`}>{display ?? placeholder}</span>
         <CalendarIcon />
       </button>
 
