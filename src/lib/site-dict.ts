@@ -141,7 +141,9 @@ type SiteDict = {
       yourName: string;
       partnerName: string;
       weddingDate: string;
-      weddingDateHint: string;
+      datePlaceholder: string;
+      prevMonth: string;
+      nextMonth: string;
       welcomeMessage: string;
       welcomeMessagePlaceholder: string;
       estateName: string;
@@ -399,7 +401,9 @@ const es: SiteDict = {
       yourName: "Vuestro nombre",
       partnerName: "Nombre de tu pareja",
       weddingDate: "Fecha de la boda",
-      weddingDateHint: "Tiene que ser una fecha futura",
+      datePlaceholder: "Elegir fecha",
+      prevMonth: "Mes anterior",
+      nextMonth: "Mes siguiente",
       welcomeMessage: "Mensaje de bienvenida",
       welcomeMessagePlaceholder: "Lo primero que leerán vuestros invitados al entrar en la web.",
       estateName: "Finca / lugar principal",
@@ -419,7 +423,7 @@ const es: SiteDict = {
       storyImageDrawing: "Dibujando vuestra ilustración… puede tardar hasta un minuto.",
       storyImageFallback: "No hemos podido crear la ilustración, así que usaremos vuestra foto tal cual.",
       hashtag: "Hashtag de la boda",
-      hashtagHint: "Para redes sociales",
+      hashtagHint: "Sin espacios, para redes sociales",
     },
     stepRsvpGift: {
       rsvpSectionTitle: "Confirmación de asistencia",
@@ -658,7 +662,9 @@ const en: SiteDict = {
       yourName: "Your name",
       partnerName: "Your partner's name",
       weddingDate: "Wedding date",
-      weddingDateHint: "Must be a date in the future",
+      datePlaceholder: "Choose a date",
+      prevMonth: "Previous month",
+      nextMonth: "Next month",
       welcomeMessage: "Welcome message",
       welcomeMessagePlaceholder: "The first thing your guests will read when they open the site.",
       estateName: "Venue / main location",
@@ -678,7 +684,7 @@ const en: SiteDict = {
       storyImageDrawing: "Drawing your illustration… this can take up to a minute.",
       storyImageFallback: "We couldn't create the illustration, so we'll use your photo as it is.",
       hashtag: "Wedding hashtag",
-      hashtagHint: "For social media",
+      hashtagHint: "No spaces, for social media",
     },
     stepRsvpGift: {
       rsvpSectionTitle: "RSVP",

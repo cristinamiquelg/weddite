@@ -9,6 +9,14 @@ const TITLE_MAX_LENGTH = 50;
 const STORY_MAX_LENGTH = 600;
 const HASHTAG_MAX_LENGTH = 30;
 
+// A hashtag is one run of text with no spaces, always led by "#". The field
+// shows the "#" from the start and it can't be deleted; an empty body is
+// stored as "" so the template doesn't render a lone "#".
+function sanitizeHashtag(raw: string): string {
+  const body = raw.replace(/[\s#]/g, "");
+  return body ? `#${body}` : "";
+}
+
 export default function StepStory({
   data,
   onChange,
@@ -127,10 +135,12 @@ export default function StepStory({
       </Field>
       <Field label={dict.hashtag} hint={`${dict.hashtagHint} — ${maxChars(HASHTAG_MAX_LENGTH)}`}>
         <TextInput
-          value={data.hashtag}
-          onChange={(e) => onChange({ hashtag: e.target.value })}
-          placeholder="#CassandraYJonathan"
+          value={data.hashtag || "#"}
+          onChange={(e) => onChange({ hashtag: sanitizeHashtag(e.target.value) })}
           maxLength={HASHTAG_MAX_LENGTH}
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
         />
       </Field>
     </div>
