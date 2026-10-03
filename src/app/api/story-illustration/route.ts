@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { STORY_ILLUSTRATION_PROMPT } from "@/lib/story-illustration-prompt";
+import { STORY_STYLE_REFERENCE_PNG_BASE64 } from "@/lib/story-style-reference";
 
 export const runtime = "nodejs";
 // Image generation routinely takes 30–90s.
@@ -51,7 +52,13 @@ export async function POST(request: Request) {
 
   const body = new FormData();
   body.append("model", process.env.OPENAI_IMAGE_MODEL || "gpt-image-1");
-  body.append("image", file, "photo.jpg");
+  // Two inputs: the couple's photo first, then the style sheet (see the prompt).
+  body.append("image[]", file, "photo.jpg");
+  body.append(
+    "image[]",
+    new Blob([Buffer.from(STORY_STYLE_REFERENCE_PNG_BASE64, "base64")], { type: "image/png" }),
+    "style-reference.png",
+  );
   body.append("prompt", STORY_ILLUSTRATION_PROMPT);
   body.append("background", "transparent");
   body.append("output_format", "webp");

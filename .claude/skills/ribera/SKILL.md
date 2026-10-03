@@ -69,6 +69,20 @@ clay, so Ribera overrides it back to navy under `.root`.
   `scrollIntoView()` on it is a silent no-op. Put ids on real, rendered
   elements; a bare (non-hidden) `<span>` is fine as a fallback when there's
   no other element to anchor to.
+- **Scroll targets need an offset.** The header is sticky, so anything the
+  wizard scrolls the preview to (phase, detail card, contact) would land
+  *under* it. `.root [id]` carries `scroll-margin-top`; keep it when adding
+  anchors.
+- **Phase times are ISO date-times** (`2027-09-11T18:00`, picked with
+  `components/customize/DatePicker.tsx` in `withTime` mode) and are formatted
+  per language by `formatPhaseWhen` in `lib/format.ts`; legacy free text is
+  shown as is.
+- **The monogram never invents initials**: with no names yet it is a bare
+  `&` (`ribera/initials.ts`).
+- **The story illustration** is generated from the couple's photo plus a
+  style sheet of the template's own SVG illustrations
+  (`lib/story-style-reference.ts`, regenerate it if those illustrations
+  change) — that second input image is what keeps it consistent with them.
 - **The mobile header grid must stay symmetric.** `grid-template-columns`
   needs equal-fraction side columns (`1fr auto 1fr`), not `auto 1fr auto` —
   otherwise the hamburger button and the (wider) RSVP button pull the

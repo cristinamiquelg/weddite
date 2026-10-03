@@ -80,7 +80,10 @@
 }
 
 .root img { max-width: 100%; display: block; }
-.root section[id] { scroll-margin-top: var(--r-header-h); }
+/* Every anchor, not just sections: the wizard scrolls the preview to a
+   specific phase / detail card / contact, and without this offset the sticky
+   header sits right on top of the target. */
+.root [id] { scroll-margin-top: calc(var(--r-header-h) + 16px); }
 
 /* The global ::selection rule in globals.css paints Wedite's own clay
    brand color — that's the wizard/marketing site's palette, not this

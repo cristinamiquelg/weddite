@@ -4,7 +4,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import SparkleIcon from "@/components/site/SparkleIcon";
 import type { PlaceIllustration, WeddingData, WeddingPlace } from "@/lib/wedding-types";
-import { formatLongDate, mapsUrl } from "@/lib/format";
+import { formatLongDate, formatPhaseWhen, mapsUrl } from "@/lib/format";
 import { getDict, locales as localeOptions } from "@/lib/i18n";
 import RiberaCountdown from "./RiberaCountdown";
 import RiberaCopyButton from "./RiberaCopyButton";
@@ -330,7 +330,7 @@ export default function RiberaTemplate({
                       {phase.name ? <p className={styles.phaseName}>{phase.name}</p> : null}
                       {phase.when ? (
                         <p className={styles.phaseWhen}>
-                          {phase.when}
+                          {formatPhaseWhen(phase.when, locale)}
                         </p>
                       ) : null}
                     </div>

@@ -107,7 +107,7 @@ const es: Dict = {
     itinerary: { title: "Itinerario y lugares", comoLlegar: "Cómo llegar" },
     details: {
       title: "Detalles",
-      dresscode: { title: "Dress code", cta: "Inspiración" },
+      dresscode: { title: "Código de vestimenta", cta: "Inspiración" },
       bus: { title: "Autobuses", cta: "Cómo llegar" },
       hotel: { title: "Hoteles", cta: "Más información" },
     },

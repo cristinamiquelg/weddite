@@ -1,12 +1,20 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { Select } from "./fields";
 
 // A calendar popover styled like the rest of the wizard. The browser's own
 // <input type="date"> popup can't be styled at all, so it always looked like
 // a foreign widget stuck onto the page.
+//
+// With `withTime` it is a date-time picker: the value becomes a local
+// "YYYY-MM-DDTHH:mm" string and hour/minute selectors appear under the grid.
 
 type ISO = string; // YYYY-MM-DD, always in the visitor's local calendar
+
+const DEFAULT_TIME = "18:00";
+const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
+const MINUTES = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, "0"));
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const toISO = (y: number, m: number, d: number): ISO => `${y}-${pad(m + 1)}-${pad(d)}`;
@@ -53,7 +61,7 @@ function CalendarIcon() {
 }
 
 export default function DatePicker({
-  value,
+  value: rawValue,
   onChange,
   min,
   locale,
@@ -61,9 +69,15 @@ export default function DatePicker({
   prevMonthLabel,
   nextMonthLabel,
   ariaLabel,
+  withTime = false,
+  defaultMonth,
+  hourLabel = "Hour",
+  minuteLabel = "Minutes",
+  doneLabel = "Done",
 }: {
-  value: ISO;
-  onChange: (iso: ISO) => void;
+  /** YYYY-MM-DD, or YYYY-MM-DDTHH:mm with `withTime`. */
+  value: string;
+  onChange: (value: string) => void;
   /** Earliest selectable day (inclusive). */
   min?: ISO;
   locale: string;
@@ -71,7 +85,19 @@ export default function DatePicker({
   prevMonthLabel: string;
   nextMonthLabel: string;
   ariaLabel: string;
+  withTime?: boolean;
+  /** Day whose month opens first when nothing is selected yet (e.g. the wedding date). */
+  defaultMonth?: ISO;
+  hourLabel?: string;
+  minuteLabel?: string;
+  doneLabel?: string;
 }) {
+  // Date part ("YYYY-MM-DD") and time part ("HH:mm") of the value. Free text
+  // saved before this picker existed doesn't parse and reads as "nothing chosen".
+  const value: ISO = parseISO(rawValue.slice(0, 10)) ? rawValue.slice(0, 10) : "";
+  const time = /^\d{2}:\d{2}$/.test(rawValue.slice(11, 16)) ? rawValue.slice(11, 16) : DEFAULT_TIME;
+  const emit = (iso: ISO, t: string) => onChange(withTime ? `${iso}T${t}` : iso);
+  const startISO = defaultMonth && parseISO(defaultMonth) && (!min || defaultMonth >= min) ? defaultMonth : min && min > todayISO() ? min : todayISO();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -80,12 +106,12 @@ export default function DatePicker({
 
   const selected = parseISO(value);
   // The month on display and the day that holds keyboard focus.
-  const initial = selected ?? parseISO(min && min > today ? min : today)!;
+  const initial = selected ?? parseISO(startISO)!;
   const [view, setView] = useState({ y: initial.y, m: initial.m });
   const [focusISO, setFocusISO] = useState<ISO>(value || toISO(initial.y, initial.m, initial.d));
 
   function openPicker() {
-    const base = parseISO(value) ?? parseISO(min && min > today ? min : today)!;
+    const base = parseISO(value) ?? parseISO(startISO)!;
     setView({ y: base.y, m: base.m });
     setFocusISO(toISO(base.y, base.m, base.d));
     setOpen(true);
@@ -160,11 +186,13 @@ export default function DatePicker({
     }
   }
 
-  const display = selected
+  const dateText = selected
     ? new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", year: "numeric" }).format(
         new Date(selected.y, selected.m, selected.d),
       )
     : null;
+  const display = dateText && withTime ? `${dateText} · ${time}` : dateText;
+  const [hh, mm] = time.split(":");
 
   return (
     <div ref={rootRef} className="relative">
@@ -187,7 +215,7 @@ export default function DatePicker({
           id={popoverId}
           role="dialog"
           aria-label={ariaLabel}
-          className="absolute left-0 top-full z-30 mt-2 w-[19rem] max-w-full rounded-2xl border border-line bg-paper-raised p-4 shadow-[0_24px_50px_-24px_rgba(33,29,26,0.35)]"
+          className="absolute left-0 top-full z-30 mt-2 w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-line bg-paper-raised p-4 shadow-[0_24px_50px_-24px_rgba(33,29,26,0.35)]"
         >
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-medium text-ink" aria-live="polite">
@@ -236,8 +264,9 @@ export default function DatePicker({
                   aria-pressed={isSelected}
                   aria-current={isToday ? "date" : undefined}
                   onClick={() => {
-                    onChange(iso);
-                    close();
+                    emit(iso, time);
+                    // A date-time picker stays open so the time can be set too.
+                    if (!withTime) close();
                   }}
                   onKeyDown={(e) => onDayKeyDown(e, iso)}
                   className={[
@@ -256,6 +285,46 @@ export default function DatePicker({
               );
             })}
           </div>
+
+          {withTime ? (
+            <div className="mt-4 flex items-end gap-3 border-t border-line pt-4">
+              <label className="flex flex-1 flex-col gap-1 text-xs text-ink-soft">
+                {hourLabel}
+                <Select
+                  value={hh}
+                  disabled={!selected}
+                  onChange={(e) => selected && emit(value, `${e.target.value}:${mm}`)}
+                >
+                  {HOURS.map((h) => (
+                    <option key={h} value={h}>
+                      {h}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+              <label className="flex flex-1 flex-col gap-1 text-xs text-ink-soft">
+                {minuteLabel}
+                <Select
+                  value={MINUTES.includes(mm) ? mm : "00"}
+                  disabled={!selected}
+                  onChange={(e) => selected && emit(value, `${hh}:${e.target.value}`)}
+                >
+                  {MINUTES.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+              <button
+                type="button"
+                onClick={() => close()}
+                className="cursor-pointer rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+              >
+                {doneLabel}
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>
