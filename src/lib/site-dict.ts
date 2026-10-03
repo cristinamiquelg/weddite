@@ -136,7 +136,7 @@ type SiteDict = {
     required: string;
     remove: string;
     maxChars: (n: number) => string;
-    stepLanguage: { intro: string; included: string; summary: (langs: string) => string };
+    stepLanguage: { intro: string; included: string };
     stepCouple: {
       yourName: string;
       partnerName: string;
@@ -397,7 +397,6 @@ const es: SiteDict = {
     stepLanguage: {
       intro: "Elegid en qué idiomas estará disponible vuestra web. Podéis elegir más de uno: si la boda es bilingüe, vuestros invitados podrán cambiar de idioma con un selector en la propia web.",
       included: "Incluido",
-      summary: (langs) => `Vuestra web mostrará un selector de idioma para que cada invitado elija entre: ${langs}.`,
     },
     stepCouple: {
       yourName: "Vuestro nombre",
@@ -660,7 +659,6 @@ const en: SiteDict = {
     stepLanguage: {
       intro: "Choose which languages your website will be available in. You can pick more than one: if the wedding is bilingual, your guests will be able to switch language with a selector on the site itself.",
       included: "Included",
-      summary: (langs) => `Your website will show a language selector so each guest can choose between: ${langs}.`,
     },
     stepCouple: {
       yourName: "Your name",
