@@ -74,6 +74,26 @@ gasto propio.
 | `OPENAI_API_KEY` | Ilustración de "Nuestra historia" (`/api/story-illustration`) |
 | `OPENAI_IMAGE_MODEL` | Opcional: modelo de imagen (por defecto `gpt-image-1`) |
 | `RESEND_API_KEY` | Envío del formulario de contacto |
+| `SUPABASE_URL` | URL del proyecto de Supabase de ese entorno |
+| `SUPABASE_SERVICE_ROLE_KEY` | Clave **secreta** de Supabase (solo servidor; nunca en el cliente ni en el repositorio) |
+
+### Base de datos (Supabase)
+
+Un proyecto de Supabase por entorno, ambos en Irlanda (`eu-west-1`) por el RGPD:
+
+| Entorno | Proyecto | Ref |
+| --- | --- | --- |
+| Staging (Vercel Preview) | `wedite-staging` | `lglyotjdmfyvnikjjsva` |
+| Producción (Vercel Production) | `wedite-prod` | `hbtpmguhjfrflrwzsoqr` |
+
+- El esquema vive en `supabase/migrations/` y se aplica primero a staging y,
+  una vez probado, a producción. No se hacen cambios a mano en producción.
+- Todas las tablas tienen RLS activado **sin políticas**: la clave pública no
+  puede leer ni escribir nada. Solo el servidor, con
+  `SUPABASE_SERVICE_ROLE_KEY`, accede a los datos.
+- Sin cuentas por ahora: una pareja gestiona su web con un enlace de edición
+  secreto enviado por email (en base de datos solo se guarda su hash).
+- Los cobros (`payments`, `stripe_events`) llegan con la integración de Stripe.
 
 Por ahora todo el sitio, producción incluida, es no indexable (`noindex` en el
 layout y `robots.txt` con `Disallow: /`); staging debe seguir siéndolo siempre.
