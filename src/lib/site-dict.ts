@@ -1,7 +1,7 @@
 import type { SiteLocale } from "./site-locale";
 
 type SiteDict = {
-  comingSoon: { eyebrow: string; heading: string; body: string; footer: string };
+  comingSoon: { eyebrow: string; heading: string; body: string };
   nav: { designs: string; howItWorks: string; whoWeAre: string; contact: string; viewDesigns: string };
   footer: {
     tagline: string;
@@ -220,7 +220,6 @@ const es: SiteDict = {
     eyebrow: "Muy pronto",
     heading: "Algo bonito está en camino",
     body: "Estamos terminando Wedite: webs de boda con diseño propio, que se personalizan en minutos y enamoran desde el primer vistazo.",
-    footer: "Volveremos con novedades.",
   },
   nav: { designs: "Diseños", howItWorks: "Cómo funciona", whoWeAre: "Quiénes somos", contact: "Contacto", viewDesigns: "Ver diseños" },
   footer: {
@@ -483,7 +482,6 @@ const en: SiteDict = {
     eyebrow: "Coming soon",
     heading: "Something lovely is on its way",
     body: "We're putting the finishing touches on Wedite: wedding websites with a design of their own, personalised in minutes and lovable at first glance.",
-    footer: "We'll be back with news.",
   },
   nav: { designs: "Designs", howItWorks: "How it works", whoWeAre: "About us", contact: "Contact", viewDesigns: "View designs" },
   footer: {
